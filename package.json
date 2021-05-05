@@ -1,0 +1,19 @@
+{
+  "name": "1240armazem",
+  "version": "1.0.0",
+  "description": "Aplicação WEB onde exista a possibilidade dos membros do Agrupamento, com conhecimentos informáticos na ótica do utilizador conseguirem requisitar os mais diversos equipamentos disponíveis, não só para as suas atividades ao ar livre, mas também para outros fins.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shakesac/1240Armazem.git"
+  },
+  "author": "Miguel Lima <30003444@students.ual.pt>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/shakesac/1240Armazem/issues"
+  },
+  "homepage": "https://github.com/shakesac/1240Armazem#readme"
+}
