@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/shakesac/1240Armazem/issues"
   },
-  "homepage": "https://github.com/shakesac/1240Armazem#readme"
+  "homepage": "https://github.com/shakesac/1240Armazem#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
