@@ -1,7 +1,7 @@
 # Laboratório de Projecto
 ## Agrupamento Escuteiros 1240 Murtal
 
-## 🔧 Technologies & Tools
+## 🔧 Ferramentas & Tecnologias
 
 ### Frontend
 
