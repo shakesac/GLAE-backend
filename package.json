@@ -1,22 +1,26 @@
 {
   "name": "1240armazem",
   "version": "1.0.0",
-  "description": "Aplicação WEB onde exista a possibilidade dos membros do Agrupamento, com conhecimentos informáticos na ótica do utilizador conseguirem requisitar os mais diversos equipamentos disponíveis, não só para as suas atividades ao ar livre, mas também para outros fins.",
-  "main": "index.js",
+  "description": "Sistema de gestão de equipamentos do agrupamento 1240 de escuteiros.",
+  "main": "server.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shakesac/1240Armazem.git"
   },
-  "author": "Miguel Lima <30003444@students.ual.pt>",
+  "author": "Miguel Lima, Tiago Alves",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/shakesac/1240Armazem/issues"
   },
   "homepage": "https://github.com/shakesac/1240Armazem#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.7"
   }
 }
