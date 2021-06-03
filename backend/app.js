@@ -31,7 +31,11 @@ app.post(api+'/teste', (req, res) =>{
 
 
 db.execute('SELECT * FROM cargo')
-    .then(() => {}) 
+    .then(result => {
+        console.log(result[0])
+    }).catch(err => {
+        console.log(err)
+    })
 
 
 module.exports = app;
