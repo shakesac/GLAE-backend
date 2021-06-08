@@ -5,6 +5,9 @@ const api = process.env.API_URL
 const db = require('./util/db')
 require('dotenv/config')
 
+//ROUTES
+const adminRoutes = require('./routes/admin.route')
+
 //MIDDLEWARE
 app.use(express.json()) //body-parser on Express 4.16+ 
 app.use(morgan('tiny'))
