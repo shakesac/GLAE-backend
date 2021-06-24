@@ -1,17 +1,19 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db')
 
-const Cargo = sequelize.define('cargo', {
+const Lease = sequelize.define('lease', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    cargo: {
-        type: Sequelize.STRING,
+    start: {
+        type: Sequelize.DATEONLY,
         allowNull: false,
-    }
+    },
+    end: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+    }    
 })
-
-module.exports =  Cargo
