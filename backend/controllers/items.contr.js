@@ -1,23 +1,22 @@
 const Item = require('../models/item.model')
 
 exports.new = async (req, res) => {
-    const newItem = new Item({
-        id: req.body.id,
+    const newItem = await new Item({
         name: req.body.name,
         purchasedAt: req.body.purchasedAt,
-        createdBy: req.body.user.Id
+        createdBy: req.body.userId
     })
-    await item.save().catch((err) => {
+    await newItem.save().catch((err) => {
         console.log('Erro: ', err)
         res.status(304).json({
             status: 'fail',
-            message: 'Ocorreu um erro ao criar item',
+            message: err.errors[0].message,
         })
     })
     res.status(201).json({
         status: 'success',
         message: 'O item foi criado.',
-        itemId: item.id,
+        itemId: newItem.id,
     })
 }
 
@@ -31,7 +30,7 @@ exports.update = async (req, res) => {
         console.log('Erro: ', err)
         res.status(304).json({
             status: 'fail',
-            message: 'Ocorreu um erro ao actualizar o item'
+            message: err.errors[0].message,
         })
     })
     res.status(201).json({
@@ -51,7 +50,7 @@ exports.get = async (req, res) => {
         console.log('Erro: ', err)
         res.status(202).json({
             status: 'fail',
-            message: 'Ocorreu um erro ao obter o emprestimo'
+            message: err.errors[0].message,
         })
     })
 }

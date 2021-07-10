@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db')
 
-const ItemCategory = sequelize.define('lease_status', {
+const LeaseStatus = sequelize.define('lease_status', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -10,7 +10,7 @@ const ItemCategory = sequelize.define('lease_status', {
     },
     status: {
         type: Sequelize.STRING,
-        values: ['pending', 'accepted', 'in progress', 'finished', 'refused'],
+        values: ['pending', 'accepted', 'in progress', 'returned', 'refused'],
         allowNull: false,
     },
     leaseId: {
@@ -21,4 +21,4 @@ const ItemCategory = sequelize.define('lease_status', {
     updatedAt: false,
 })
 
-module.exports = ItemCategory
+module.exports = LeaseStatus

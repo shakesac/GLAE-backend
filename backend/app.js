@@ -16,11 +16,13 @@ const adminRoutes = require('./routes/admin.route')
 const authRoutes = require('./routes/auth.route')
 const leaseRoutes = require('./routes/lease.route')
 const itemRoutes = require('./routes/item.route')
+const sectionRoutes = require('./routes/section.route')
 const { getCargos } = require('./controllers/cargos.contr')
 app.use(api+'/admin', adminRoutes)
 app.use(api, authRoutes)
 app.use(api+'/lease', leaseRoutes)
 app.use(api+'/item', itemRoutes)
+app.use(api+'/section', sectionRoutes)
 
 app.get('/', (req, res, next) =>{
     res.status(200).send('A API está a correr!')
@@ -36,6 +38,8 @@ const ItemCategory = require('./models/item-cat.model')
 const ItemInspection = require('./models/item-inspection.model')
 const UserRole = require('./models/user-role.model')
 const LeaseStatus = require('./models/lease-status.model')
+const Section = require('./models/section.model')
+const Subsection = require('./models/subsection.model')
 //const router = require('./routes/admin.route')
 
 // SEQUELIZE - ASSOCIATIONS
@@ -60,11 +64,18 @@ ItemInspection.belongsTo(Item)
 Lease.hasMany(LeaseStatus)
 LeaseStatus.belongsTo(Lease)
 
-const LeaseItems = sequelize.define('Lease_Item', {}, { timestamps: false });
-Lease.belongsToMany(Item, { through: 'Lease_Item' })
-Item.belongsToMany(Lease, { through: 'Lease_Item' })
+User.hasMany(Item)
+Item.belongsTo(User)
+
+Section.hasMany(Subsection)
+Subsection.belongsTo(Section)
+Subsection.hasMany(User)
+User.belongsTo(Subsection)
 
 
+const LeaseItems = sequelize.define('lease_item', {}, { timestamps: false });
+Lease.belongsToMany(Item, { through: 'lease_item' })
+Item.belongsToMany(Lease, { through: 'lease_item' })
 
 
 // SEQUELIZE - SYNC

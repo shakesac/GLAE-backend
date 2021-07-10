@@ -1,16 +1,16 @@
 const Lease = require('../models/lease.model')
 
 exports.new = async (req, res) => {
-    const newLease = new Lease({
+    const newLease = await new Lease({
         start: req.body.start,
         end: req.body.end,
         userId: req.body.userId
     })
     await newLease.save().catch((err) => {
-        console.log('Error ', err)
-        res.status(202).json({
+        console.log('Erro: ', err)
+        res.status(304).json({
             status: 'fail',
-            message: 'Ocorreu um erro ao criar emprestimo',
+            message: err.errors[0].message,
         })
     })
     res.status(201).json({
@@ -30,7 +30,7 @@ exports.update = async (req, res) => {
         console.log('Erro: ', err)
         res.status(304).json({
             status: 'fail',
-            message: 'Ocorreu um erro ao actualizar o emprestimo'
+            message: err.errors[0].message,
         })
     })
     res.status(201).json({
@@ -52,15 +52,13 @@ exports.getAll = async (req, res) => {
     const leases = await Lease.findAll().then((result) => {
         res.status(200).json({
             status: 'success',
-            data: {
-                data: result
-            }
+            data: result
         })
     }).catch((err) => {
         console.log('Erro: ', err)
         res.status(202).json({
             status: 'fail',
-            message: 'Ocorreu um erro ao listar emprestimos'
+            message: err.errors[0].message,
         })
     })
 
@@ -76,7 +74,7 @@ exports.get = async (req, res) => {
         console.log('Erro: ', err)
         res.status(202).json({
             status: 'fail',
-            message: 'Ocorreu um erro ao obter o emprestimo'
+            message: err.errors[0].message,
         })
     })
 }

@@ -37,6 +37,9 @@ const User = sequelize.define('user', {
         type: Sequelize.INTEGER,
         defaultValue: 2,
         allowNull: false
+    },
+    subsectionId: {
+        type: Sequelize.INTEGER,
     }
 })
 

@@ -27,7 +27,8 @@ exports.register = async (req, res) => {
         await newUser.save().catch((err) => {
             console.log('Error: ', err)
             res.status(204).json({
-                error: 'Ocorreu um erro ao registar o utilizador.'
+                status: 'failed',
+                message: err.errors[0].message,
             })
         })
         res.status(201).json({
