@@ -79,3 +79,19 @@ exports.getAll = async (req, res) => {
         })
     })
 }
+
+exports.delete = async (req, res) => {
+    await Subsection.destroy({
+        where: { id: req.params.id }
+    }).then(() => {
+        res.status(200).json({
+            status: 'success',
+            message: 'A secção foi eliminada com sucesso.'
+        })
+    }).catch((err) => {
+        res.status(304).json({
+            status: 'failed',
+            message: err.errors[0].message,
+        })
+    })
+}

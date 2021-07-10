@@ -12,6 +12,7 @@ router.get('/:id', sectionContr.get)
 
 router.post(subSecPre+'/new', subsectionContr.new)
 router.put(subSecPre+'/update/:id', subsectionContr.update)
+router.delete(subSecPre+'/delete/:id', subsectionContr.delete)
 router.get(subSecPre+'/all', subsectionContr.getAll)
 router.get(subSecPre+'/:id', subsectionContr.get)
 

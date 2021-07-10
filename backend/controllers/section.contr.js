@@ -72,18 +72,17 @@ exports.getAll = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    const sectionId = req.params.id
-    console.log(sectionId)
-    await Subsection.findAndCountAll({
-        where: {
-            id: sectionId
-        }
-    }).then((subsection) => {
-        if (subsections.count > 1) return res.status(304).json({
+    await Section.destroy({
+        where: { id: req.params.id }
+    }).then((section) => {
+        res.status(200).json({
+            status: 'success',
+            message: 'A secção foi eliminada com sucesso.'
+        })
+    }).catch((err) => {
+        res.status(304).json({
             status: 'failed',
-            message: 'Existem subsecções associadas a esta secção. \
-            Elimine primeiro essas dependencias.'
+            message: err.errors[0].message,
         })
     })
-    console.log(verifyAssociations)
 }

@@ -17,12 +17,14 @@ const authRoutes = require('./routes/auth.route')
 const leaseRoutes = require('./routes/lease.route')
 const itemRoutes = require('./routes/item.route')
 const sectionRoutes = require('./routes/section.route')
+const userRoutes = require('./routes/user.route')
 const { getCargos } = require('./controllers/cargos.contr')
 app.use(api+'/admin', adminRoutes)
 app.use(api, authRoutes)
 app.use(api+'/lease', leaseRoutes)
 app.use(api+'/item', itemRoutes)
 app.use(api+'/section', sectionRoutes)
+app.use(api+'/user', userRoutes)
 
 app.get('/', (req, res, next) =>{
     res.status(200).send('A API está a correr!')
@@ -67,9 +69,10 @@ LeaseStatus.belongsTo(Lease)
 User.hasMany(Item)
 Item.belongsTo(User)
 
-Section.hasMany(Subsection)
+Section.hasMany(Subsection, { onDelete: 'RESTRICT' })
 Subsection.belongsTo(Section)
-Subsection.hasMany(User)
+
+Subsection.hasMany(User, { onDelete: 'RESTRICT' })
 User.belongsTo(Subsection)
 
 
