@@ -15,10 +15,12 @@ app.use(morgan('tiny'))
 const adminRoutes = require('./routes/admin.route')
 const authRoutes = require('./routes/auth.route')
 const leaseRoutes = require('./routes/lease.route')
+const itemRoutes = require('./routes/item.route')
 const { getCargos } = require('./controllers/cargos.contr')
 app.use(api+'/admin', adminRoutes)
 app.use(api, authRoutes)
 app.use(api+'/lease', leaseRoutes)
+app.use(api+'/item', itemRoutes)
 
 app.get('/', (req, res, next) =>{
     res.status(200).send('A API está a correr!')
