@@ -15,5 +15,11 @@ const Lease = sequelize.define('lease', {
     end: {
         type: Sequelize.DATEONLY,
         allowNull: false,
-    }    
+    },
+    userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    }
 })
+
+module.exports = Lease

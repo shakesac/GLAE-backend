@@ -2,8 +2,11 @@ const Cargo = require('../models/cargo.model')
 const db = require('../util/db')
 
 exports.getCargos = (req, res, next) => {
-    const cargos = Cargo.getAll()
-    res.status(200).send(cargos)
+    //const cargos = Cargo.getAll()
+    res.status(200).json({
+        status: 'success',
+        message: 'Pediste todos os cargos'
+    })
 }
 exports.addCargo = (req, res, next) => {
     const cargo = new Cargo(req.body.title)

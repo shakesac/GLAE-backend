@@ -12,6 +12,8 @@ const Cargo = sequelize.define('cargo', {
         type: Sequelize.STRING,
         allowNull: false,
     }
+}, {
+    timestamps: false
 })
 
-module.exports =  Cargo
+module.exports = Cargo

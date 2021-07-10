@@ -19,15 +19,24 @@ const User = sequelize.define('user', {
     email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
         isEmail: true,
     },
     address: {
         type: Sequelize.STRING,
-        allowNull: false,
     },
     phoneNumber: {
         type: Sequelize.STRING,
         allowNull: false,
+    },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    roleId: {
+        type: Sequelize.INTEGER,
+        defaultValue: 2,
+        allowNull: false
     }
 })
 

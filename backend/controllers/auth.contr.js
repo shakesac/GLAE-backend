@@ -1,0 +1,78 @@
+
+const jwt = require('jsonwebtoken')
+const User = require('../models/user.model')
+
+exports.register = async (req, res) => {
+    const verifyEmail = await User.findOne({
+        where: {
+            email: req.body.email
+        }
+    }).catch((err) => {
+        console.log('Error: ', err)
+    })
+    if(verifyEmail) {
+        return res.status(200).json({
+            message: 'Já existe um utilizador com o email indicado.'
+        })
+    }
+    try {
+        const newUser = new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            address: req.body.address,
+            phoneNumber: req.body.phoneNumber,
+            password: req.body.password
+        })
+        await newUser.save().catch((err) => {
+            console.log('Error: ', err)
+            res.status(204).json({
+                error: 'Ocorreu um erro ao registar o utilizador.'
+            })
+        })
+        res.status(201).json({
+            status: 'success',
+            message: 'Utilizador registado com sucesso.',
+            UserId: newUser.id
+        })
+    } catch (err) {
+        console.log('Erro: ', err)
+        res.status(400).json({
+            status: 'fail',
+            message: 'Sintaxe Inválida'
+        })
+    }
+    /*
+    */
+}
+
+exports.login = async (req, res) => {
+    const loginData = {
+        email: req.body.email,
+        password: req.body.password
+    }
+    const checkUser = await User.findOne({
+        where: {email: loginData.email}
+    }).catch((err) => {
+        console.log('Erro: ', err)
+    })
+    if (!checkUser) return res.status(202).json({
+        status: 'fail',
+        message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que o email não existe por razões de segurança
+    })
+    if (checkUser.password !== loginData.password) return res.status(202).json({
+            status: 'fail',
+            message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
+    })
+    
+    const token = jwt.sign({
+        id: checkUser.id,
+        email: checkUser.email
+    }, process.env.JWT_SECRET)
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Sessão iniciada',
+        token: token
+    })
+}
