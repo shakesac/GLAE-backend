@@ -1,6 +1,31 @@
 const Section = require('../models/section.model')
 const Subsection = require('../models/subsection.model')
+const User = require('../models/user.model')
 
+exports.new = async (req, res) => {
+    const newSubsection = new Subsection({
+        id: req.body.id,
+        section: req.body.section
+    })
+    await newSection.save().then((section) => {
+        res.status(201).json({
+            status: 'success',
+            message: 'A secção foi criada com sucesso',
+            data: section
+        })
+    }).catch((err) => {
+        if (err.errors[0].message == 'sections.PRIMARY must be unique') {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Já existe uma secção com o código ' + req.body.id + 'atribuido.'
+            })
+        }
+        res.status(400).json({
+            status: 'fail',
+            message: err.errors[0].message,
+        })
+    })
+}
 
 exports.new = async (req, res) => {
     const newSubsection = await new Subsection({
@@ -81,6 +106,9 @@ exports.getAll = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
+    const verifyDependencies = await User.findAndCountAll({
+
+    })
     await Subsection.destroy({
         where: { id: req.params.id }
     }).then(() => {

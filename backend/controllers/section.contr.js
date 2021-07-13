@@ -1,9 +1,8 @@
 const Section = require('../models/section.model')
 const Subsection = require('../models/subsection.model')
-const User = require('../models/user.model')
 
 exports.new = async (req, res) => {
-    const newSection = await new Section({
+    const newSection = new Section({
         id: req.body.id,
         section: req.body.section
     })
@@ -14,8 +13,13 @@ exports.new = async (req, res) => {
             data: section
         })
     }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(304).json({
+        if (err.errors[0].message == 'sections.PRIMARY must be unique') {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Já existe uma secção com o código ' + req.body.id + ' atribuido.'
+            })
+        }
+        res.status(400).json({
             status: 'fail',
             message: err.errors[0].message,
         })
@@ -23,66 +27,98 @@ exports.new = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-    await Section.update({
+    const section = await Section.findByPk(req.params.id).catch((err) => {
+        res.status(400).json({
+            status: 'failed',
+            message: err.errors[0].message,
+        })
+    })
+    if (!section) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Não existe nenhuma secção com o código indicado.'
+        })
+    }
+    const sectionUpdate = await Section.update({
         id: req.body.id,
         section: req.body.section,
     }, {
         where: { id: req.params.id }
-    }).then((subsection) => {
-        res.status(200).json({
-            status: 'success',
-            message: 'A secção foi actualizada com sucesso.',
-        })
     }).catch((err) => {
         console.log('Erro: ', err)
-        res.status(304).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
-}
-
-exports.get = async (req, res) => {
-    await Section.findByPk(req.params.id).then((section) => {
-        res.status(200).json({
-            status: 'success',
-            data: section
-        })
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(404).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
-}
-
-exports.getAll = async (req, res) => {
-    await Section.findAll().then((sections) => {
-        res.status(200).json({
-            status: 'success',
-            data: sections
-        })
-    }).catch((err) => {
         res.status(202).json({
             status: 'fail',
             message: err.errors[0].message,
         })
     })
+    res.status(200).json({
+        status: 'success',
+        message: 'A secção foi actualizada com sucesso.',
+        data: sectionUpdate
+    })
 }
 
-exports.delete = async (req, res) => {
-    await Section.destroy({
-        where: { id: req.params.id }
-    }).then((section) => {
-        res.status(200).json({
-            status: 'success',
-            message: 'A secção foi eliminada com sucesso.'
-        })
-    }).catch((err) => {
-        res.status(304).json({
-            status: 'failed',
+exports.get = async (req, res) => {
+    const section = await Section.findByPk(req.params.id).catch((err) => {
+        res.status(400).json({
+            status: 'fail',
             message: err.errors[0].message,
         })
     })
+    if (!section) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Não existe nenhuma secção com o ID especificado.'
+        })
+    }
+    res.status(200).json({
+        status: 'success',
+        data: section
+    })
+}
+
+exports.getAll = async (req, res) => {
+    const sections = await Section.findAll().catch((err) => {
+        res.status(202).json({
+            status: 'fail',
+            message: err.errors[0].message,
+        })
+    })
+    if (sections.length < 1) {
+        return res.status(202).json({
+            status: 'failed',
+            message: 'Não existem secções.'
+        })
+    }
+    res.status(200).json({
+        status: 'success',
+        data: sections
+    })
+}
+
+exports.delete = async (req, res) => {
+    const verifyDependencies = await Subsection.findAndCountAll({
+        where: { sectionId: req.params.id }
+    })
+    console.log(verifyDependencies.count)
+    if (verifyDependencies.count > 0) {
+        return res.status(202).json({
+            status: 'failed',
+            message: 'Existem subsecções associadas a esta secção.'
+        })
+    }
+    else {
+        const delSection = await Section.destroy({
+            where: { id: req.params.id }
+        }).catch((err) => {
+            res.status(304).json({
+                status: 'failed',
+                message: err.errors[0].message,
+            })
+        })
+        return res.status(200).json({
+            status: 'success',
+            message: 'A secção foi eliminada com sucesso.'
+        })
+    }
 }

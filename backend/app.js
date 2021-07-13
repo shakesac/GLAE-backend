@@ -3,6 +3,7 @@ const app = express()
 const morgan = require('morgan')
 const api = process.env.API_URL
 const sequelize = require('./util/db')
+const dbInitValues = require('./util/initValues')
 require('dotenv/config')
 
 
@@ -85,11 +86,11 @@ Item.belongsToMany(Lease, { through: 'lease_item' })
 sequelize.sync({ force: true }).then(result => {
     console.log('BD: ' + result.config.database + '\nUser: ' + result.config.username)
     console.log(result.config.protocol + ' ' + result.config.host + ':' + result.config.port)
-    UserRole.create({ name: 'admin'})
-    UserRole.create({ name: 'user'})
+    dbInitValues.create()
 }).catch(err => {
     console.log('ERRO: DB SYNC()', err)
 })
+
 
 
 // 404 - CATCH ALL MIDDLEWARE

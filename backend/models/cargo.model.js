@@ -11,6 +11,7 @@ const Cargo = sequelize.define('cargo', {
     cargo: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true
     }
 }, {
     timestamps: false

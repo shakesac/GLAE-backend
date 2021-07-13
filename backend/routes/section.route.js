@@ -7,7 +7,7 @@ const subSecPre = '/sub'
 router.post('/new', sectionContr.new)
 router.put('/update/:id', sectionContr.update)
 router.delete('/delete/:id', sectionContr.delete)
-//router.get('/all', sectionContr.getAll)
+router.get('/all', sectionContr.getAll)
 router.get('/:id', sectionContr.get)
 
 router.post(subSecPre+'/new', subsectionContr.new)
