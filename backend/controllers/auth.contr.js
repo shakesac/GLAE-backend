@@ -1,6 +1,10 @@
 
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const User = require('../models/user.model')
+const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
+
+
 
 exports.register = async (req, res) => {
     const verifyEmail = await User.findOne({
@@ -22,7 +26,7 @@ exports.register = async (req, res) => {
             email: req.body.email,
             address: req.body.address,
             phoneNumber: req.body.phoneNumber,
-            password: req.body.password
+            password: bcrypt.hashSync(req.body.password, bcryptSalt)
         })
         await newUser.save().catch((err) => {
             console.log('Error: ', err)
@@ -61,15 +65,16 @@ exports.login = async (req, res) => {
         status: 'fail',
         message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que o email não existe por razões de segurança
     })
-    if (checkUser.password !== loginData.password) return res.status(202).json({
+    if (!bcrypt.compareSync(loginData.password, checkUser.password)) return res.status(202).json({
             status: 'fail',
             message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
     })
-    
     const token = jwt.sign({
         id: checkUser.id,
         email: checkUser.email
-    }, process.env.JWT_SECRET)
+    }, process.env.JWT_SECRET, {
+        expiresIn: '15 days'
+    })
 
     res.status(200).json({
         status: 'success',
