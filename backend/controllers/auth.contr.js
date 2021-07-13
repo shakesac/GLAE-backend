@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/user.model')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
+const jwtConfig = require('../util/jwt')
 
 
 
@@ -73,7 +74,8 @@ exports.login = async (req, res) => {
         id: checkUser.id,
         email: checkUser.email
     }, process.env.JWT_SECRET, {
-        expiresIn: '15 days'
+        expiresIn: process.env.JWT_EXPIRATION,
+        algorithm: process.env.JWT_ALGORITHM
     })
 
     res.status(200).json({
