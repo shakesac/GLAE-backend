@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db')
 
-const statusValues = process.env.LEASE_STATES
+const statusValues = ['pending', 'accepted', 'in progress', 'returned', 'refused']
 
 const LeaseStatus = sequelize.define('lease_status', {
     id: {
@@ -22,6 +22,7 @@ const LeaseStatus = sequelize.define('lease_status', {
     }
     }, {
     updatedAt: false,
+    freezeTableName: true,
 })
 
 module.exports = LeaseStatus
