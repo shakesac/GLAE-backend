@@ -1,6 +1,9 @@
 const { Op } = require("sequelize");
 const LeaseStatus = require('../models/lease-status.model')
 const Lease = require('../models/lease.model')
+const availableStatus = process.env.LEASE_STATUS.split(',')
+const unmutableStatus = process.env.UNMUTABLE_STATUS.split(',')
+
 
 exports.new = async (req, res) => {
     const newLease = new Lease({
@@ -74,7 +77,13 @@ exports.get = async (req, res) => {
             model: LeaseStatus
         }]
     }).then((lease) => {
-        res.status(200).json({
+        if (!lease) {
+            res.status(404).json({
+                status: 'failed',
+                message: 'O emprestimo indicado não existe.'
+            })
+        }
+        return res.status(200).json({
             status: 'success',
             data: lease
         })
@@ -90,6 +99,14 @@ exports.get = async (req, res) => {
 exports.updateStatus = async (req, res) => {
     const { status } = req.body
     const leaseId = req.params.id
+    // Verificar se o estado introduzido é válido (pertence ao Array LEASE_STATUS)
+    if (!availableStatus.includes(status)) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'O valor de estado não é válido. \
+            Valores permitidos: ' + availableStatus
+        })
+    }
     // Verificar se o emprestimo existe
     const lease = await Lease.findByPk(leaseId).catch(err => {
         return res.status(400).json({
@@ -105,36 +122,33 @@ exports.updateStatus = async (req, res) => {
     }
     // Verificar se o emprestimo já terminou ou foi cancelado.
     //SELECT * FROM lease_status WHERE leaseId = {leaseId} AND status = 'returned' OR status = 'canceled';
-    LeaseStatus.findOne({
+    const checkLease = await LeaseStatus.findOne({
         where: {
             leaseId,
             status: {
-                [Op.or]: ['returned', 'canceled']
+                [Op.or]: unmutableStatus
             }
         }
-    }).then(status => {
-        if (status) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Não é possivel adicionar estados a este emprestimo por \
-                este já ter terminado ou ter sido cancelado.'
-            })
-        } else {
-            const newStatus = new LeaseStatus({
-                status,
-                leaseId
-            })
-            return newStatus.save().catch(err => {
-                res.status(400).json({
-                    status: 'failed',
-                    message: err.errors[0].message,
-                })
-            })
-        }
+    })
+    if (checkLease){
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Não é possivel adicionar estados a este emprestimo por \
+            este já ter terminado ou ter sido cancelado.'
+        })
+    }
+    LeaseStatus.create({
+        status,
+        leaseId
+    }).then(() => {
+        res.status(201).json({
+            status: 'success',
+            message: 'Estado de encomenda adicionado com sucesso.',
+        })
     }).catch(err => {
         res.status(400).json({
             status: 'failed',
-            message: err
+            message: err.errors[0].message
         })
     })
 }

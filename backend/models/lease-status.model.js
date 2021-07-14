@@ -1,13 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db')
-
-const statusValues = [
-    'pending',
-    'accepted',
-    'in progress',
-    'returned',
-    'refused',
-    'canceled']
+const statusValues = process.env.LEASE_STATUS.split(',')
 
 const LeaseStatus = sequelize.define('lease_status', {
     id: {
