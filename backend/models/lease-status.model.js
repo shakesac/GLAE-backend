@@ -23,6 +23,14 @@ const LeaseStatus = sequelize.define('lease_status', {
     }, {
     updatedAt: false,
     freezeTableName: true,
+    // Verificar se o estado introduzido é válido (pertence ao Array LEASE_STATUS)
+    validate: {
+        checkStatus() {
+            if (!statusValues.includes(this.status)) {
+                throw new Error('O estado indicado não é válido. Estados: ' + statusValues)
+            }
+        }
+    }
 })
 
 module.exports = LeaseStatus
