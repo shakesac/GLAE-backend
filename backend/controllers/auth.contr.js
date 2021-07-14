@@ -94,7 +94,7 @@ exports.login = (req, res, next) => {
     })
 }
 
-exports.verifyToken = async (req, res, next) => {
+exports.verify = async (req, res, next) => {
     const userToken = req.cookies.jwt
     if (!userToken) {
         return res.status(403).json({
