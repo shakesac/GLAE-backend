@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const {verify} = require('../controllers/auth.contr')
 const userContr = require('../controllers/user.contr')
 
-router.put('/update/:id', userContr.update)
-router.get('/:id', userContr.get)
+router.put('/update/:id', verify,userContr.update)
+router.get('/:id', verify, userContr.get)
 
 module.exports = router

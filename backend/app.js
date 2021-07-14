@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cookieParser = require('cookie-parser')
 const api = process.env.API_URL
 const sequelize = require('./util/db')
 const dbInitValues = require('./util/initValues')
@@ -10,6 +11,7 @@ require('dotenv/config')
 //MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json()) //body-parser on Express 4.16+ 
+app.use(cookieParser())
 app.use(morgan('tiny'))
 
 //ROUTES

@@ -4,83 +4,121 @@ const bcrypt = require('bcrypt')
 const User = require('../models/user.model')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const jwtConfig = require('../util/jwt')
+const app = require('../app')
 
-
-
-exports.register = async (req, res) => {
-    const verifyEmail = await User.findOne({
+exports.register = (req, res, next) => {
+    const {firstName, lastName, email, address, phoneNumber, password} = req.body
+    User.findOne({
         where: {
             email: req.body.email
         }
-    }).catch((err) => {
-        console.log('Error: ', err)
-    })
-    if(verifyEmail) {
-        return res.status(200).json({
-            message: 'Já existe um utilizador com o email indicado.'
-        })
-    }
-    try {
+    }).then((user) => {
+        if (user) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Já existe um utilizador com o email indicado.'
+            })
+        }
+        return bcrypt.hash(password, bcryptSalt)
+    }).then(hashedPw => {
         const newUser = new User({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            address: req.body.address,
-            phoneNumber: req.body.phoneNumber,
-            password: bcrypt.hashSync(req.body.password, bcryptSalt)
+            firstName,
+            lastName,
+            email,
+            address,
+            phoneNumber,
+            password: hashedPw
         })
-        await newUser.save().catch((err) => {
-            console.log('Error: ', err)
-            res.status(204).json({
+        return newUser.save().catch(err => {
+            res.status(400).json({
                 status: 'failed',
                 message: err.errors[0].message,
             })
         })
-        res.status(201).json({
+    }).then((result) => {
+        return res.status(201).json({
             status: 'success',
-            message: 'Utilizador registado com sucesso.',
-            UserId: newUser.id
+            message: 'O utilizador foi registado com sucesso.'
         })
-    } catch (err) {
-        console.log('Erro: ', err)
+    }).catch(err => {
         res.status(400).json({
-            status: 'fail',
-            message: 'Sintaxe Inválida'
+            status: 'failed',
+            message: err.errors[0].message,
         })
-    }
-    /*
-    */
+    })
 }
 
-exports.login = async (req, res) => {
-    const loginData = {
-        email: req.body.email,
-        password: req.body.password
-    }
-    const checkUser = await User.findOne({
-        where: {email: loginData.email}
-    }).catch((err) => {
-        console.log('Erro: ', err)
+exports.login = (req, res, next) => {
+    const { email, password } = req.body
+    User.findOne({
+        where: {
+            email
+        }
+    }).then(user => {
+        if (!user) {
+            return res.status(202).json({
+                status: 'failed',
+                message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que o email não existe por razões de segurança
+            })
+        }
+        bcrypt.compare(password, user.password).then(result => {
+            if (!result) {
+                return res.status(202).json({
+                    status: 'fail',
+                    message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
+                })
+            } else {
+                const token = jwt.sign({
+                    id: user.id,
+                    email: user.email
+                }, process.env.JWT_SECRET, {
+                    expiresIn: process.env.JWT_EXPIRATION,
+                    algorithm: process.env.JWT_ALGORITHM
+                })
+                res.cookie('jwt', token, {
+                    httpOnly: true,
+                    secure: process.env.HTTP_ACTIVE,
+                })
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Sessão iniciada',
+                    token: token
+                })
+            }
+        }).catch(err => {
+            res.status(202).json({
+                status: 'failed',
+                message: err
+            })
+        })
     })
-    if (!checkUser) return res.status(202).json({
-        status: 'fail',
-        message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que o email não existe por razões de segurança
-    })
-    if (!bcrypt.compareSync(loginData.password, checkUser.password)) return res.status(202).json({
-            status: 'fail',
-            message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
-    })
-    const token = jwt.sign({
-        id: checkUser.id,
-        email: checkUser.email
-    }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRATION,
-        algorithm: process.env.JWT_ALGORITHM
-    })
+}
 
-    res.status(200).json({
-        status: 'success',
-        message: 'Sessão iniciada',
-        token: token
+exports.verifyToken = async (req, res, next) => {
+    const userToken = req.cookies.jwt
+    if (!userToken) {
+        return res.status(403).json({
+            status: 'failed',
+            message: 'Token em falta nos Headers.'
+        })
+    }
+    jwt.verify(userToken, process.env.JWT_SECRET, async (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                status: 'failed',
+                message: 'O token não é válido.'
+            })
+        } else {
+            // Verifica se utilizador ao qual pertence ainda existe
+            const user = await User.findByPk(decoded.id)
+            if (!user) {
+                return res.status(401).json({
+                    status: 'failed',
+                    message: 'O utilizador já não existe.'
+                })
+            }
+            req.user = user
+            next()
+        }
     })
 }
