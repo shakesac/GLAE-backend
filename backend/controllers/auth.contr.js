@@ -35,7 +35,7 @@ exports.register = (req, res, next) => {
                 message: err.errors[0].message,
             })
         })
-    }).then((result) => {
+    }).then(() => {
         return res.status(201).json({
             status: 'success',
             message: 'O utilizador foi registado com sucesso.'

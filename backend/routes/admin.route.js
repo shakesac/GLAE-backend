@@ -1,8 +1,6 @@
 // É a route que lida com a gestão dos items e utilizadores
 const express = require('express')
 const router = express.Router()
-const passport = require('passport')
-//require('../util/passport')
 const api = process.env.API_URL
 
 const rootDir = require('../util/path')

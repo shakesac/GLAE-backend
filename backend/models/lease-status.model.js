@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db')
 
-const statusValues = ['pending', 'accepted', 'in progress', 'returned', 'refused']
+const statusValues = [
+    'pending',
+    'accepted',
+    'in progress',
+    'returned',
+    'refused',
+    'canceled']
 
 const LeaseStatus = sequelize.define('lease_status', {
     id: {
@@ -14,6 +20,7 @@ const LeaseStatus = sequelize.define('lease_status', {
         type: Sequelize.ENUM({
             values: statusValues
         }),
+        defaultValue: 'pending',
         allowNull: false,
     },
     leaseId: {
