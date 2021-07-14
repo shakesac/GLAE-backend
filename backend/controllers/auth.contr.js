@@ -97,9 +97,9 @@ exports.login = (req, res, next) => {
 exports.verify = async (req, res, next) => {
     const userToken = req.cookies.jwt
     if (!userToken) {
-        return res.status(403).json({
+        return res.status(401).json({
             status: 'failed',
-            message: 'Token em falta nos Headers.'
+            message: 'Não tem sessão iniciada.'
         })
     }
     jwt.verify(userToken, process.env.JWT_SECRET, async (err, decoded) => {
@@ -109,7 +109,7 @@ exports.verify = async (req, res, next) => {
                 message: 'O token não é válido.'
             })
         } else {
-            // Verifica se utilizador ao qual pertence ainda existe
+            // Verifica se utilizador ao qual o token pertence ainda existe
             const user = await User.findByPk(decoded.id)
             if (!user) {
                 return res.status(401).json({
@@ -121,4 +121,18 @@ exports.verify = async (req, res, next) => {
             next()
         }
     })
+}
+
+exports.logout = (req, res) => {
+    if (req.cookies.jwt) {
+        res.clearCookie('jwt').status(200).json({
+            status: 'success',
+            message: 'Sessão terminada.'
+        })
+    } else {
+        res.status(401).json({
+            status: 'failed',
+            message: 'JWT inválido.'
+        })
+    }
 }
