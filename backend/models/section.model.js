@@ -15,6 +15,14 @@ const Section = sequelize.define('section', {
         type: Sequelize.STRING(50),
         allowNull: false,
     }
+}, {
+    validate: {
+        checkId() {
+            if (this.id < 0 || this.id > 9) {
+                throw new Error('O código deverá ser um valor entre 0 e 9.')
+            }
+        }
+    }
 })
 
 module.exports = Section

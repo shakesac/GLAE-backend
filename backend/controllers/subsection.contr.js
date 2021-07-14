@@ -27,42 +27,28 @@ exports.new = async (req, res) => {
     })
 }
 
-exports.new = async (req, res) => {
-    const newSubsection = await new Subsection({
-        id: req.body.id,
-        subsection: req.body.subsection,
-        sectionId: req.body.sectionId
-    })
-    await newSubsection.save().then((subsection) => {
-        res.status(201).json({
-            status: 'success',
-            message: 'A subsecção foi criada com sucesso.',
-            data: subsection
-        })
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
-}
-
 exports.update = async (req, res) => {
+    const { id, subsection, sectionId } = req.body
+    if (id < 0 && id > 9) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'O código deverá ser um valor entre 0 e 9.'
+        })
+    }
     await Subsection.update({
-        id: req.body.id,
-        subsection: req.body.subsection,
-        sectionId: req.body.sectionId
+        id,
+        subsection,
+        sectionId
     }, {
         where: { id: req.params.id }
-    }).then((subsection) => {
+    }).then(() => {
         res.status(200).json({
             status: 'success',
             message: 'A subsecção foi actualizada com sucesso.',
         })
     }).catch((err) => {
         console.log('Erro: ', err)
-        res.status(304).json({
+        res.status(400).json({
             status: 'fail',
             message: err.errors[0].message,
         })
