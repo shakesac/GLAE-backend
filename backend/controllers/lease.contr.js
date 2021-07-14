@@ -99,14 +99,6 @@ exports.get = async (req, res) => {
 exports.updateStatus = async (req, res) => {
     const { status } = req.body
     const leaseId = req.params.id
-    // Verificar se o estado introduzido é válido (pertence ao Array LEASE_STATUS)
-    if (!availableStatus.includes(status)) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'O valor de estado não é válido. \
-            Valores permitidos: ' + availableStatus
-        })
-    }
     // Verificar se o emprestimo existe
     const lease = await Lease.findByPk(leaseId).catch(err => {
         return res.status(400).json({
@@ -133,8 +125,7 @@ exports.updateStatus = async (req, res) => {
     if (checkLease){
         return res.status(400).json({
             status: 'failed',
-            message: 'Não é possivel adicionar estados a este emprestimo por \
-            este já ter terminado ou ter sido cancelado.'
+            message: 'Não é possivel adicionar estados a este emprestimo por este já ter terminado ou ter sido cancelado.'
         })
     }
     LeaseStatus.create({
