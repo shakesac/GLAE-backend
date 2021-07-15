@@ -56,15 +56,15 @@ exports.login = (req, res, next) => {
         }
     }).then(user => {
         if (!user) {
-            return res.status(202).json({
+            return res.status(400).json({
                 status: 'failed',
                 message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que o email não existe por razões de segurança
             })
         }
         bcrypt.compare(password, user.password).then(result => {
             if (!result) {
-                return res.status(202).json({
-                    status: 'fail',
+                return res.status(400).json({
+                    status: 'failed',
                     message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
                 })
             } else {

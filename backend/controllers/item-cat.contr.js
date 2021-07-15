@@ -63,3 +63,25 @@ exports.update = async (req, res) => {
         })
     })
 }
+
+exports.get = async (req, res) => {
+    await Subsection.findByPk(req.params.id, {include: Section}).then((subsection) => {
+        if (subsection == null) {
+            res.status(404).json({
+                status: 'not found',
+                message: 'Não existe nenhuma subsecção com o ID especificado.'
+            })
+        }
+        res.status(200).json({
+            status: 'success',
+            data: subsection,
+            subsectionFullId: subsection.sectionId+''+subsection.id
+        })
+    }).catch((err) => {
+        console.log('Erro: ', err)
+        res.status(202).json({
+            status: 'fail',
+            message: err.errors[0].message,
+        })
+    })
+}

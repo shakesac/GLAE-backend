@@ -34,7 +34,7 @@ const LeaseStatus = sequelize.define('lease_status', {
             }
         },
         checkComment() {
-            if (this.comment && this.comment.length > 1001) {
+            if (this.comment && this.comment.length > 1000) {
                 throw new Error('O comentário não pode ter mais de 1000 caracteres.')
             }
         }
