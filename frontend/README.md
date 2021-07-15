@@ -1,4 +1,4 @@
-# 1240armazem
+# frontend
 
 ## Project setup
 ```
