@@ -19,6 +19,9 @@ const LeaseStatus = sequelize.define('lease_status', {
     leaseId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+    },
+    comment: {
+        type: Sequelize.TEXT
     }
     }, {
     updatedAt: false,
@@ -28,6 +31,12 @@ const LeaseStatus = sequelize.define('lease_status', {
         checkStatus() {
             if (!statusValues.includes(this.status)) {
                 throw new Error('O estado indicado não é válido. Estados: ' + statusValues)
+            }
+        },
+        checkComment() {
+            if (this.comment) {console.log(this.comment.length)}
+            if (this.comment && this.comment.length > 1001) {
+                throw new Error('O comentário não pode ter mais de 1000 caracteres.')
             }
         }
     }

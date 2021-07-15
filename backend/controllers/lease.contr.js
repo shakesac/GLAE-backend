@@ -88,7 +88,6 @@ exports.get = async (req, res) => {
             data: lease
         })
     }).catch((err) => {
-        console.log('Erro: ', err)
         res.status(202).json({
             status: 'fail',
             message: err.errors[0].message,
@@ -97,7 +96,7 @@ exports.get = async (req, res) => {
 }
 
 exports.updateStatus = async (req, res) => {
-    const { status } = req.body
+    const { status, comment } = req.body
     const leaseId = req.params.id
     // Verificar se o emprestimo existe
     const lease = await Lease.findByPk(leaseId).catch(err => {
@@ -130,7 +129,8 @@ exports.updateStatus = async (req, res) => {
     }
     LeaseStatus.create({
         status,
-        leaseId
+        leaseId,
+        comment
     }).then(() => {
         res.status(201).json({
             status: 'success',
