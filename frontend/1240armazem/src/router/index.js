@@ -19,7 +19,7 @@ const routes = [
         name: 'about,',
         // Carregamento lazy (loaded apenas quando é visitada)
         component: () => import('../views/About.vue')
-    }
+    },
     {
         path: '*',
         component: PageNotFound
