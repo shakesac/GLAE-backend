@@ -2,8 +2,9 @@
     <main>
         <img alt="Vue logo" src="../assets/logo.png">
         <div>
-            <b-table striped hover :sections="sections">
-            </b-table>
+            <b-table striped hover :items="sections"></b-table>
+            <b-table striped hover :items="subsections"></b-table>
+            <p>{{ sections }}</p>
         </div>
     </main>
 </template>
@@ -16,12 +17,21 @@ export default {
     name: 'Main',
     data() {
         return {
-            sections: []
+            sections: [],
+            subsections: []
         }
     }, 
     mounted() {
         api.get('/section/all').then(res => {
-            this.sections = res.data
+            if (res.status == 'failed'){
+                console.log(res.message)
+            } else {
+                console.log(res.status, res.data.status)
+                this.sections = res.data.data
+            }
+        })
+        api.get('/section/sub/all').then(res => {
+            this.subsections = res.data.data
         })
     }
 }
