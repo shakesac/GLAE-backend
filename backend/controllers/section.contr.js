@@ -79,13 +79,13 @@ exports.get = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     const sections = await Section.findAll().catch((err) => {
-        res.status(202).json({
-            status: 'fail',
+        res.status(400).json({
+            status: 'failed',
             message: err.errors[0].message,
         })
     })
     if (sections.length < 1) {
-        return res.status(202).json({
+        return res.status(404).json({
             status: 'failed',
             message: 'Não existem secções.'
         })

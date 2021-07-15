@@ -3,25 +3,27 @@ const Subsection = require('../models/subsection.model')
 const User = require('../models/user.model')
 
 exports.new = async (req, res) => {
+    const { id, subsection, sectionId } = req.body
     const newSubsection = new Subsection({
-        id: req.body.id,
-        section: req.body.section
+        id,
+        subsection,
+        sectionId
     })
-    await newSection.save().then((section) => {
+    await newSubsection.save().then((section) => {
         res.status(201).json({
             status: 'success',
             message: 'A secção foi criada com sucesso',
             data: section
         })
     }).catch((err) => {
-        if (err.errors[0].message == 'sections.PRIMARY must be unique') {
+        if (err.errors[0].message == 'subsections.PRIMARY must be unique') {
             return res.status(400).json({
                 status: 'failed',
                 message: 'Já existe uma secção com o código ' + req.body.id + 'atribuido.'
             })
         }
         res.status(400).json({
-            status: 'fail',
+            status: 'failed',
             message: err.errors[0].message,
         })
     })
