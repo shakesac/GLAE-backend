@@ -14,6 +14,7 @@ const Subsection = sequelize.define('subsection', {
     sectionId: {
         type: Sequelize.INTEGER(2),
         allowNull: false,
+        primaryKey: true
     }
 }, {
     validate: {
