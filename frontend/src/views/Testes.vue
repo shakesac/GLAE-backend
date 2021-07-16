@@ -5,7 +5,7 @@
             <main class="px-3 d-flex flex-column">
                 <table class="table table-hover">
                 </table>
-                <p v-for="(id, section) in sections" :key="id">{{ section }}</p>
+                <p v-for="(id, sections) in sections" :key="id">{{ sections }}</p>
             </main>
             </div>
         </div>        
@@ -14,14 +14,23 @@
 
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
     name: 'Testes',
     computed: {
         ...mapState(['sections']),
-    }
-}
-console.log(mapState.sections)
+    }, 
+    async created() {
+        await this.loadSections();
+    },
+    methods: {
+        ...mapActions(['getSections']),
+        async loadSections() {
+            await this.getSections();
+        },
+    },
+};
+console.log(mapState.subsections)
 </script>
 <style>
   .center-container {
