@@ -5,11 +5,14 @@
 Open endpoints não requerem autenticação.
 
 * [Login](auth/login.md) : `POST /api/v1/login/`
-* [Registar](auth/register.md) : `POST /api/v1/register` 
+* [Registo](auth/register.md) : `POST /api/v1/register` 
+
+* [Mostrar Secções](section.getAll.md) : `GET /api/v1/section/all`
+* [Mostrar Grupos](subsection.getAll.md) : `GET /api/v1/section/sub/all`
 
 ## Endpoints que requerem autenticação
 
-Endpoints fechados requerem um token válido incluído no header do pedido. Pode obter-se um token através do pedido de Login mencionado em cima.
+Endpoints fechados requerem um token válido incluído no header do pedido. Pode obter-se um token através do pedido de Login mencionado acima.
 
 ### Current User related
 
