@@ -20,7 +20,7 @@ exports.new = async (req, res) => {
             })
         }
         res.status(400).json({
-            status: 'fail',
+            status: 'failed',
             message: err.errors[0].message,
         })
     })
@@ -47,7 +47,7 @@ exports.update = async (req, res) => {
     }).catch((err) => {
         console.log('Erro: ', err)
         res.status(202).json({
-            status: 'fail',
+            status: 'failed',
             message: err.errors[0].message,
         })
     })
@@ -61,7 +61,7 @@ exports.update = async (req, res) => {
 exports.get = async (req, res) => {
     const section = await Section.findByPk(req.params.id).catch((err) => {
         res.status(400).json({
-            status: 'fail',
+            status: 'failed',
             message: err.errors[0].message,
         })
     })
