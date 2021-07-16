@@ -7,7 +7,13 @@ const jwtConfig = require('../util/jwt')
 const app = require('../app')
 
 exports.register = (req, res, next) => {
-    const {firstName, lastName, email, address, phoneNumber, password} = req.body
+    const {firstName, lastName, email, address, phoneNumber, password, confirmPassword} = req.body
+    if (password !== confirmPassword) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'A palavra-passe e a confirmação não coincidem.'
+        })
+    }
     User.findOne({
         where: {
             email: req.body.email
