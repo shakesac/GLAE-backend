@@ -7,8 +7,8 @@ Open endpoints não requerem autenticação.
 * [Login](auth/login.md) : `POST /api/v1/login/`
 * [Registo](auth/register.md) : `POST /api/v1/register` 
 
-* [Mostrar Secções](section.getAll.md) : <span style="color:blue">GET</span> `/api/v1/section/all`
-* [Mostrar Grupos](section.getAll.md) : `GET /api/v1/section/sub/all`
+* [Mostrar Secções](section.getAll.md) : `GET /api/v1/section/all`
+* [Mostrar Grupos](subsection.getAll.md) : `GET /api/v1/section/sub/all`
 
 ## Endpoints que requerem autenticação
 
