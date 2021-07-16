@@ -19,9 +19,9 @@
                             <input type="text" id="address" class="form-control" placeholder="Morada" required>
                             <label for="address">Morada</label>
                         </div>
-                        <select class="form-select" aria-label="section">
+                        <select class="form-select" aria-label="sections">
                             <option selected>Secção</option>
-                            <option v-for="(id, section) in sections" value="{{ id }}" :key="id">{{ section }}</option>
+                            <option v-for="section in sections" value="{{ section.id }}" :key="section.id">{{ section.section }}</option>
                         </select>
                         <select class="form-select" aria-label="subsection">
                             <option selected>Grupo</option>
@@ -47,13 +47,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
-    name: 'Testes',
+    name: 'Register',
     computed: {
         ...mapState(['sections']),
-    }
-}
+    }, 
+    async created() {
+        await this.loadSections();
+    },
+    methods: {
+        ...mapActions(['getSections']),
+        async loadSections() {
+            await this.getSections();
+        },
+    },
+};
 </script>
 
 <style>
