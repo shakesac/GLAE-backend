@@ -34,7 +34,6 @@ exports.create = async () => {
         { id: 1, subsection: 'Vasco da Gama', sectionId: 4},
     ])
 
-
     //DEV - DADOS DE TESTE
     const users = await User.bulkCreate([
         {
