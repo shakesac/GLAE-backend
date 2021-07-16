@@ -21,9 +21,7 @@
                         </div>
                         <select class="form-select" aria-label="section">
                             <option selected>Secção</option>
-                            <option value="1">Exemplo1</option>
-                            <option value="2">Exemplo2</option>
-                            <option value="3">Exemplo3</option>
+                            <option v-for="(id, section) in sections" value="{{ id }}" :key="id">{{ section }}</option>
                         </select>
                         <select class="form-select" aria-label="subsection">
                             <option selected>Grupo</option>
@@ -49,8 +47,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-    
+    name: 'Testes',
+    computed: {
+        ...mapState(['sections']),
+    }
 }
 </script>
 
