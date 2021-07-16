@@ -14,7 +14,7 @@ export default createStore({
     getSections({ commit }) {
       api.get('/section/all').then(res => {
         commit('getSections', res.data.data)
-        console.log(res.data.data)
+        console.log('Action: ',res.data.data)
       })
     }
   },

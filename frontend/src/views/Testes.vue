@@ -18,9 +18,10 @@ import { mapState } from 'vuex'
 export default {
     name: 'Testes',
     computed: {
-        ...mapState(['sections'])
+        ...mapState(['sections']),
     }
 }
+console.log(mapState.sections)
 </script>
 <style>
   .center-container {
