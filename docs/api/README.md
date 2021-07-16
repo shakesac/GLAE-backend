@@ -12,7 +12,7 @@ Open endpoints não requerem autenticação.
 
 ## Endpoints que requerem autenticação
 
-Endpoints fechados requerem um token válido incluído no header do pedido. Pode obter-se um token através do pedido de Login mencionado em cima.
+Endpoints fechados requerem um token válido incluído no header do pedido. Pode obter-se um token através do pedido de Login mencionado acima.
 
 ### Current User related
 
