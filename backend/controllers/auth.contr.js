@@ -5,13 +5,33 @@ const User = require('../models/user.model')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const jwtConfig = require('../util/jwt')
 const app = require('../app')
+const Subsection = require('../models/subsection.model')
 
-exports.register = (req, res, next) => {
-    const {firstName, lastName, email, address, phoneNumber, password, confirmPassword} = req.body
+exports.register = async (req, res) => {
+    const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId} = req.body
     if (password !== confirmPassword) {
         return res.status(400).json({
             status: 'failed',
             message: 'A palavra-passe e a confirmação não coincidem.'
+        })
+    }
+    const idSplit = subsectionId.split('')
+    if (!idSplit || !idSplit[1]) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Código de grupo inválido.'
+        })
+    }
+    const subsectionExists = await Subsection.findOne({
+        where: {
+            id: idSplit[1],
+            sectionId: idSplit[0]
+        }
+    })
+    if (!subsectionExists) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Não existe nenhum grupo com o código ' + sectionId + '.'
         })
     }
     User.findOne({
@@ -33,7 +53,8 @@ exports.register = (req, res, next) => {
             email,
             address,
             phoneNumber,
-            password: hashedPw
+            password: hashedPw,
+            subsectionId
         })
         return newUser.save().catch(err => {
             res.status(400).json({
