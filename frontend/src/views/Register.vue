@@ -4,7 +4,7 @@
   <h5>Registo</h5>
 </div>
 <div class="row">
-  <form align="align-items-center">
+  <form align="align-items-center" novalidade data-vv-scope="create-user-form">
     <div class="row">
 <div class="col-md-4 mx-auto">
       <div class="form-label-group">
@@ -59,7 +59,7 @@
           placeholder="Endereço de email"
           required
         />
-        <label for="address">Endereço de email</label>
+        <label for="email">Endereço de email</label>
       </div>
     <div class="form-label-group">
         <input
@@ -135,7 +135,8 @@
 import { mapState, mapActions } from 'vuex'
 export default {
     name: 'Register',
-    data() {
+    
+    data()  {
         return {
            users: {
             firstName: '',
@@ -143,7 +144,8 @@ export default {
             email: '',
             address: '',
             phoneNumber: '',
-            password: '' 
+            password: '',
+            confirmPassword: '',
            }
         };
     },
@@ -151,29 +153,20 @@ export default {
         ...mapState(['sections']),
     }, 
     async created() {
-        await this.loadSections();
+        await this.getSections();
     },
     methods: {
         ...mapActions(['getSections', 'registerUserAction']),
         async saveUser() {
-            this$validator.validateAll('create-user-form').then(async (valid) => {
-               if (valid) {
-                   if (this.getUserByEmail(this.user.email) === undefined) {
-                       await this.registerUserAction(this.user);
-                       this.$router.push({ name: 'Home'});
-                   } else {
-                       notifier.alert(
-                         `utilizador não criado porque <b>${this.user.email}</b? já existe`
-                       );
-                   }
-               }
-            });
-        },
+          await this.registerUserAction(this.user).catch(err => {
+            console.log(err)
+          })
+        }
     }
 }
 </script>
 
-<style>
+<style scoped>
 :root {
   --input-padding-x: 1.5rem;
   --input-padding-y: 0.75rem;

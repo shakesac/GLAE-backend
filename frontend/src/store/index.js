@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import api from '@/services/api.js'
+import auth from './modules/auth'
 
 export default createStore({
   state: {
@@ -22,9 +23,10 @@ export default createStore({
     },
     registerUserAction({ commit }) {
       api.post('/register').then(res => {
+        console.log('Cheguei à action')
         commit('setUserData', res.data.data)
       })
-    }
+    },
   },
   getters: {
     getSections(state) {
@@ -32,5 +34,6 @@ export default createStore({
     }
   },
   modules: {
+    auth,
   }
 })

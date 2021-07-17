@@ -8,6 +8,7 @@ const app = require('../app')
 const Subsection = require('../models/subsection.model')
 
 exports.register = async (req, res) => {
+    console.log(req.body)
     const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId} = req.body
     if (password !== confirmPassword) {
         return res.status(400).json({
@@ -15,24 +16,26 @@ exports.register = async (req, res) => {
             message: 'A palavra-passe e a confirmação não coincidem.'
         })
     }
-    const idSplit = subsectionId.split('')
-    if (!idSplit || !idSplit[1]) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Código de grupo inválido.'
-        })
-    }
-    const subsectionExists = await Subsection.findOne({
-        where: {
-            id: idSplit[1],
-            sectionId: idSplit[0]
+    if (subsectionId) {
+        const idSplit = subsectionId.split('')
+        if (!idSplit || !idSplit[1]) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Código de grupo inválido.'
+            })
         }
-    })
-    if (!subsectionExists) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Não existe nenhum grupo com o código ' + sectionId + '.'
+        const subsectionExists = await Subsection.findOne({
+            where: {
+                id: idSplit[1],
+                sectionId: idSplit[0]
+            }
         })
+        if (!subsectionExists) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Não existe nenhum grupo com o código ' + sectionId + '.'
+            })
+        }
     }
     User.findOne({
         where: {

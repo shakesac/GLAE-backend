@@ -1,16 +1,16 @@
 <template>
-        <div class="col col-md-4 mx-auto">
+        <div class="col col-lg-4 mx-auto">
             <h5 class="text-center">Iniciar sessão</h5>
             <form>
                 <div class="form-label-group">
-                <input type="email" id="inputEmail" class="form-control" placeholder="Endereço de email" required autofocus>
+                <input v-model="email" type="email" id="inputEmail" class="form-control" placeholder="Endereço de email" required autofocus>
                 <label for="inputEmail">Endereço de email</label>
                 </div>
                 <div class="form-label-group">
-                <input type="password" id="inputPassword" class="form-control" placeholder="Palavra-passe" required>
+                <input type="password" v-model="pass" id="inputPassword" class="form-control" placeholder="Palavra-passe" required>
                 <label for="inputPassword">Palavra-passe</label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2 mt-3 w-100" type="submit">Entrar</button>
+                <button v-on:click="onSubmit" class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2 mt-3 w-100" type="submit">Entrar</button>
                 <div class="text-center mt-1">
                     <router-link to="/registo" class="link small">Não tens conta?</router-link>
                 </div>
@@ -19,8 +19,26 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
-    
+    name: 'Login',
+    data() {
+        return {
+            email: '',
+            pass: ''
+        }
+     },
+    methods: {
+        ...mapActions(['login']),
+        onSubmit() {
+            this.login({
+                email: this.email,
+                password: this.pass
+            })
+
+        },
+    },
+
 }
 </script>
 
