@@ -6,9 +6,9 @@ const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const jwtConfig = require('../util/jwt')
 const app = require('../app')
 const Subsection = require('../models/subsection.model')
+const ssl = process.env.HTTP_ACTIVE
 
 exports.register = async (req, res) => {
-    console.log(req.body)
     const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId} = req.body
     if (password !== confirmPassword) {
         return res.status(400).json({
@@ -79,6 +79,7 @@ exports.register = async (req, res) => {
 }
 
 exports.login = (req, res, next) => {
+    console.log(req.body)
     const { email, password } = req.body
     User.findOne({
         where: {
@@ -106,9 +107,11 @@ exports.login = (req, res, next) => {
                     algorithm: process.env.JWT_ALGORITHM
                 })
                 res.cookie('jwt', token, {
-                    httpOnly: true,
-                    secure: process.env.HTTP_ACTIVE,
+                    httpOnly: ssl,
+                    secure: false,
+                    //sameSite: 'secure'
                 })
+                console.log(process.env.HTTP_ACTIVE)
                 return res.status(200).json({
                     status: 'success',
                     message: 'Sessão iniciada',

@@ -7,7 +7,7 @@ const getters = {
     isLoggedIn: (state) => {
        return !!state.token
     }
-
+'Content-Type': 'application/x-www-form-urlencoded'
 }
 
 const actions = {
@@ -15,7 +15,7 @@ const actions = {
         event.preventDefault();
         api.post('/login', credentials).then(res => {
             const token = res.data.token;
-            document.cookie = "auth_token="+token;
+            document.cookie = 'jwt=' + token;
         }).catch(err => {
             console.log('API resquest: ', err)
         })
