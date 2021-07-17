@@ -1,5 +1,4 @@
 <template>
-  <div class="center-container d-flex text-white bg-dark">
     <div class="cover-container w-100 p-3 mx-auto justify-content-center d-flex flex-column">
     <main class="px-3 d-flex flex-column">
         <div class="col-8 mx-auto">
@@ -25,7 +24,6 @@
         </div>
     </main>
     </div>
-  </div>
 </template>
 
 <script>
@@ -38,12 +36,6 @@ export default {
     :root {
     --input-padding-x: 1.5rem;
     --input-padding-y: 0.75rem;
-    }
-  .center-container {
-      background-image: url('../assets/background.jpg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;      
     }
     .card-signin {
         color:black;
