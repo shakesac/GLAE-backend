@@ -1,6 +1,5 @@
 <template>
-
-    <main class="px-3 d-flex flex-column">
+    <main class="col-sm d-flex flex-column">
       <h1>Cover your page.</h1>
       <p class="lead">1Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
       <p class="lead">2Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>

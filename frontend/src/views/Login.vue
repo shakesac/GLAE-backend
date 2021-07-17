@@ -1,29 +1,21 @@
 <template>
-    <div class="cover-container w-100 p-3 mx-auto justify-content-center d-flex flex-column">
-    <main class="px-3 d-flex flex-column">
-        <div class="col-8 mx-auto">
-            <div class="card card-signin my-5">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Iniciar sessão</h5>
-                    <form>
-                        <div class="form-label-group">
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Endereço de email" required autofocus>
-                        <label for="inputEmail">Endereço de email</label>
-                        </div>
-                        <div class="form-label-group">
-                        <input type="password" id="inputPassword" class="form-control" placeholder="Palavra-passe" required>
-                        <label for="inputPassword">Palavra-passe</label>
-                        </div>
-                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2 mt-3 w-100" type="submit">Entrar</button>
-                        <div class="text-center mt-1">
-                            <router-link to="/registo" class="link small">Não tens conta?</router-link>
-                        </div>
-                    </form>
+        <div class="col col-md-4 mx-auto">
+            <h5 class="text-center">Iniciar sessão</h5>
+            <form>
+                <div class="form-label-group">
+                <input type="email" id="inputEmail" class="form-control" placeholder="Endereço de email" required autofocus>
+                <label for="inputEmail">Endereço de email</label>
                 </div>
-            </div>
+                <div class="form-label-group">
+                <input type="password" id="inputPassword" class="form-control" placeholder="Palavra-passe" required>
+                <label for="inputPassword">Palavra-passe</label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2 mt-3 w-100" type="submit">Entrar</button>
+                <div class="text-center mt-1">
+                    <router-link to="/registo" class="link small">Não tens conta?</router-link>
+                </div>
+            </form>
         </div>
-    </main>
-    </div>
 </template>
 
 <script>
@@ -36,18 +28,6 @@ export default {
     :root {
     --input-padding-x: 1.5rem;
     --input-padding-y: 0.75rem;
-    }
-    .card-signin {
-        color:black;
-        padding: 1rem;
-        border: 0;
-        border-radius: 1rem;
-        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-    }
-    .card-signin .card-title {
-        margin-bottom: 2rem;
-        font-weight: 300;
-        font-size: 1.5rem;
     }
     .btn-login {
         font-size: 0.9rem;

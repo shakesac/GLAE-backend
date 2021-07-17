@@ -1,104 +1,84 @@
 <template>
-  <div class="center-container d-flex text-white bg-dark">
-    <div
-      class="
-        cover-container
-        w-100
-        p-3
-        mx-auto
-        justify-content-center
-        d-flex
-        flex-column
-      "
-    >
-      <main class="px-3 d-flex flex-column">
-        <div class="col-8 mx-auto">
-          <div class="card card-signin my-5">
-            <div class="card-body">
-              <h5 class="card-title text-center">Registo</h5>
-              <form>
-                <div class="form-label-group">
-                  <input
-                    type="text"
-                    id="firstName"
-                    class="form-control"
-                    placeholder="Nome"
-                    required
-                    autofocus
-                  />
-                  <label for="firstName">Nome</label>
-                </div>
-                <div class="form-label-group">
-                  <input
-                    type="text"
-                    id="lastName"
-                    class="form-control"
-                    placeholder="Apelido"
-                    required
-                  />
-                  <label for="lastName">Apelido</label>
-                </div>
-                <div class="form-label-group">
-                  <input
-                    type="text"
-                    id="address"
-                    class="form-control"
-                    placeholder="Morada"
-                    required
-                  />
-                  <label for="address">Morada</label>
-                </div>
-                <select class="form-select" aria-label="sections">
-                  <option selected>Secção</option>
-                  <option
-                    v-for="section in sections"
-                    value="{{ section.id }}"
-                    :key="section.id"
-                  >
-                    {{ section.section }}
-                  </option>
-                </select>
-                <select class="form-select" aria-label="subsection">
-                  <option selected>Grupo</option>
-                  <option value="1">Exemplo1</option>
-                  <option value="2">Exemplo2</option>
-                  <option value="3">Exemplo3</option>
-                </select>
-                <div class="form-label-group">
-                  <input
-                    type="password"
-                    id="inputPassword"
-                    class="form-control"
-                    placeholder="Palavra-passe"
-                    required
-                  />
-                  <label for="inputPassword">Palavra-passe</label>
-                </div>
-                <button
-                  class="
-                    btn btn-lg btn-primary btn-block btn-login
-                    text-uppercase
-                    font-weight-bold
-                    mb-2
-                    mt-3
-                    w-100
-                  "
-                  type="submit"
-                  @click="saveUser()"
-                >
-                  Entrar
-                </button>
-                <div class="text-center mt-1">
-                  <router-link to="/login" class="link small"
-                    >Já tens conta?</router-link
-                  >
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+<div class="col col-md-4 mx-auto">
+  <h5 class="text-center">Registo</h5>
+  <form>
+      <div class="form-label-group">
+        <input
+          type="text"
+          id="firstName"
+          class="form-control"
+          placeholder="Nome"
+          required
+          autofocus
+        />
+        <label for="firstName">Nome</label>
+      </div>
+      <div class="form-label-group">
+        <input
+          type="text"
+          id="lastName"
+          class="form-control"
+          placeholder="Apelido"
+          required
+        />
+        <label for="lastName">Apelido</label>
+      </div>
+      <div class="form-label-group">
+        <input
+          type="text"
+          id="address"
+          class="form-control"
+          placeholder="Morada"
+          required
+        />
+        <label for="address">Morada</label>
+      </div>
+      <select class="form-select" aria-label="sections">
+        <option selected>Secção</option>
+        <option
+          v-for="section in sections"
+          value="{{ section.id }}"
+          :key="section.id"
+        >
+          {{ section.section }}
+        </option>
+      </select>
+      <select class="form-select" aria-label="subsection">
+        <option selected>Grupo</option>
+        <option value="1">Exemplo1</option>
+        <option value="2">Exemplo2</option>
+        <option value="3">Exemplo3</option>
+      </select>
+      <div class="form-label-group">
+        <input
+          type="password"
+          id="inputPassword"
+          class="form-control"
+          placeholder="Palavra-passe"
+          required
+        />
+        <label for="inputPassword">Palavra-passe</label>
+      </div>
+      <button
+        class="
+          btn btn-lg btn-primary btn-block btn-login
+          text-uppercase
+          font-weight-bold
+          mb-2
+          mt-3
+          w-100
+        "
+        type="submit"
+        @click="saveUser()"
+      >
+        Entrar
+      </button>
+      <div class="text-center mt-1">
+        <router-link to="/login" class="link small"
+          >Já tens conta?</router-link
+        >
+      </div>
+    </form>
   </div>
 </template>
 
@@ -148,24 +128,6 @@ export default {
 :root {
   --input-padding-x: 1.5rem;
   --input-padding-y: 0.75rem;
-}
-.center-container {
-  background-image: url("../assets/background.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.card-signin {
-  color: black;
-  padding: 1rem;
-  border: 0;
-  border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-}
-.card-signin .card-title {
-  margin-bottom: 2rem;
-  font-weight: 300;
-  font-size: 1.5rem;
 }
 .btn-login {
   font-size: 0.9rem;
