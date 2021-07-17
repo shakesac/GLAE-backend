@@ -8,6 +8,9 @@ export default createStore({
   mutations: {
     getSections(state, sections) {
       state.sections = sections
+    },
+    setUserData(state, users) {
+      state.users = users
     }
   },
   actions: {
@@ -15,6 +18,11 @@ export default createStore({
       api.get('/section/all').then(res => {
         commit('getSections', res.data.data)
         console.log('Action: ',res.data.data)
+      })
+    },
+    registerUserAction({ commit }) {
+      api.post('/register').then(res => {
+        commit('setUserData', res.data.data)
       })
     }
   },
