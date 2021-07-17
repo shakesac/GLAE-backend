@@ -12,10 +12,10 @@ const getters = {
 
 const actions = {
     login: ({ commit }, credentials) => {
-        console.log('NUNO')
-        console.log(credentials)
+        event.preventDefault();
         api.post('/login', credentials).then(res => {
-            commit('setToken', res.data.token)
+            const token = res.data.token;
+            document.cookie = "auth_token="+token;
         }).catch(err => {
             console.log('API resquest: ', err)
         })
