@@ -1,7 +1,12 @@
 <template>
-<div class="col col-md-4 mx-auto">
-  <h5 class="text-center">Registo</h5>
-  <form>
+<div class="container">
+<div id="title" class="row">
+  <h5>Registo</h5>
+</div>
+<div class="row">
+  <form align="align-items-center">
+    <div class="row">
+<div class="col-md-4 mx-auto">
       <div class="form-label-group">
         <input
           type="text"
@@ -23,6 +28,16 @@
         />
         <label for="lastName">Apelido</label>
       </div>
+        <div class="form-label-group">
+        <input
+          type="text"
+          id="phoneNumber"
+          class="form-control"
+          placeholder="Telemóvel"
+          required
+        />
+        <label for="phoneNumber">Telemóvel</label>
+      </div>
       <div class="form-label-group">
         <input
           type="text"
@@ -33,7 +48,44 @@
         />
         <label for="address">Morada</label>
       </div>
-      <select class="form-select" aria-label="sections">
+      
+  </div>
+  <div class="col-md-4 mx-auto align-middle">
+        <div class="form-label-group">
+        <input
+          type="email"
+          id="email"
+          class="form-control"
+          placeholder="Endereço de email"
+          required
+        />
+        <label for="address">Endereço de email</label>
+      </div>
+    <div class="form-label-group">
+        <input
+          type="password"
+          id="inputPassword"
+          class="form-control"
+          placeholder="Palavra-passe"
+          required
+        />
+        <label for="inputPassword">Palavra-passe</label>
+      </div>
+          <div class="form-label-group">
+        <input
+          type="password"
+          id="confirmPassword"
+          class="form-control"
+          placeholder="Confirmar palavra-passe"
+          required
+        />
+        <label for="confirmPassword">Confirmar palavra-passe</label>
+      </div>
+  </div>
+    </div>
+    <div class="row m-2 justify-content-center">
+      <div class="col-md-4 border-top border-bottom py-3">
+         <select class="form-select" aria-label="sections">
         <option selected>Secção</option>
         <option
           v-for="section in sections"
@@ -49,17 +101,11 @@
         <option value="2">Exemplo2</option>
         <option value="3">Exemplo3</option>
       </select>
-      <div class="form-label-group">
-        <input
-          type="password"
-          id="inputPassword"
-          class="form-control"
-          placeholder="Palavra-passe"
-          required
-        />
-        <label for="inputPassword">Palavra-passe</label>
-      </div>
-      <button
+  </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-4">
+    <button
         class="
           btn btn-lg btn-primary btn-block btn-login
           text-uppercase
@@ -78,8 +124,11 @@
           >Já tens conta?</router-link
         >
       </div>
-    </form>
+      </div>
   </div>
+      </form>
+</div>
+</div>
 </template>
 
 <script>
