@@ -7,7 +7,6 @@ const getters = {
     isLoggedIn: (state) => {
        return !!state.token
     }
-'Content-Type': 'application/x-www-form-urlencoded'
 }
 
 const actions = {
