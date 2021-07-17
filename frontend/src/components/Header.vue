@@ -32,7 +32,7 @@
             </li>
         </ul>
         <div class="dropdown">
-            <button type="button" class="btn btn-primary btn-circle btn-lg" id=userDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
+            <button type="button" class="btn btn-success btn-circle btn-lg" id=userDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
             <ul class="dropdown-menu" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="#">Action</a></li>
                 <li><a class="dropdown-item" href="#">Another action</a></li>
