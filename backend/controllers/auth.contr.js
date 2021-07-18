@@ -9,6 +9,7 @@ const Subsection = require('../models/subsection.model')
 const ssl = process.env.HTTP_ACTIVE
 
 exports.register = async (req, res) => {
+    console.log(req.body)
     const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId} = req.body
     if (password !== confirmPassword) {
         return res.status(400).json({
