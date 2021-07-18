@@ -28,6 +28,19 @@ const actions = {
         const res = await api.post('/login', payload).catch(err => {
                 console.log(err)
             })
+            if(res.data && res.data.status == 'success') {
+                localStorage.setItem('user', JSON.stringify(res.data.data))
+                commit('setToken', true)
+                if (res.data.data.roleId == 1) {
+                    commit('setRole', true)
+                }
+            }
+    },
+    /*
+    login: async ({commit}, payload) => {
+        const res = await api.post('/login', payload).catch(err => {
+                console.log(err)
+            })
             if(res.data.status == 'success') {
                 commit('setToken', true)
                 if (res.data.roleId == 1) {
@@ -35,6 +48,7 @@ const actions = {
                 }
             }
     },
+    */
 
     logout: async ({ commit }) => {
         await api.post('/logout')
@@ -44,7 +58,7 @@ const actions = {
     userInfo: async ({commit}) => {
         const res = await api.get('/user/me')
         if (res.data.status == 'success') {
-            commit('setUserInfo', res.data.data)
+            commit('setUserInfo', res.data)
         }
     },
     registerUser({ commit }, user) {
