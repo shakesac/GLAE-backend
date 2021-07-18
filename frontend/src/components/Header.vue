@@ -22,18 +22,25 @@
             <li class="nav-item">
             <router-link to="/teste" class="nav-link"></router-link>
             </li>
-            <li class="nav-item">
-                <router-link to="/login" class="nav-link">Login</router-link>
-            </li>
-            <li v-if="isAdmin" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
+            <li class="nav-item dropdown">
+            <a v-if="isAdmin" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Pedidos
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Ver pedidos</a></li>
+                <li><a class="dropdown-item" href="#">Gerir pedidos</a></li>
+            </ul>
+            </li>
+            <li class="nav-item dropdown">
+            <a v-if="isAdmin" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Material
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Ver itens</a></li>
+                <li><a class="dropdown-item" href="#">Gerir itens</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">Gerir categorias</a></li>
+                <li><a class="dropdown-item" href="#">Gerir tipos</a></li>
             </ul>
             </li>
             <li class="nav-item">

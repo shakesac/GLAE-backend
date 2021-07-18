@@ -72,7 +72,8 @@ const actions = {
 
     logout: ({ commit }) => {
         localStorage.removeItem('user');
-        commit('setToken', null)
+        commit('setToken', false)
+        commit('setRole', false)
     },
 
     userInfo: async ({commit}) => {
