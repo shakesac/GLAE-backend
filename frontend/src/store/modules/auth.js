@@ -11,7 +11,6 @@ const getters = {
 
 const actions = {
     login: ({ commit }, credentials) => {
-        event.preventDefault();
         api.post('/login', credentials).then(res => {
             const token = res.data.token;
             document.cookie = 'jwt=' + token;

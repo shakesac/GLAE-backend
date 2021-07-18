@@ -5,6 +5,7 @@ import sections from './modules/sections'
 
 export default createStore({
   state: {
+    userRole: 'user'
 
   },
   mutations: {
