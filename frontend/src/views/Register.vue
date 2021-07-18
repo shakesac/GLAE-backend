@@ -1,169 +1,201 @@
 <template>
-<div class="container">
-<div id="title" class="row">
-  <h5>Registo</h5>
-</div>
-<div class="row">
-  <form align="align-items-center" novalidade data-vv-scope="create-user-form">
-    <div class="row">
-<div class="col-md-4 mx-auto">
-      <div class="form-label-group">
-        <input
-          type="text"
-          id="firstName"
-          class="form-control"
-          placeholder="Nome"
-          required
-          autofocus
-        />
-        <label for="firstName">Nome</label>
-      </div>
-      <div class="form-label-group">
-        <input
-          type="text"
-          id="lastName"
-          class="form-control"
-          placeholder="Apelido"
-          required
-        />
-        <label for="lastName">Apelido</label>
-      </div>
-        <div class="form-label-group">
-        <input
-          type="text"
-          id="phoneNumber"
-          class="form-control"
-          placeholder="Telemóvel"
-          required
-        />
-        <label for="phoneNumber">Telemóvel</label>
-      </div>
-      <div class="form-label-group">
-        <input
-          type="text"
-          id="address"
-          class="form-control"
-          placeholder="Morada"
-          required
-        />
-        <label for="address">Morada</label>
-      </div>
-      
-  </div>
-  <div class="col-md-4 mx-auto align-middle">
-        <div class="form-label-group">
-        <input
-          type="email"
-          id="email"
-          class="form-control"
-          placeholder="Endereço de email"
-          required
-        />
-        <label for="email">Endereço de email</label>
-      </div>
-    <div class="form-label-group">
-        <input
-          type="password"
-          id="inputPassword"
-          class="form-control"
-          placeholder="Palavra-passe"
-          required
-        />
-        <label for="inputPassword">Palavra-passe</label>
-      </div>
-          <div class="form-label-group">
-        <input
-          type="password"
-          id="confirmPassword"
-          class="form-control"
-          placeholder="Confirmar palavra-passe"
-          required
-        />
-        <label for="confirmPassword">Confirmar palavra-passe</label>
-      </div>
-  </div>
+  <div class="container">
+    <div id="title" class="row border-bottom mb-3">
+      <h3>Registo</h3>
     </div>
-    <div class="row m-2 justify-content-center">
-      <div class="col-md-4 border-top border-bottom py-3">
-         <select class="form-select" aria-label="sections">
-        <option selected>Secção</option>
-        <option
-          v-for="section in sections"
-          value="{{ section.id }}"
-          :key="section.id"
-        >
-          {{ section.section }}
-        </option>
-      </select>
-      <select class="form-select" aria-label="subsection">
-        <option selected>Grupo</option>
-        <option value="1">Exemplo1</option>
-        <option value="2">Exemplo2</option>
-        <option value="3">Exemplo3</option>
-      </select>
-  </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-4">
-    <button
-        class="
-          btn btn-lg btn-primary btn-block btn-login
-          text-uppercase
-          font-weight-bold
-          mb-2
-          mt-3
-          w-100
-        "
-        type="submit"
-        @click="saveUser()"
+    <div class="row">
+      <form
+        align="align-items-center"
+        novalidade
+        data-vv-scope="create-user-form"
       >
-        Entrar
-      </button>
-      <div class="text-center mt-1">
-        <router-link to="/login" class="link small"
-          >Já tens conta?</router-link
-        >
-      </div>
-      </div>
-  </div>
+        <div class="row">
+          <div class="col-md-4 mx-auto">
+            <div class="form-label-group">
+              <input
+                type="text"
+                v-model="firstName"
+                id="firstName"
+                class="form-control"
+                placeholder="Nome"
+                required
+                autofocus
+              />
+              <label for="firstName">Nome</label>
+            </div>
+            <div class="form-label-group">
+              <input
+                type="text"
+                v-model="lastName"
+                id="lastName"
+                class="form-control"
+                placeholder="Apelido"
+                required
+              />
+              <label for="lastName">Apelido</label>
+            </div>
+            <div class="form-label-group">
+              <input
+                type="text"
+                v-model="phoneNumber"
+                id="phoneNumber"
+                class="form-control"
+                placeholder="Telemóvel"
+                required
+              />
+              <label for="phoneNumber">Telemóvel</label>
+            </div>
+            <div class="form-label-group">
+              <input
+                type="text"
+                v-model="address"
+                id="address"
+                class="form-control"
+                placeholder="Morada"
+                required
+              />
+              <label for="address">Morada</label>
+            </div>
+          </div>
+          <div class="col-md-4 mx-auto align-middle">
+            <div class="form-label-group">
+              <input
+                type="email"
+                v-model="email"
+                id="email"
+                class="form-control"
+                placeholder="Endereço de email"
+                required
+              />
+              <label for="email">Endereço de email</label>
+            </div>
+            <div class="form-label-group">
+              <input
+                type="password"
+                v-model="password"
+                id="inputPassword"
+                class="form-control"
+                placeholder="Palavra-passe"
+                required
+              />
+              <label for="inputPassword">Palavra-passe</label>
+            </div>
+            <div class="form-label-group">
+              <input
+                type="password"
+                v-model="confirmPassword"
+                id="confirmPassword"
+                class="form-control"
+                placeholder="Confirmar palavra-passe"
+                required
+              />
+              <label for="confirmPassword">Confirmar palavra-passe</label>
+            </div>
+          </div>
+        </div>
+        <div class="row m-2 justify-content-center">
+          <div class="col-md-4 border-top border-bottom py-3">
+            <select class="form-select" v-model="selectedSection" v-on:change="getSubsections">
+              <option disabled selected>Secção</option>
+              <option
+                v-for="section in getSections"
+                :value="section.id"
+                :key="section.id"
+              >
+                {{ section.section }}
+              </option>
+            </select>
+            <select class="form-select" v-model="selectedSubsection" v-if="selectedSection">
+              <option disabled selected>Grupo</option>
+              <option
+              v-for="subsection in getSubsectionsFromSection"
+              :value="subsection.id"
+              :key="subsection.id"
+              >{{ subsection.subsection }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <button
+              class="
+                btn btn-lg btn-primary btn-block btn-login
+                text-uppercase
+                font-weight-bold
+                mb-2
+                mt-3
+                w-100
+              "
+              type="submit"
+              v-on:click="saveUser"
+            >
+              Entrar
+            </button>
+            <div class="text-center mt-1">
+              <router-link to="/login" class="link small"
+                >Já tens conta?</router-link
+              >
+            <p>{{ selectedSection }}</p>
+            </div>
+          </div>
+        </div>
       </form>
-</div>
-</div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 export default {
-    name: 'Register',
-    
-    data()  {
-        return {
-           users: {
-            firstName: '',
-            lasName: '',
-            email: '',
-            address: '',
-            phoneNumber: '',
-            password: '',
-            confirmPassword: '',
-           }
-        };
-    },
-    computed: {
-        ...mapState(['sections']),
-    }, 
-    async created() {
-        await this.getSections();
-    },
-    methods: {
-        ...mapActions(['getSections', 'registerUserAction']),
-        async saveUser() {
-          await this.registerUserAction(this.user).catch(err => {
-            console.log(err)
-          })
-        }
+  name: "Register",
+  data() {
+    return {
+      selectedSection: null,
+      selectedSubsection: null,
+      firstName: '',
+      lastName: '',
+      email: '',
+      address: '',
+      phoneNumber: '',
+      password: '',
+      confirmPassword: '',
+      subsectionId: this.selectedSection + this.selectedSubsection
     }
-}
+  },
+  created() {
+    this.fetchSections();
+  },
+  computed: {
+    ...mapGetters(['getSections', 'getSubsectionsFromSection']),
+  },
+  methods: {
+    ...mapActions([
+      'fetchSections',
+      'fetchSubsectionsFromSection',
+      'registerUser',
+      ]),
+    async saveUser() {
+      const payload = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        address: this.address,
+        phoneNumber: this.phoneNumber,
+        password: this.password,
+        confirmPassword: this.confirmPassword,
+        subsectionId: this.subsectionId
+      };
+      await this.registerUser(payload).catch((err) => {
+        console.log(err);
+      });
+    },
+    async getSubsections() {
+      await this.fetchSubsectionsFromSection(this.selectedSection).catch((err) => {
+        console.log(err);
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>

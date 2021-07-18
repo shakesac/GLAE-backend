@@ -15,6 +15,7 @@ const actions = {
         api.post('/login', credentials).then(res => {
             const token = res.data.token;
             document.cookie = 'jwt=' + token;
+            commit('setToken', true)
         }).catch(err => {
             console.log('API resquest: ', err)
         })
@@ -22,7 +23,13 @@ const actions = {
     logout: async ({ commit }) => {
         await api.post('/logout')
         commit('setToken', null)
-    }
+    },
+    registerUser({ commit }, user) {
+        event.preventDefault();
+        api.post('/register', user).then(res => {
+          commit('setUserData', res.data.data)
+        })
+      }
 }
 
 const mutations = {
