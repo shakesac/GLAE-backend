@@ -8,6 +8,9 @@ const state = {
 const getters = {
     isLoggedIn: (state) => {
        return !!state.token
+    },
+    isAdmin: (state) => {
+        return state.isAdmin
     }
 }
 

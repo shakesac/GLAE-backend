@@ -8,7 +8,7 @@
                 <label for="inputEmail">Endereço de email</label>
                 </div>
                 <div class="form-label-group">
-                <input v-model="data.pass" type="password" id="inputPassword" class="form-control" placeholder="Palavra-passe" required>
+                <input v-model="data.password" type="password" id="inputPassword" class="form-control" placeholder="Palavra-passe" required>
                 <label for="inputPassword">Palavra-passe</label>
                 </div>
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2 mt-3 w-100" type="submit">Entrar</button>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import {reactive} from 'vue'
+import {computed, reactive} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 import BaseLayout from './Base.vue'
@@ -35,12 +35,15 @@ export default {
         const router = useRouter()
         const data = reactive({
             email: '',
-            pass: '',
+            password: '',
         })
         const submit = async () => {
             await store.dispatch('login', data)
-            await router.push('/')
+            if (status) {
+                await router.push('/')
+            }
         }
+        const status = computed(() => store.getters.isLoggedIn)
         return {
             data,
             submit
