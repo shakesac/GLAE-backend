@@ -39,8 +39,8 @@ export default {
         })
         const submit = async () => {
             await store.dispatch('login', data)
-            if (status.value) {
-                await router.push('/')
+            if (status.value == true) {
+                await router.push('/painel')
             } else {
                 alert('Falhou')
             }

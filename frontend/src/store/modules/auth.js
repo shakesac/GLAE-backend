@@ -1,5 +1,4 @@
 import api from '@/services/api'
-import axios from 'axios'
 const state = {
     token: null,
     isAdmin: false,
@@ -26,17 +25,10 @@ const getters = {
 
 const actions = {
     login: async ({commit}, payload) => {
-        const res = await axios.post(
-            'http://127.0.0.1:5000/api/v1/login',
-            payload, {
-                withCredentials: true,
-                credentials: 'include'
-            }).catch(err => {
+        const res = await api.post('/login', payload).catch(err => {
                 console.log(err)
             })
             if(res.data.status == 'success') {
-                const token = res.data.token;
-                document.cookie = 'jwt=' + token;
                 commit('setToken', true)
                 if (res.data.roleId == 1) {
                     commit('setRole', true)
@@ -50,7 +42,7 @@ const actions = {
     },
 
     userInfo: async ({commit}) => {
-        const get = await api.get('/user/me')
+        const res = await api.get('/user/me')
         if (res.data.status == 'success') {
             commit('setUserInfo', res.data.data)
         }

@@ -112,8 +112,8 @@ exports.login = (req, res, next) => {
                 })
                 res.cookie('jwt', token, {
                     httpOnly: true,
-                    secure: ssl,
-                    //sameSite: 'secure'
+                    secure: true,
+                    sameSite: 'lax'
                 })
                 console.log(process.env.HTTP_ACTIVE)
                 return res.status(200).json({

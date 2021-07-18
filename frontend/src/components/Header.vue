@@ -31,13 +31,21 @@
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
             </li>
         </ul>
-        <div class="dropdown">
-            <button type="button" class="btn btn-success btn-circle btn-lg" id=userDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
-            <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+        <div class="dropdown" v-if="isLoggedIn == true">
+            <button type="button" class="btn btn-success btn-circle btn-lg" id=loggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
+            <ul class="dropdown-menu" aria-labelledby="loggedDropdown">
+                <li><a class="dropdown-item disabled">{{ userInfo.email }}</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">Perfil</a></li>
+                <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+            </div>
+            <div class="dropdown" v-if="isLoggedIn == false">
+            <button type="button" class="btn btn-success btn-circle btn-lg" id=unloggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
+            <ul class="dropdown-menu" aria-labelledby="unloggedDropdown">
+                <li><router-link to="/login" class="dropdown-item">Iniciar sessão</router-link></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><router-link to="/registo" class="dropdown-item">Registo</router-link></li>
             </ul>
             </div>
         </div>
@@ -45,8 +53,19 @@
     </nav>
 </template>
 <script>
+import {computed} from 'vue'
+import {useStore} from 'vuex'
 export default {
-    
+    name: 'NavBar',
+    setup() {
+        const store = useStore()
+        const isLoggedIn = computed(() => store.getters.isLoggedIn)
+        const userInfo = computed(() => store.getters.getUserInfo)
+        return {
+            isLoggedIn,
+            userInfo
+        }
+    }
 }
 </script>
 <style scoped>
