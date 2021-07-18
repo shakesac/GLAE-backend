@@ -71,6 +71,29 @@ exports.getAll = async (req, res) => {
     })
 }
 
+exports.getAllFromUser = async (req, res) => {
+    const { id } = req.user.dataValues
+    const leases = await Lease.findAll({
+        where: {
+            userId: id
+        },
+        include: [{
+            model: LeaseStatus
+        }]
+    }).then((userLeases) => {
+        res.status(200).json({
+            status: 'success',
+            data: userLeases
+        })
+    }).catch((err) => {
+        console.log('Erro: ', err)
+        res.status(202).json({
+            status: 'fail',
+            message: err.errors[0].message,
+        })
+    })
+}
+
 exports.get = async (req, res) => {
     await Lease.findByPk(req.params.id, {
         include: [{
