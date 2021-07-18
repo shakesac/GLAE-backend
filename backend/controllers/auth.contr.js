@@ -116,6 +116,7 @@ exports.login = (req, res, next) => {
                 return res.status(200).json({
                     status: 'success',
                     message: 'Sessão iniciada',
+                    userId: user.id,
                     token: token
                 })
             }
