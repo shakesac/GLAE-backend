@@ -17,7 +17,6 @@ const mutations = {
         state.userLeases = leases
     },
 }
-}
 
 const actions = {
     fetchAllLeases({ commit }) {

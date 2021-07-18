@@ -6,22 +6,26 @@
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <!-- ##### VISITANTE ##### -->
         <ul v-if="isLoggedIn == false" class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
             <router-link to="/about" class="nav-link">About</router-link>
             </li>
         </ul>
+
+        <!-- ##### UTILIZADOR ##### -->
         <ul v-if="isLoggedIn == true" class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-            <router-link to="/about" class="nav-link">About</router-link>
+            <router-link to="/about" class="nav-link"></router-link>
             </li>
             <li class="nav-item">
-            <router-link to="/teste" class="nav-link">Teste</router-link>
+            <router-link to="/teste" class="nav-link"></router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/login" class="nav-link">Login</router-link>
             </li>
-            <li class="nav-item dropdown">
+            <li v-if="isAdmin" class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Dropdown
             </a>
@@ -41,8 +45,10 @@
             <ul class="dropdown-menu" aria-labelledby="loggedDropdown">
                 <li><a class="dropdown-item disabled">{{ userInfo.firstName }}</a></li>
                 <li><hr class="dropdown-divider"></li>
+                <li><a v-if="isAdmin == true" class="dropdown-item disabled">Administrador</a></li>
+                <li><hr v-if="isAdmin == true" class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#">Perfil</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
+                <li><a v-on:click.prevent="logout" class="dropdown-item" href="#">Logout</a></li>
             </ul>
             </div>
             <div class="dropdown" v-if="isLoggedIn == false">
@@ -60,15 +66,24 @@
 <script>
 import {computed} from 'vue'
 import {useStore} from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
     name: 'NavBar',
     setup() {
         const store = useStore()
+        const router = useRouter()
         const isLoggedIn = computed(() => store.getters.isLoggedIn)
+        const isAdmin = computed(() => store.getters.isAdmin)
         const userInfo = computed(() => store.getters.getUserInfo)
+        const logout = async () => {
+            await store.dispatch('logout')
+            router.push('/login')
+        }
         return {
             isLoggedIn,
-            userInfo
+            isAdmin,
+            userInfo,
+            logout,
         }
     }
 }

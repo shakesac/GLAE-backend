@@ -70,13 +70,12 @@ const actions = {
     },
     */
 
-    logout: async ({ commit }) => {
-        await api.post('/logout')
+    logout: ({ commit }) => {
+        localStorage.removeItem('user');
         commit('setToken', null)
     },
 
     userInfo: async ({commit}) => {
-        console.log('Cheguei aqui')
         const res = await api.get('/user/me')
         console.log('userInfo: ', res)
         if (res.data.status == 'success') {

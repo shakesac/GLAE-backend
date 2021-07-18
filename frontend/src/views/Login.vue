@@ -34,7 +34,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const status = computed(() => store.getters.isLoggedIn)
-        if (status.value === false) {
+        if (status.value === true) {
             router.push('/painel')
         }
         const data = reactive({

@@ -136,7 +136,6 @@
               <router-link to="/login" class="link small"
                 >Já tens conta?</router-link
               >
-            <p>{{ selectedSection }}</p>
             </div>
           </div>
         </div>
