@@ -1,6 +1,8 @@
 import api from '@/services/api'
+import axios from 'axios'
 const state = {
-    token: null
+    token: null,
+    isAdmin: false,
 }
 
 const getters = {
@@ -10,15 +12,25 @@ const getters = {
 }
 
 const actions = {
-    login: ({ commit }, credentials) => {
-        api.post('/login', credentials).then(res => {
-            const token = res.data.token;
-            document.cookie = 'jwt=' + token;
-            commit('setToken', true)
-        }).catch(err => {
-            console.log('API resquest: ', err)
-        })
+    login: async ({commit}, payload) => {
+        const res = await axios.post(
+            'http://localhost:5000/api/v1/login',
+            payload,
+            {
+                credentials: 'include'
+            }).catch(err => {
+                console.log(err)
+            })
+            if(res.data.status == 'success') {
+                const token = res.data.token;
+                document.cookie = 'jwt=' + token;
+                commit('setToken', true)
+                if (res.data.roleId == 1) {
+                    commit('setRole', true)
+                }
+            }
     },
+
     logout: async ({ commit }) => {
         await api.post('/logout')
         commit('setToken', null)
@@ -34,6 +46,9 @@ const actions = {
 const mutations = {
     setToken: (state, token) => {
         state.token = token
+    },
+    setRole: (state, bool) => {
+        state.isAdmin = bool
     }
 }
 
