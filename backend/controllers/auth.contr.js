@@ -87,13 +87,16 @@ exports.login = (req, res, next) => {
             email
         }
     }).then(user => {
+        console.log('User DB: ', user.dataValues)
         if (!user) {
             return res.status(400).json({
                 status: 'failed',
                 message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que o email não existe por razões de segurança
             })
         }
+        console.log('Pass enviada: ' + password, ' Pass user db: ' + user.password)
         bcrypt.compare(password, user.password).then(result => {
+            console.log('RESULTADO: ', result)
             if (!result) {
                 return res.status(400).json({
                     status: 'failed',
@@ -108,8 +111,8 @@ exports.login = (req, res, next) => {
                     algorithm: process.env.JWT_ALGORITHM
                 })
                 res.cookie('jwt', token, {
-                    httpOnly: ssl,
-                    secure: false,
+                    httpOnly: true,
+                    secure: ssl,
                     //sameSite: 'secure'
                 })
                 console.log(process.env.HTTP_ACTIVE)
@@ -117,7 +120,8 @@ exports.login = (req, res, next) => {
                     status: 'success',
                     message: 'Sessão iniciada',
                     userId: user.id,
-                    token: token
+                    roleId: user.roleId,
+                    token
                 })
             }
         }).catch(err => {
