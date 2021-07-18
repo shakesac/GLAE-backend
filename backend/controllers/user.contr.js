@@ -48,6 +48,7 @@ exports.get = async (req, res) => {
 }
 
 exports.getMe = async (req, res) => {
+    console.log(req.user)
     await User.findByPk(req.user.id).then((user) => {
         return res.status(200).json({
             status: 'success',

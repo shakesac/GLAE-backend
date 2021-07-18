@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
-const cookieParser = require('cookie-parser')
+//const cookieParser = require('cookie-parser')
+const helmet = require('helmet')
 const cors = require('cors')
 const api = process.env.API_URL
 const sequelize = require('./util/db')
@@ -16,9 +17,10 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json()) //body-parser on Express 4.16+ 
-app.use(cookieParser())
-app.use(morgan('tiny'))
+app.use(express.json()) //body-parser on Express 4.16+
+app.use(helmet())
+//app.use(cookieParser())
+app.use(morgan('dev')) //tiny, dev
 
 //ROUTES
 const adminRoutes = require('./routes/admin.route')
@@ -91,7 +93,7 @@ Item.belongsToMany(Lease, { through: 'lease_item' })
 
 
 // SEQUELIZE - SYNC
-sequelize.sync({ force: true }).then(result => {
+sequelize.sync({ force: false }).then(result => {
     console.log('BD: ' + result.config.database + '\nUser: ' + result.config.username)
     console.log(result.config.protocol + ' ' + result.config.host + ':' + result.config.port)
     dbInitValues.create()

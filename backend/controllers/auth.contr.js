@@ -110,22 +110,33 @@ exports.login = (req, res, next) => {
                     expiresIn: process.env.JWT_EXPIRATION,
                     algorithm: process.env.JWT_ALGORITHM
                 })
+                return res.status(200).json({
+                    status: 'success',
+                    data: {
+                        userId: user.id,
+                        roleId: user.roleId,
+                        token
+                    }
+                })
+                /*res.cookie('jwt', token, {
+                    expires: new Date(Date.now() + process.env.JWT_EXPIRATION.split(' ')[0] * 86400), //Converte o valor para segundos
+                    httpOnly: true, //Previne modificações externas ao cookie
+                    secure: ssl  // Usar apenas com certificado. Força utilização de SSL
+                })
                 res.cookie('jwt', token, {
                     httpOnly: true,
-                    secure: true,
-                    sameSite: 'lax'
+                    secure: ssl,
                 })
-                console.log(process.env.HTTP_ACTIVE)
                 return res.status(200).json({
                     status: 'success',
                     message: 'Sessão iniciada',
                     userId: user.id,
                     roleId: user.roleId,
                     token
-                })
+                })*/
             }
         }).catch(err => {
-            res.status(202).json({
+            res.status(500).json({
                 status: 'failed',
                 message: err
             })
@@ -134,6 +145,52 @@ exports.login = (req, res, next) => {
 }
 
 exports.verify = async (req, res, next) => {
+    let token = req.headers['x-access-token']
+    if (!token) {
+        return res.status(403).json({
+            status: 'failed',
+            message: 'Não tem sessão iniciada.'
+        })
+    }
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                status: 'failed',
+                message: 'O token não é válido.'
+            })
+        } else {
+            // Verifica se utilizador ao qual o token pertence ainda existe
+            const user = await User.findByPk(decoded.id)
+            if (!user) {
+                return res.status(401).json({
+                    status: 'failed',
+                    message: 'O utilizador já não existe.'
+                })
+            }
+            req.user = user
+            next()
+        }
+    })
+}
+
+
+exports.isAdmin = async (req, res, next) => {
+    await User.findByPk(req.user.id).then(user => {
+        if (user.roleId === 1) {
+            next()
+            return
+        } else {
+            return res.status(403).json({
+                status: 'failed',
+                message: 'Não tem permissões de administrador.'
+            })
+        }
+    })
+}
+
+/*
+exports.verify = async (req, res, next) => {
+    console.log('verifyAuth: ', req.cookies)
     const userToken = req.cookies.jwt
     if (!userToken) {
         return res.status(401).json({
@@ -161,7 +218,7 @@ exports.verify = async (req, res, next) => {
         }
     })
 }
-
+*/
 exports.logout = (req, res) => {
     if (req.cookies.jwt) {
         res.clearCookie('jwt').status(200).json({
