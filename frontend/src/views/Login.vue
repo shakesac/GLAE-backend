@@ -39,8 +39,10 @@ export default {
         })
         const submit = async () => {
             await store.dispatch('login', data)
-            if (status) {
+            if (status.value) {
                 await router.push('/')
+            } else {
+                alert('Falhou')
             }
         }
         const status = computed(() => store.getters.isLoggedIn)

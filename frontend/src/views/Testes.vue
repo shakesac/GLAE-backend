@@ -1,22 +1,16 @@
 <template>
-    <div>
-        <div class="center-container d-flex text-center text-white bg-dark">
-            <div class="cover-container w-100 p-3 mx-auto justify-content-center d-flex flex-column">
-            <main class="px-3 d-flex flex-column">
-                <table class="table table-hover">
-                </table>
-                <p v-for="(id, sections) in sections" :key="id">{{ sections }}</p>
-            </main>
-            </div>
-        </div>        
-    </div>
+<div>
+    <leaseTable />
+</div>
 </template>
 
 
-<script>
+<script scoped>
 import { mapState, mapActions } from 'vuex'
+import leaseTable from '@/components/LeaseTable.vue'
 export default {
     name: 'Testes',
+    components: { leaseTable },
     computed: {
         ...mapState(['sections']),
     }, 
@@ -29,7 +23,7 @@ export default {
             await this.getSections();
         },
     },
-};
+}
 console.log(mapState.subsections)
 </script>
 <style>
