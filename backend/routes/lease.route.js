@@ -5,11 +5,11 @@ const leaseContr = require('../controllers/lease.contr')
 const { verify } = require('../controllers/auth.contr')
 
 router.post('/new', verify, leaseContr.new)
-router.put('/update/:id', leaseContr.update)
-router.get('/all', leaseContr.getAll)
-router.post('/status/update/:id', leaseContr.updateStatus)
-router.get('/user/:id', verify, leaseContr.getAllFromUser)
+router.put('/update/:id', verify, leaseContr.update)
+router.get('/all/user', verify, leaseContr.getAllFromUser)
+router.get('/all', verify, leaseContr.getAll)
+router.post('/status/update/:id', verify, leaseContr.updateStatus)
 
-router.get('/:id', leaseContr.get)
+router.get('/:id', verify, leaseContr.get)
 
 module.exports = router
