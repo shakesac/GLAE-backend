@@ -1,4 +1,5 @@
 <template>
+<base-layout>
   <div class="container">
     <div id="title" class="row border-bottom mb-3">
       <h3>Registo</h3>
@@ -142,12 +143,15 @@
       </form>
     </div>
   </div>
+  </base-layout>
 </template>
 
 <script>
+import BaseLayout from './Base.vue'
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Register",
+  components: { BaseLayout },
   data() {
     return {
       selectedSection: null,
@@ -192,7 +196,8 @@ export default {
     async getSubsections() {
       await this.fetchSubsectionsFromSection(this.selectedSection).catch((err) => {
         console.log(err);
-      });
+      })
+      this.router.push('/')
     },
   },
 };
