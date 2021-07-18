@@ -81,12 +81,17 @@ exports.getAllFromUser = async (req, res) => {
             model: LeaseStatus
         }]
     }).then((userLeases) => {
+        if (!userLeases) {
+            return res.status(202).json({
+                status: 'success',
+                message: 'Não existem emprestimos.',
+            })
+        }
         res.status(200).json({
             status: 'success',
             data: userLeases
         })
     }).catch((err) => {
-        console.log('Erro: ', err)
         res.status(202).json({
             status: 'fail',
             message: err.errors[0].message,
