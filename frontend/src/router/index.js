@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
-import store from '@/store/index'
+import store from '@/store'
 
 const routes = [
   {
@@ -47,10 +47,10 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   if (to.meta.requiredAuth) {
-    let userInfo = store.getters['auth/getUserInfo']
+    let userInfo = store.getters.getUserInfo
     if (userInfo.id === 0) {
       await store.dispatch('userInfo')
-      userInfo = store.getters['auth/getUserInfo']
+      userInfo = store.getters.getUserInfo
       if (userInfo.id === 0) {
         return next({
           path: '/login'
