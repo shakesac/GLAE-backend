@@ -46,3 +46,24 @@ exports.get = async (req, res) => {
         })
     })
 }
+
+exports.getMe = async (req, res) => {
+    await User.findByPk(req.user.id).then((user) => {
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                subsectionId: user.subsectionId
+            },
+        })
+    }).catch((err) => {
+        console.log('Erro: ', err)
+        res.status(202).json({
+            status: 'fail',
+            message: err.errors[0].message,
+        })
+    })
+}
