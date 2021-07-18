@@ -113,6 +113,25 @@ exports.getAll = async (req, res) => {
     })
 }
 
+exports.getAllFromSection = async (req, res) => {
+    console.log(req.params)
+    await Subsection.findAll({
+        where: {
+            sectionId: req.params.id
+        }
+    }).then((subsections) => {
+        res.status(200).json({
+            status: 'success',
+            data: subsections
+        })
+    }).catch((err) => {
+        res.status(202).json({
+            status: 'fail',
+            message: err.errors[0].message,
+        })
+    })
+}
+
 exports.delete = async (req, res) => {
     const verifyDependencies = await User.findAndCountAll({
 
