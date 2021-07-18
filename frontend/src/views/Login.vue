@@ -1,4 +1,5 @@
 <template>
+<base-layout>
         <div class="col col-lg-4 mx-auto">
             <h5 class="text-center">Iniciar sessão</h5>
             <form>
@@ -16,12 +17,17 @@
                 </div>
             </form>
         </div>
+</base-layout>
 </template>
 
 <script>
+import BaseLayout from './Base.vue'
 import { mapActions } from 'vuex'
 export default {
     name: 'Login',
+    components: {
+        BaseLayout,
+    },
     data() {
         return {
             email: '',
@@ -35,6 +41,7 @@ export default {
                 email: this.email,
                 password: this.pass
             })
+            this.$router.push('/')
 
         },
     },
