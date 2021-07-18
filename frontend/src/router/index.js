@@ -1,13 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
-import store from '@/store'
 
 const routes = [
   {
     path: '/',
-    name: 'Login',
-    component: Login,
-    meta: { requiredAuth: true }
+    redirect: 'painel',
   },
   {
     path: '/about',
@@ -46,21 +43,15 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (to.meta.requiredAuth) {
-    let userInfo = store.getters.getUserInfo
-    if (userInfo.id === 0) {
-      await store.dispatch('userInfo')
-      userInfo = store.getters.getUserInfo
-      if (userInfo.id === 0) {
-        return next({
-          path: '/login'
-        })
-      } else {
-        return next()
-      }
-    }
+  const publicPages = ['/login', '/registo', '/about'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('user');
+  // redirecciona para página the login caso nao esteja logado
+  if (authRequired && !loggedIn) {
+    next('/login');
+  } else {
+    next();
   }
-  return next()
 })
 
 export default router

@@ -33,19 +33,23 @@ export default {
     setup() {
         const store = useStore()
         const router = useRouter()
+        const status = computed(() => store.getters.isLoggedIn)
+        if (status.value === false) {
+            router.push('/painel')
+        }
         const data = reactive({
             email: '',
             password: '',
         })
         const submit = async () => {
             await store.dispatch('login', data)
-            if (status.value == true) {
+            if (status.value === true) {
+                store.dispatch('userInfo')
                 await router.push('/painel')
             } else {
-                alert('Falhou')
+                alert('Falhou. Status: ', status.value)
             }
         }
-        const status = computed(() => store.getters.isLoggedIn)
         return {
             data,
             submit

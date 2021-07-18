@@ -33,7 +33,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .center-container {
     height: calc(100vh - 56px);
   }

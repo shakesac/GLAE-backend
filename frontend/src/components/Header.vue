@@ -6,7 +6,12 @@
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul v-if="isLoggedIn == false" class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+            <router-link to="/about" class="nav-link">About</router-link>
+            </li>
+        </ul>
+        <ul v-if="isLoggedIn == true" class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
             <router-link to="/about" class="nav-link">About</router-link>
             </li>
@@ -34,7 +39,7 @@
         <div class="dropdown" v-if="isLoggedIn == true">
             <button type="button" class="btn btn-success btn-circle btn-lg" id=loggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
             <ul class="dropdown-menu" aria-labelledby="loggedDropdown">
-                <li><a class="dropdown-item disabled">{{ userInfo.email }}</a></li>
+                <li><a class="dropdown-item disabled">{{ userInfo.firstName }}</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#">Perfil</a></li>
                 <li><a class="dropdown-item" href="#">Logout</a></li>

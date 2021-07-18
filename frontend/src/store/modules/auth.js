@@ -1,4 +1,5 @@
 import api from '@/services/api'
+
 const state = {
     token: null,
     isAdmin: false,
@@ -8,6 +9,25 @@ const state = {
         lastName: null,
         email: null,
         subsectionId: 0,
+    }
+}
+
+const mutations = {
+    setToken: (state, token) => {
+        state.token = token
+    },
+    setRole: (state, bool) => {
+        state.isAdmin = bool
+    },
+    setUserInfo: (state, user) => {
+        const userInfo = {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            subsectionId: user.subsectionId
+        }
+        state.userInfo = userInfo
     }
 }
 
@@ -56,9 +76,11 @@ const actions = {
     },
 
     userInfo: async ({commit}) => {
+        console.log('Cheguei aqui')
         const res = await api.get('/user/me')
+        console.log('userInfo: ', res)
         if (res.data.status == 'success') {
-            commit('setUserInfo', res.data)
+            commit('setUserInfo', res.data.data)
         }
     },
     registerUser({ commit }, user) {
@@ -67,25 +89,6 @@ const actions = {
           commit('setUserData', res.data.data)
         })
       }
-}
-
-const mutations = {
-    setToken: (state, token) => {
-        state.token = token
-    },
-    setRole: (state, bool) => {
-        state.isAdmin = bool
-    },
-    setUserInfo: (state, user) => {
-        const userInfo = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            subsectionId: user.subsectionId
-        }
-        state.userInfo = userInfo
-    }
 }
 
 export default {
