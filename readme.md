@@ -7,7 +7,7 @@
 
 ## 🔧 Ferramentas & Tecnologias utilizadas
 ### Frameworks
-![Vue 3](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D) ![Bootstrap 5](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+![Vue 3](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D) ![Bootstrap 5](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-43853D?style=for-the-badge&logo=express&logoColor=white)
 
 ### Base de dados
 ![MySQL](https://img.shields.io/badge/MySQL-4479a1?style=for-the-badge&logo=mysql&logoColor=white)
@@ -33,7 +33,7 @@
 
 
 ## Licença
-![License](https://img.shields.io/github/license/shakesac/1240Armazem.svg):
+![License](https://img.shields.io/github/license/shakesac/1240Armazem.svg)
 * [Documentação Oficial](https://www.gnu.org/licenses/gpl-3.0.en.html)
 * [Resumo](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3))
 
