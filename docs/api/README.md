@@ -4,9 +4,11 @@
 
 Open endpoints não requerem autenticação.
 
+### Autenticação
 * [Login](auth/login.md) : `POST /api/v1/login/`
 * [Registo](auth/register.md) : `POST /api/v1/register` 
 
+### Relacionados com Secções e Grupos
 * [Mostrar Secções](section.getAll.md) : `GET /api/v1/section/all`
 * [Mostrar Grupos](subsection.getAll.md) : `GET /api/v1/section/sub/all`
 
@@ -16,11 +18,9 @@ Endpoints fechados requerem um token válido incluído no header do pedido. Pode
 
 ### Current User related
 
-Each endpoint manipulates or displays information related to the User whose
-Token is provided with the request:
+Cada endpoint manipula ou mostra informação relacionada com o utilizador do token fornecido com o pedido:
 
-* [Show info](user/get.md) : `GET /api/user/`
-* [Update info](user/put.md) : `PUT /api/user/`
+* [Mostrar utilizador actual](user/get.md) : `GET /user/me`
 
 ### Account related
 
