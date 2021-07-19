@@ -22,10 +22,11 @@
 ![VS Code](http://img.shields.io/badge/-VS%20Code-007ACC?style=for-the-badge&logo=visual-studio-code)
 
 ### Produtividade & colaboração
-![MS Project](https://img.shields.io/badge/Microsoft_Project-327530?style=for-the-badge&logo=microsoftoffice&logoColor=white) ![MS Visio](https://img.shields.io/badge/Microsoft_Visio-3955A3?style=for-the-badge&logo=microsoft-visio&logoColor=white) ![MS Teams](https://img.shields.io/badge/Microsoft_Teams-6264A7?style=for-the-badge&logo=microsoft-teams&logoColor=white) ![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white)
+![MS Project](https://img.shields.io/badge/MS_Project-327530?style=for-the-badge&logo=microsoftoffice&logoColor=white) ![MS Visio](https://img.shields.io/badge/MS_Visio-3955A3?style=for-the-badge&logo=microsoft-visio&logoColor=white) ![MS Teams](https://img.shields.io/badge/Teams-6264A7?style=for-the-badge&logo=microsoft-teams&logoColor=white) ![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white)
 
-### Sistemas Operativos
-![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+### Sistemas Operativos & Virtualização
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ed?style=for-the-badge&logo=Docker&logoColor=white)
+
 
 ### Navegadores
 ![Firefox](https://img.shields.io/badge/Firefox-F45B2C?style=for-the-badge&logo=firefoxbrowser&logoColor=white) ![Chrome](https://img.shields.io/badge/Chrome-2D9653?style=for-the-badge&logo=googlechrome&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-057ED5?style=for-the-badge&logo=microsoftedge&logoColor=white)
