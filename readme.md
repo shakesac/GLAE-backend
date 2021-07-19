@@ -1,6 +1,6 @@
 ## Laboratório de Projecto - Agrupamento Escuteiros 1240 Murtal
 
-![Created](https://badges.pufler.dev/created/shakesac/1240Armazem) - ![Updated](https://badges.pufler.dev/updated/shakesac/1240Armazem)
+![Created](https://badges.pufler.dev/created/shakesac/1240Armazem) ![Updated](https://badges.pufler.dev/updated/shakesac/1240Armazem)
 
 ## Documentação
 * [Documentação](docs/README.md)
@@ -26,6 +26,10 @@
 
 ### Sistemas Operativos
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+
+### Navegadores
+![Firefox](https://img.shields.io/badge/Firefox-F45B2C?style=for-the-badge&logo=firefoxbrowser&logoColor=white) ![Chrome](https://img.shields.io/badge/Chrome-2D9653?style=for-the-badge&logo=googlechrome&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-057ED5?style=for-the-badge&logo=microsoftedge&logoColor=white)
+
 
 ### Licença GPL 3.0
 ![License](https://img.shields.io/github/license/shakesac/1240Armazem.svg)
