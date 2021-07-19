@@ -1,56 +1,43 @@
-
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const helper = require('../util/contr.helpers')
 const User = require('../models/user.model')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
-const jwtConfig = require('../util/jwt')
-const app = require('../app')
 const Subsection = require('../models/subsection.model')
-const ssl = process.env.HTTP_ACTIVE
 
 exports.register = async (req, res) => {
-    console.log(req.body)
     const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId} = req.body
-    if (password !== confirmPassword) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'A palavra-passe e a confirmação não coincidem.'
-        })
-    }
-    if (subsectionId) {
-        const idSplit = subsectionId.split('')
-        if (!idSplit || !idSplit[1]) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Código de grupo inválido.'
-            })
-        }
-        const subsectionExists = await Subsection.findOne({
-            where: {
-                id: idSplit[1],
-                sectionId: idSplit[0]
-            }
-        })
-        if (!subsectionExists) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Não existe nenhum grupo com o código ' + sectionId + '.'
-            })
-        }
-    }
-    User.findOne({
-        where: {
-            email: req.body.email
-        }
-    }).then((user) => {
-        if (user) {
+    const options = { where: { email }}
+    try {
+        const exists = await helper.checkIfExistsWithOptions(User, options)
+        if (exists) {
             return res.status(400).json({
                 status: 'failed',
                 message: 'Já existe um utilizador com o email indicado.'
             })
         }
-        return bcrypt.hash(password, bcryptSalt)
-    }).then(hashedPw => {
+        if (subsectionId) {
+            const idSplit = subsectionId.split('')
+            if (!idSplit || !idSplit[1]) {
+                return res.status(400).json({
+                    status: 'failed',
+                    message: 'Código de grupo inválido.'
+                })
+            }
+            const options = { where: { id: idSplit[1] }}
+            await helper.checkIfExistsOptWithErrorRes(
+                res,
+                Subsection,
+                options,
+                'Não existe nenhum grupo com o código indicado.')
+        }
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'A palavra-passe e a confirmação não coincidem.'
+            })
+        }
+        const hashedPw = await bcrypt.hash(password, bcryptSalt)
         const newUser = new User({
             firstName,
             lastName,
@@ -60,88 +47,62 @@ exports.register = async (req, res) => {
             password: hashedPw,
             subsectionId
         })
-        return newUser.save().catch(err => {
-            res.status(400).json({
-                status: 'failed',
-                message: err.errors[0].message,
-            })
-        })
-    }).then(() => {
+        await newUser.save()
         return res.status(201).json({
             status: 'success',
             message: 'O utilizador foi registado com sucesso.'
         })
-    }).catch(err => {
-        res.status(400).json({
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
             status: 'failed',
-            message: err.errors[0].message,
+            message: err.name
         })
-    })
+    }
 }
 
-exports.login = (req, res, next) => {
-    console.log(req.body)
+exports.login = async (req, res, next) => {
     const { email, password } = req.body
-    User.findOne({
-        where: {
-            email
-        }
-    }).then(user => {
-        console.log('User DB: ', user.dataValues)
-        if (!user) {
+    const options = { where: { email }}
+    try {
+        const exists = await helper.checkIfExistsWithOptions(User, options)
+        if (!exists){
             return res.status(400).json({
                 status: 'failed',
-                message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que o email não existe por razões de segurança
-            })
+                message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
+            })            
         }
-        console.log('Pass enviada: ' + password, ' Pass user db: ' + user.password)
-        bcrypt.compare(password, user.password).then(result => {
-            console.log('RESULTADO: ', result)
-            if (!result) {
-                return res.status(400).json({
-                    status: 'failed',
-                    message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
-                })
-            } else {
-                const token = jwt.sign({
-                    id: user.id,
-                    email: user.email
-                }, process.env.JWT_SECRET, {
-                    expiresIn: process.env.JWT_EXPIRATION,
-                    algorithm: process.env.JWT_ALGORITHM
-                })
-                return res.status(200).json({
-                    status: 'success',
-                    data: {
-                        userId: user.id,
-                        roleId: user.roleId,
-                        token
-                    }
-                })
-                /*res.cookie('jwt', token, {
-                    expires: new Date(Date.now() + process.env.JWT_EXPIRATION.split(' ')[0] * 86400), //Converte o valor para segundos
-                    httpOnly: true, //Previne modificações externas ao cookie
-                    secure: ssl  // Usar apenas com certificado. Força utilização de SSL
-                })
-                res.cookie('jwt', token, {
-                    httpOnly: true,
-                    secure: ssl,
-                })
-                return res.status(200).json({
-                    status: 'success',
-                    message: 'Sessão iniciada',
+        const user = await User.findOne(options)
+        const equal = await bcrypt.compare(password, user.password)
+        if (!equal) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
+            })
+        } else {
+            const token = jwt.sign({
+                id: user.id,
+                email: user.email
+            }, process.env.JWT_SECRET, {
+                expiresIn: process.env.JWT_EXPIRATION,
+                algorithm: process.env.JWT_ALGORITHM
+            })
+            return res.status(200).json({
+                status: 'success',
+                data: {
                     userId: user.id,
                     roleId: user.roleId,
                     token
-                })*/
-            }
-        }).catch(err => {
-            res.status(500).json({
-                status: 'failed',
-                message: err
+                }
             })
+        }
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            status: 'failed',
+            message: err.name
         })
-    })
+    }            
 }
 
 exports.verify = async (req, res, next) => {
