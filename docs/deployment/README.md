@@ -34,8 +34,9 @@ JWT_ALGORITHM=HS256
 LEASE_STATUS=pending,accepted,in progress,returned,refused,canceled
 UNMUTABLE_STATUS=returned,canceled
 ```
-** Nota **: LEASE_STATUS: É um array de todos os estados possíveis de um pedido de emprestimo. Podem ser adicionados mais separando-os com uma virgula.
-            UNMUTABLE_STATUS: É um array de estados que "terminam" um emprestimo não permitindo que após a sua atribuição se possa adicionar mais estados ao emprestimo.
+** Notas **:
+ - LEASE_STATUS: É um array de todos os estados possíveis de um pedido de emprestimo. Podem ser adicionados mais separando-os com uma virgula.
+ - UNMUTABLE_STATUS: É um array de estados que "terminam" um emprestimo não permitindo que após a sua atribuição se possa adicionar mais estados ao emprestimo.
 
 ### Instalar modulos Node.js
 ```
@@ -51,21 +52,21 @@ $ npm start
 ### Instalar modulos Node.js
 ```
 $ cd frontend
-npm install
+$ npm install
 ```
 
 ### Correr em modo desenvolvimento
 ```
-npm run serve
+$ npm run serve
 ```
 
 ### Compilação e minificação para produção
 ```
-npm run build
+$ npm run build
 ```
 
 ### Personalizar configuração
-See [Guia de configuração oficial](https://cli.vuejs.org/config/).
+Consultar [Guia de configuração oficial](https://cli.vuejs.org/config/).
 
 ## Outros
 ### Ligação para a colecção Postman
