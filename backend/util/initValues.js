@@ -45,23 +45,37 @@ exports.create = async () => {
         { id: 7, category: 'Desportivos'},
         { id: 8, category: 'Diversos'},
         { id: 9, category: 'Jogos'}
-    ])
-    const ItemsCategories = await ItemsCategory.bulkCreate([
-        { id: 01, subsection: 'Dossier', itemCategoryId: 1},
-        { id: 2, subsection: 'Cinzento', itemCategoryId: 1},
-        { id: 3, subsection: 'Castanho', itemCategoryId: 1},
-        { id: 4, subsection: 'Preto', itemCategoryId: 1},
-        { id: 5, subsection: 'Ruivo', itemCategoryId: 1},
-        { id: 1, subsection: 'Pantera', itemCategoryId: 2},
-        { id: 2, subsection: 'Mocho', itemCategoryId: 2},
-        { id: 3, subsection: 'Falcão', itemCategoryId: 2},
-        { id: 4, subsection: 'Leão', itemCategoryId: 2},
-        { id: 5, subsection: 'Touro', itemCategoryId: 2},
-        { id: 1, subsection: 'B.P.', itemCategoryId: 3},
-        { id: 2, subsection: 'Camões', itemCategoryId: 3},
-        { id: 3, subsection: 'Padeira de Aljubarrota', itemCategoryId: 3},
-        { id: 1, subsection: 'Vasco da Gama', itemCategoryId: 4},
-    ])
+    ]).catch(err =>{ console.log(err.message) })
+    const itemsTypes = await ItemType.bulkCreate([
+        { id: 0, type: 'Dossier', itemCategoryId: 1},
+        { id: 1, type: 'Mesa', itemCategoryId: 1},
+        { id: 2, type: 'Quadros', itemCategoryId: 1},
+        { id: 0, type: 'Tenda', itemCategoryId: 2},
+        { id: 1, type: 'Oleado', itemCategoryId: 2},
+        { id: 0, type: 'Cantina', itemCategoryId: 3},
+        { id: 1, type: 'Colher', itemCategoryId: 3},
+        { id: 2, type: 'Faca', itemCategoryId: 3},
+        { id: 3, type: 'Jerrican', itemCategoryId: 3},
+        { id: 4, type: 'Alguidar', itemCategoryId: 3},
+        { id: 0, type: 'Machado', itemCategoryId: 4},
+        { id: 1, type: 'Pá', itemCategoryId: 4},
+        { id: 2, type: 'Vassora', itemCategoryId: 4},
+        { id: 3, type: 'Azagaia', itemCategoryId: 4},
+        { id: 0, type: 'Bilha', itemCategoryId: 5},
+        { id: 1, type: 'Fogão', itemCategoryId: 5},
+        { id: 2, type: 'Candeeiro', itemCategoryId: 5},
+        { id: 0, type: 'Farmácia', itemCategoryId: 6},
+        { id: 1, type: 'Maca', itemCategoryId: 6},
+        { id: 0, type: 'Barco', itemCategoryId: 7},
+        { id: 1, type: 'Remos', itemCategoryId: 7},
+        { id: 2, type: 'Colete', itemCategoryId: 7},
+        { id: 3, type: 'Salva-vidas', itemCategoryId: 7},
+        { id: 4, type: 'Corda', itemCategoryId: 7},
+        { id: 5, type: 'Capacete', itemCategoryId: 7},
+        { id: 6, type: 'Tecido', itemCategoryId: 7},
+        { id: 7, type: 'Capacete', itemCategoryId: 7},
+
+    ]).catch(err =>{ console.log(err) })
 
     //DEV - DADOS DE TESTE
     const users = await User.bulkCreate([

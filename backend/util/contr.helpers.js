@@ -8,21 +8,6 @@ exports.checkIfExistsWithOptions = async (obj, options) => {
     return result ? true : false
 }
 
-exports.checkIfExistsOptWithErrorRes = async (res, obj, options, msg) => {
-    const result = await obj.findOne(options).catch((err) => {
-        res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
-    if (!result) {
-        res.status(400).json({
-            status: 'failed',
-            message: msg
-        })
-    }
-}
-
 // Verifica se objecto1 tem restrições na tabela do objecto 2
 exports.hasConstraints = async (obj, idObj, fieldName) => {
     const result = await obj.findAndCountAll({

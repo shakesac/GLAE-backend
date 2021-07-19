@@ -25,11 +25,13 @@ exports.register = async (req, res) => {
                 })
             }
             const options = { where: { id: idSplit[1] }}
-            await helper.checkIfExistsOptWithErrorRes(
-                res,
-                Subsection,
-                options,
-                'Não existe nenhum grupo com o código indicado.')
+            const exists = await helper.checkIfExists(Subsection, idSplit[1])
+            if (!exists) {
+                return res.status(400).json({
+                    status: 'failed',
+                    message: 'Não existe nenhum grupo com o código indicado.'
+                })
+            }
         }
         if (password !== confirmPassword) {
             return res.status(400).json({
