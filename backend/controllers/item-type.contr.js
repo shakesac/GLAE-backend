@@ -1,15 +1,5 @@
+const helper = require('../util/contr.helpers')
 const ItemType = require('../models/item-cat.model')
-
-const checkIfExists = async (id) => {
-    const itemType = await ItemType.findByPk(id).catch((err) => {
-        res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
-    const result = itemType ? true : false
-    return result
-}
 
 exports.new = async (req, res) => {
     const { id, type, itemCategoryId } = req.body
@@ -40,7 +30,7 @@ exports.new = async (req, res) => {
 
 exports.update = async (req, res) => {
     const { id, type, itemCategoryId } = req.body
-    if (!checkIfExists(req.params.id)) {
+    if (!helper.checkIfExists(id, ItemType)) {
         return res.status(400).json({
             status: 'failed',
             message: 'Não existe nenhuma categoria de material com o código indicado.'
@@ -72,7 +62,7 @@ exports.get = async (req, res) => {
     await Subsection.findByPk(req.params.id, {include: Section}).then((subsection) => {
         if (subsection == null) {
             res.status(404).json({
-                status: 'not found',
+                status: 'failed',
                 message: 'Não existe nenhuma subsecção com o ID especificado.'
             })
         }
