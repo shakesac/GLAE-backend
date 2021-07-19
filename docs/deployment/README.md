@@ -27,7 +27,7 @@ DB_TYPE=mysql             //Possivel compatibilidade com PostgreSQL.
 
 BCRYPT_SALT=10
 
-JWT_SECRET=GrUp0$3sCuT4s  //Segredo do token JWT
+JWT_SECRET=GrUp0$3sCuT4s  //Segredo do token JWT. Deverá ser uma string complexa.
 JWT_EXPIRATION=14 days
 JWT_ALGORITHM=HS256
 
