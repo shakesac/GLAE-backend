@@ -12,7 +12,8 @@ const ItemCategory = sequelize.define('item_category', {
         allowNull: false,
     }
 }, {
-    timestamps: false,
+    timestamps: true,
+    updatedAt: false,
     validate: {
         checkId() {
             if (this.id < 0 || this.id > 9) {
