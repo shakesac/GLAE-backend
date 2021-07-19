@@ -34,7 +34,7 @@ JWT_ALGORITHM=HS256
 LEASE_STATUS=pending,accepted,in progress,returned,refused,canceled
 UNMUTABLE_STATUS=returned,canceled
 ```
-** Notas **:
+**Notas**:
  - LEASE_STATUS: É um array de todos os estados possíveis de um pedido de emprestimo. Podem ser adicionados mais separando-os com uma virgula.
  - UNMUTABLE_STATUS: É um array de estados que "terminam" um emprestimo não permitindo que após a sua atribuição se possa adicionar mais estados ao emprestimo.
 
