@@ -26,11 +26,11 @@ const ItemType = sequelize.define('item_type', {
                 throw new Error('O código deverá ser um valor entre 0 e 99.')
             }
         },
-        checkComment() {
+        /*checkComment() {
             if (this.comment.length !== 2) {
                 throw new Error('O código deverá ser composto por 2 algarismos. (Ex.: 01, 34, 68)')
             }
-        }
+        }*/
     }
 
 })

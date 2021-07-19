@@ -41,16 +41,15 @@ exports.update = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
-    await Item.findByPk(req.params.id).then((item) => {
-        res.status(200).json({
-            status: 'success',
-            data: item
-        })
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
+    helper.checkIfAndGet(res, Item, req.params.id)
+}
+
+exports.delete = async (req, res) => {
+    await helper.delete(
+        res,
+        Item,
+        req.params.id,
+        null,
+        ''
+        )
 }

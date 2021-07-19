@@ -100,27 +100,7 @@ exports.getAllFromUser = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
-    await Lease.findByPk(req.params.id, {
-        include: [{
-            model: LeaseStatus
-        }]
-    }).then((lease) => {
-        if (!lease) {
-            res.status(404).json({
-                status: 'failed',
-                message: 'O emprestimo indicado não existe.'
-            })
-        }
-        return res.status(200).json({
-            status: 'success',
-            data: lease
-        })
-    }).catch((err) => {
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
+    helper.checkIfAndGet(res, Lease, req.params.id)
 }
 
 exports.updateStatus = async (req, res) => {

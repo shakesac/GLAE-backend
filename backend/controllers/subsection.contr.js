@@ -1,3 +1,4 @@
+const helper = require('../util/contr.helpers')
 const Section = require('../models/section.model')
 const Subsection = require('../models/subsection.model')
 const User = require('../models/user.model')
@@ -78,39 +79,12 @@ exports.update = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
-    await Subsection.findByPk(req.params.id, {include: Section}).then((subsection) => {
-        if (subsection == null) {
-            res.status(404).json({
-                status: 'not found',
-                message: 'Não existe nenhum grupo com o ID especificado.'
-            })
-        }
-        res.status(200).json({
-            status: 'success',
-            data: subsection,
-            subsectionFullId: subsection.sectionId+''+subsection.id
-        })
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
+    helper.checkIfByPkAndGet(res, Subsection, req.params.id)
 }
 
 exports.getAll = async (req, res) => {
-    await Subsection.findAll({ include: Section }).then((subsections) => {
-        res.status(200).json({
-            status: 'success',
-            data: subsections
-        })
-    }).catch((err) => {
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
+    const options = { include: Section }
+    helper.checkIfAndGetAll(res, Subsection, options)
 }
 
 exports.getAllFromSection = async (req, res) => {
@@ -126,7 +100,7 @@ exports.getAllFromSection = async (req, res) => {
         })
     }).catch((err) => {
         res.status(202).json({
-            status: 'fail',
+            status: 'failed',
             message: err.errors[0].message,
         })
     })
