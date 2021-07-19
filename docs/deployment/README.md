@@ -1,6 +1,6 @@
 ## Pré-requisitos
- - Node.js - Download and Install [Node.js](https://nodejs.org/en/)
- - MySQL - Download and Install [MySQL](https://www.mysql.com/downloads/)
+ - Node.js - Transferir e Instalar [Node.js](https://nodejs.org/en/)
+ - MySQL - Transferir e Instalar [MySQL](https://www.mysql.com/downloads/)
 
 ## Instalação
 ### Clone
