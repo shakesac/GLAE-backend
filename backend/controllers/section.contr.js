@@ -1,5 +1,8 @@
+const helper = require('../util/contr.helpers')
 const Section = require('../models/section.model')
 const Subsection = require('../models/subsection.model')
+
+
 
 exports.new = async (req, res) => {
     const newSection = new Section({
@@ -27,13 +30,7 @@ exports.new = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-    const section = await Section.findByPk(req.params.id).catch((err) => {
-        res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
-    if (!section) {
+    if (!helper.checkIfExists(req.params.id, Section)) {
         return res.status(400).json({
             status: 'failed',
             message: 'Não existe nenhuma secção com o código indicado.'
