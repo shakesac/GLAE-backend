@@ -2,8 +2,6 @@ const helper = require('../util/contr.helpers')
 const Section = require('../models/section.model')
 const Subsection = require('../models/subsection.model')
 
-
-
 exports.new = async (req, res) => {
     const newSection = new Section({
         id: req.body.id,
@@ -30,7 +28,8 @@ exports.new = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-    if (!helper.checkIfExists(req.params.id, Section)) {
+    const exists = await helper.checkIfExists(req.params.id, Section)
+    if (!exists) {
         return res.status(400).json({
             status: 'failed',
             message: 'Não existe nenhuma secção com o código indicado.'
@@ -94,11 +93,8 @@ exports.getAll = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    const verifyDependencies = await Subsection.findAndCountAll({
-        where: { sectionId: req.params.id }
-    })
-    console.log(verifyDependencies.count)
-    if (verifyDependencies.count > 0) {
+    const hasConstraints = await helper.hasConstraints(Subsection, req.params.id, 'sectionId')
+    if (hasConstraints) {
         return res.status(202).json({
             status: 'failed',
             message: 'Existem subsecções associadas a esta secção.'
