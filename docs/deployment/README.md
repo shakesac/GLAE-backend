@@ -25,6 +25,8 @@ DB_PASS=PALAVRA_PASSE_BD
 DB_DATA=NOME_BD
 DB_TYPE=mysql             //Possivel compatibilidade com PostgreSQL.
 
+SEQUELIZE_DEV_MODE=false  //Caso true recria as tabelas a cada npm start
+
 BCRYPT_SALT=10
 
 JWT_SECRET=GrUp0$3sCuT4s  //Segredo do token JWT. Deverá ser uma string complexa.
