@@ -1,3 +1,4 @@
+const helper = require('../util/contr.helpers')
 const Cargo = require('../models/cargo.model')
 
 exports.new = async (req, res) => {
@@ -74,20 +75,5 @@ exports.get = async (req, res) => {
 }
 
 exports.getAll = async (req, res) => {
-    const cargos = await Cargo.findAll().catch((err) => {
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
-    if (cargos.length < 1) {
-        return res.status(404).json({
-            status: 'failed',
-            message: 'Não existem cargos.'
-        })
-    }
-    res.status(200).json({
-        status: 'success',
-        data: cargos
-    })
+    await helper.checkIfAndGetAll(res, Cargo)
 }
