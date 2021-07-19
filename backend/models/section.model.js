@@ -16,6 +16,8 @@ const Section = sequelize.define('section', {
         allowNull: false,
     }
 }, {
+    timestamps: true,
+    updatedAt: false,
     validate: {
         checkId() {
             if (this.id < 0 || this.id > 9) {
