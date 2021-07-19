@@ -31,6 +31,6 @@ Para um utilizador com o ID 2 na base de dados local onde registou um endereço 
 }
 ```
 
-## Notes
+## Notas
 
 * Para realizar este pedido é necessário o envio do token gerado durante o inicio de sessão nos headers. Exemplo: `{ x-access-token: YWlsLmNvbSIsImlhdCI6MTYyNjYzNTU2NCwiZX }`
