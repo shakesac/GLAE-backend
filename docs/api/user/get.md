@@ -16,7 +16,7 @@ Recebe detalhes do utilizador actualmente autenticado.
 
 **Exemplo de conteúdo**
 
-Para um utilizador com o ID 1234 na base de dados local onde registou um endereço de email, nome e outras informações.
+Para um utilizador com o ID 2 na base de dados local onde registou um endereço de email, nome e outras informações.
 
 ```json
 {

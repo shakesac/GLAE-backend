@@ -1,13 +1,13 @@
-## Laboratório de Projecto - Agrupamento Escuteiros 1240 Murtal
+## :microscope: Laboratório de Projecto - Agrupamento Escuteiros 1240 Murtal
 
-![Created](https://badges.pufler.dev/created/shakesac/1240Armazem) ![Updated](https://badges.pufler.dev/updated/shakesac/1240Armazem)
+![Created](https://badges.pufler.dev/created/shakesac/1240Armazem) ![Last commit](https://img.shields.io/github/last-commit/shakesac/1240Armazem)
 
 ## :ledger: Documentação
 * [Documentação](docs/README.md)
 
-## 🔧 Ferramentas & Tecnologias utilizadas
+## :wrench: Ferramentas & Tecnologias utilizadas
 ### Frameworks
-![Vue 3](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D) ![Bootstrap 5](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-43853D?style=for-the-badge&logo=express&logoColor=white)
+![Vue 3](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D) ![Bootstrap 5](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-00000f?style=for-the-badge&logo=express&logoColor=white)
 
 ### Base de dados
 ![MySQL](https://img.shields.io/badge/MySQL-4479a1?style=for-the-badge&logo=mysql&logoColor=white)
@@ -32,7 +32,7 @@
 ![Firefox](https://img.shields.io/badge/Firefox-F45B2C?style=for-the-badge&logo=firefoxbrowser&logoColor=white) ![Chrome](https://img.shields.io/badge/Chrome-2D9653?style=for-the-badge&logo=googlechrome&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-057ED5?style=for-the-badge&logo=microsoftedge&logoColor=white)
 
 
-## Licença
+## :unlock: Licença
 ![License](https://img.shields.io/github/license/shakesac/1240Armazem.svg)
 * [Documentação Oficial](https://www.gnu.org/licenses/gpl-3.0.en.html)
 * [Resumo](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3))
