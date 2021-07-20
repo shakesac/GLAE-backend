@@ -1,23 +1,17 @@
 import api from '@/api/api'
 import { authService } from "@/api/auth.service.js";
-import {
-    AUTH_LOGIN,
-    AUTH_REGISTER,
-    AUTH_INFO,
-    AUTH_REGISTER_SUCCESS,
-    SET_MESSAGE
-  } from "./auth.constants";
 
 const state = {
     //Inicializadas com os dados no storage caso existam.
     token: localStorage.getItem('STORAGE_ACCESS_TOKEN') ||
     sessionStorage.getItem('STORAGE_ACCESS_TOKEN') ||
     '',
-    profile: //JSON.parse(
-        localStorage.getItem('STORAGE_ACCESS_TOKEN') ||
-        sessionStorage.getItem('STORAGE_ACCESS_TOKEN') ||
+    profile:
+        JSON.parse(
+        localStorage.getItem('STORAGE_USER_PROFILE') ||
+        sessionStorage.getItem('STORAGE_USER_PROFILE') ||
         '{}',
-    //),
+    ),
     isAdmin: false,
 }
 
@@ -26,7 +20,7 @@ const mutations = {
         state.token = data.token
         localStorage.STORAGE_ACCESS_TOKEN = data.token
         state.profile = data.profile
-        localStorage.setItem('STORAGE_USER_PROFILE', JSON.stringify(data.profile))
+        localStorage.STORAGE_USER_PROFILE = JSON.stringify(data.profile)
         data.role == 1 ? true : false
     },
     logout: state => {
@@ -34,12 +28,6 @@ const mutations = {
         state.profile = {}
         localStorage.removeItem('STORAGE_ACCESS_TOKEN')
         localStorage.removeItem('STORAGE_USER_PROFILE')
-    },
-    [AUTH_REGISTER_SUCCESS]: (state, data) => {
-    state.register = data;
-    },
-    [SET_MESSAGE]: (state, message) => {
-    state.message = message;
     },
     setToken: (state, token) => {
         state.token = token
@@ -56,8 +44,9 @@ const getters = {
     getProfile: (state) => {
         state.profile
     },
-    getProfileName: state => state.profile.name,
-    getMessage: state => state.message,
+    getProfileName: (state) => {
+        return state.profile.firstName.concat(' ', state.profile.lastName)
+    },
     isAdmin: (state) => {
         console.log(state.isAdmin)
         return state.isAdmin
@@ -74,7 +63,6 @@ const actions = {
                 profile: res.profile,
                 role: res.profile.roleId
             })
-            commit(SET_MESSAGE, `Bem-vindo, ${res.profile.firstName}!`)
         } catch (err) {
             console.log(err)
         }
