@@ -1,9 +1,8 @@
 <template>
-    <div id="bg-wrapper" class="container-fluid d-flex align-items-center">
-    <div id="center-wrapper" class="container-sm d-flex text-center">
+    <div id="bg-wrapper" class="container-fluid d-flex align-items-center justify-content-center">
+    <!--<div id="center-wrapper" class="container-sm d-flex text-center">-->
       <slot />
     </div>
-  </div>
 </template>
 
 <style scoped>

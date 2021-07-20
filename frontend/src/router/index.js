@@ -1,11 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
+import Perfil from '../views/Profile.vue'
 
 const routes = [
+  /*
   {
     path: '/',
-    redirect: 'painel',
+    redirect: '/perfil',
   },
+  */
   {
     path: '/about',
     name: 'About',
@@ -25,14 +28,9 @@ const routes = [
     component: () => import('@/views/Register.vue')
   },
   {
-    path: '/teste',
-    name: 'Teste',
-    component: () => import('@/views/Testes.vue'),
-  },
-  {
-    path: '/painel',
-    name: 'painel',
-    component: () => import('@/views/Dashboard.vue'),
+    path: '/perfil',
+    name: 'Perfil',
+    component: Perfil,
     meta: { requiredAuth: true }
   }
 ]
@@ -51,6 +49,7 @@ router.beforeEach(async (to, from, next) => {
   if (authRequired && !loggedIn) {
     next('/login');
   } else {
+    console.log('Utilizador autenticado.')
     next();
   }
 })

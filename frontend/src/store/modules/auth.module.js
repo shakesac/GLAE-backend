@@ -42,7 +42,7 @@ const getters = {
        return state.token !=''
     },
     getProfile: (state) => {
-        state.profile
+        return state.profile
     },
     getProfileName: (state) => {
         return state.profile.firstName.concat(' ', state.profile.lastName)

@@ -17,10 +17,7 @@
         <!-- ##### UTILIZADOR ##### -->
         <ul v-if="isLoggedIn == true" class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-            <router-link to="/about" class="nav-link"></router-link>
-            </li>
-            <li class="nav-item">
-            <router-link to="/teste" class="nav-link"></router-link>
+                <a :to="{name: Perfil}" class="nav-link" aria-current="page">perfil</a>
             </li>
             <li class="nav-item dropdown">
             <a v-if="isAdmin" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,7 +56,7 @@
             </ul>
         </div>
             <div class="dropdown" v-if="isLoggedIn == false">
-            <button type="button" class="btn btn-success btn-circle btn-lg" id=unloggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
+            <button type="button" class="btn btn-success btn-circle btn-lg m" id=unloggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
             <ul class="dropdown-menu" aria-labelledby="unloggedDropdown">
                 <li><router-link to="/login" class="dropdown-item">Iniciar sessão</router-link></li>
                 <li><hr class="dropdown-divider"></li>
