@@ -13,14 +13,14 @@ import { STORAGE_ACCESS_TOKEN, STORAGE_USER_PROFILE } from "../constants";
 
 const state = {
     //Inicializadas com os dados no storage caso existam.
-    token: localStorage.getItem(STORAGE_ACCESS_TOKEN) ||
-    sessionStorage.getItem(STORAGE_ACCESS_TOKEN) ||
+    token: localStorage.getItem('STORAGE_ACCESS_TOKEN') ||
+    sessionStorage.getItem('STORAGE_ACCESS_TOKEN') ||
     '',
-    profile: JSON.parse(
-        localStorage.getItem(STORAGE_ACCESS_TOKEN) ||
-        sessionStorage.getItem(STORAGE_ACCESS_TOKEN) ||
+    profile: //JSON.parse(
+        localStorage.getItem('STORAGE_ACCESS_TOKEN') ||
+        sessionStorage.getItem('STORAGE_ACCESS_TOKEN') ||
         '{}',
-    ),
+    //),
     isAdmin: false,
 }
 
@@ -29,14 +29,14 @@ const mutations = {
         state.token = data.token
         localStorage.STORAGE_ACCESS_TOKEN = data.token
         state.profile = data.profile
-        localStorage.STORAGE_USER_PROFILE = JSON.stringify(data.profile)
+        localStorage.setItem('STORAGE_USER_PROFILE', JSON.stringify(data.profile))
         data.role == 1 ? true : false
     },
     [AUTH_LOGOUT_SUCCESS]: state => {
         state.token = null
         state.profile = {}
-        localStorage.removeItem(STORAGE_ACCESS_TOKEN)
-        localStorage.removeItem(STORAGE_USER_PROFILE)
+        localStorage.removeItem('STORAGE_ACCESS_TOKEN')
+        localStorage.removeItem('STORAGE_USER_PROFILE')
     },
     [AUTH_REGISTER_SUCCESS]: (state, data) => {
     state.register = data;
@@ -54,7 +54,6 @@ const mutations = {
 
 const getters = {
     isLoggedIn: (state) => {
-        console.log('LOCALSTORAGE TOKEN: ', localStorage.getItem(STORAGE_ACCESS_TOKEN))
        return state.token !=''
     },
     getProfile: (state) => {
@@ -97,7 +96,6 @@ const actions = {
 }
 
 export default {
-    namespaced: true,
     state,
     getters,
     actions,

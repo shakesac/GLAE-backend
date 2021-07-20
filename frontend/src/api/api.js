@@ -1,5 +1,5 @@
 import axios from 'axios'
-import qs from 'qs'
+//import qs from 'qs'
 let apiUrl = process.env.API_URL
 apiUrl = 'http://127.0.0.1:5000/api/v1'
 
@@ -23,7 +23,7 @@ axios.interceptors.response.use((res) => {
 
 //Intercepta os requests e adiciona o header x-access-token caso o utilizador esteja logado.
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('STORAGE_ACCESS_TOKEN')
+    console.log('API TOKEN: ', token)
     if (token) {
         config.headers['x-access-token'] = token
     }

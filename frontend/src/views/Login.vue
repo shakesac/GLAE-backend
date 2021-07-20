@@ -24,7 +24,7 @@
 import {computed, reactive} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
-import { MODULE_BASE, AUTH_LOGIN } from "@/store/modules/auth.constants";
+import { AUTH_LOGIN } from "@/store/modules/auth.constants";
 import BaseLayout from './Base.vue'
 export default {
     name: 'Login',
