@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
-//import api from '@/services/api.js'
-import auth from './modules/auth'
-import sections from './modules/sections'
+//import api from '@/api/api'
+import auth from './modules/auth.module'
+import sections from './modules/sections.module'
 import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
