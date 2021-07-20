@@ -23,6 +23,7 @@ axios.interceptors.response.use((res) => {
 
 //Intercepta os requests e adiciona o header x-access-token caso o utilizador esteja logado.
 api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('STORAGE_ACCESS_TOKEN')
     console.log('API TOKEN: ', token)
     if (token) {
         config.headers['x-access-token'] = token
