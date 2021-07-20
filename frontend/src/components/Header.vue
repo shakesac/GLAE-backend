@@ -50,14 +50,14 @@
         <div class="dropdown" v-if="isLoggedIn == true">
             <button type="button" class="btn btn-success btn-circle btn-lg" id=loggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
             <ul class="dropdown-menu" aria-labelledby="loggedDropdown">
-                <li><a class="dropdown-item disabled">{{ userInfo.firstName }}</a></li>
+                <li><a class="dropdown-item disabled"></a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a v-if="isAdmin == true" class="dropdown-item disabled">Administrador</a></li>
                 <li><hr v-if="isAdmin == true" class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#">Perfil</a></li>
                 <li><a v-on:click.prevent="logout" class="dropdown-item" href="#">Logout</a></li>
             </ul>
-            </div>
+        </div>
             <div class="dropdown" v-if="isLoggedIn == false">
             <button type="button" class="btn btn-success btn-circle btn-lg" id=unloggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
             <ul class="dropdown-menu" aria-labelledby="unloggedDropdown">
@@ -81,7 +81,8 @@ export default {
         const router = useRouter()
         const isLoggedIn = computed(() => store.getters.isLoggedIn)
         const isAdmin = computed(() => store.getters.isAdmin)
-        const userInfo = computed(() => store.getters.getUserInfo)
+        const name = computed(() => store.getters.getProfileName)
+        console.log('Name: ', name, 'isLogged: ', isLoggedIn)
         const logout = async () => {
             await store.dispatch('logout')
             router.push('/login')
@@ -89,7 +90,7 @@ export default {
         return {
             isLoggedIn,
             isAdmin,
-            userInfo,
+            name,
             logout,
         }
     }

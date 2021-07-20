@@ -31,7 +31,7 @@ const routes = [
   },
   {
     path: '/painel',
-    name: 'Painel',
+    name: 'painel',
     component: () => import('@/views/Dashboard.vue'),
     meta: { requiredAuth: true }
   }
@@ -42,10 +42,11 @@ const router = createRouter({
   routes
 })
 
+
 router.beforeEach(async (to, from, next) => {
   const publicPages = ['/login', '/registo', '/about'];
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem('user');
+  const loggedIn = localStorage.getItem('STORAGE_USER_PROFILE');
   // redirecciona para página the login caso nao esteja logado
   if (authRequired && !loggedIn) {
     next('/login');
@@ -53,5 +54,6 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 })
+
 
 export default router

@@ -3,6 +3,7 @@ node_modules
 /dist
 jsconfig.json
 .gitignore
+vue.config.js
 
 
 # local env files

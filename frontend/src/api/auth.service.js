@@ -4,8 +4,9 @@ export const authService = {
     async login(payload) {
       const res = await api.post('/login', payload)
       if (res.status == 200) {
-        const token = res.data.data.token;
-        const profile = JSON.stringify(res.data.data.user)
+        const token = res.data.data.token
+        const profile = res.data.data.user
+        //const profile = JSON.stringify(res.data.data.user)
         return { token, profile }
       } else {
         throw Error(handleResponses(res.status))

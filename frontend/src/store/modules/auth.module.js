@@ -15,20 +15,13 @@ const state = {
     //Inicializadas com os dados no storage caso existam.
     token: localStorage.getItem(STORAGE_ACCESS_TOKEN) ||
     sessionStorage.getItem(STORAGE_ACCESS_TOKEN) ||
-    null,
+    '',
     profile: JSON.parse(
         localStorage.getItem(STORAGE_ACCESS_TOKEN) ||
         sessionStorage.getItem(STORAGE_ACCESS_TOKEN) ||
-        null,
+        '{}',
     ),
     isAdmin: false,
-    userInfo: {
-        id: 0,
-        firstName: null,
-        lastName: null,
-        email: null,
-        subsectionId: 0,
-    }
 }
 
 const mutations = {
@@ -36,7 +29,7 @@ const mutations = {
         state.token = data.token
         localStorage.STORAGE_ACCESS_TOKEN = data.token
         state.profile = data.profile
-        localStorage.STORAGE_USER_PROFILE = data.profile
+        localStorage.STORAGE_USER_PROFILE = JSON.stringify(data.profile)
         data.role == 1 ? true : false
     },
     [AUTH_LOGOUT_SUCCESS]: state => {
@@ -56,34 +49,23 @@ const mutations = {
     },
     setRole: (state, bool) => {
         state.isAdmin = bool
-    },
-    setUserInfo: (state, user) => {
-        const userInfo = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            subsectionId: user.subsectionId
-        }
-        state.userInfo = userInfo
     }
 }
 
 const getters = {
     isLoggedIn: (state) => {
-       return !!state.token
+        console.log('LOCALSTORAGE TOKEN: ', localStorage.getItem(STORAGE_ACCESS_TOKEN))
+       return state.token !=''
     },
     getProfile: (state) => {
         state.profile
     },
-    getUserType: (state) => state.profile.type,
+    getProfileName: state => state.profile.name,
     getMessage: state => state.message,
     isAdmin: (state) => {
+        console.log(state.isAdmin)
         return state.isAdmin
     },
-    getUserInfo: (state) => {
-        return state.userInfo
-    }
 }
 
 const actions = {
@@ -106,14 +88,6 @@ const actions = {
         commit('setToken', false)
         commit('setRole', false)
     },
-
-    userInfo: async ({commit}) => {
-        const res = await api.get('/user/me')
-        console.log('userInfo: ', res)
-        if (res.data.status == 'success') {
-            commit('setUserInfo', res.data.data)
-        }
-    },
     registerUser({ commit }, user) {
         event.preventDefault();
         api.post('/register', user).then(res => {
@@ -123,6 +97,7 @@ const actions = {
 }
 
 export default {
+    namespaced: true,
     state,
     getters,
     actions,
