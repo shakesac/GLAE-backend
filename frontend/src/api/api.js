@@ -1,6 +1,7 @@
 import axios from 'axios'
-const apiUrl = process.env.API_URL
-
+let apiUrl = process.env.API_URL
+apiUrl = 'http://127.0.0.1:5000/api/v1'
+console.log(apiUrl)
 const headers = {
     Accept: "application/json",
     ContentType: 'application/x-www-form-urlencoded',
