@@ -2,11 +2,10 @@ import api from './api'
 
 export const authService = {
     async login(payload) {
-        const res = await api.post('/login', payload)
-      if (res.ok) {
-        const data = await res.json();
-        const token = res.headers.get("x-access-token");
-        const profile = data.body
+      const res = await api.post('/login', payload)
+      if (res.status == 200) {
+        const token = res.data.data.token;
+        const profile = res.data.data.user
         return { token, profile }
       } else {
         throw Error(handleResponses(res.status))
