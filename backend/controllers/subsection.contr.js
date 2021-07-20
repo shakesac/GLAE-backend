@@ -79,11 +79,12 @@ exports.update = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
-    helper.checkIfByPkAndGet(res, Subsection, req.params.id)
+    const options = {include: Section, exclude: ['sectionId']}
+    helper.checkIfByPkAndGet(res, Subsection, req.params.id, options)
 }
 
 exports.getAll = async (req, res) => {
-    const options = { include: Section }
+    const options = {include: Section, exclude: ['sectionId']}
     helper.checkIfAndGetAll(res, Subsection, options)
 }
 

@@ -5,7 +5,7 @@ const {verify} = require('../controllers/auth.contr')
 
 router.post('/login', authContr.login)
 router.post('/register', authContr.register)
-router.get('/logout', verify, authContr.logout)
+//router.get('/logout', verify, authContr.logout)
 //router.post('/verify', authContr.verify)
 
 module.exports = router

@@ -11,64 +11,16 @@ exports.new = async (req, res) => {
         end: req.body.end,
         userId: req.user.id
     })
-    const lease = await newLease.save().catch((err) => {
-        res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
-    const status = new LeaseStatus({
-        leaseId: lease.id
-    })
-    await status.save().catch(err => {
-        res.status(400).json({
-            status: 'failed',
-            message: 'Não foi possível criar o estado do emprestimo.'
-        })
-    })
-    res.status(201).json({
-        status: 'success',
-        message: 'O emprestimo foi criado com sucesso',
-        leaseId: newLease.id
-    })
+    await helper.create(res, newLease)
 }
 
 exports.update = async (req, res) => {
-    await Lease.update({
-        start: req.body.start,
-        end: req.body.end
-    }, {
-        where: { id: req.params.id}
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(304).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
-    res.status(201).json({
-        status: 'success',
-        message: 'O emprestimo foi actualizado com sucesso'
-    })
+    await helper.checkIfByPkAndUpdate(res, Lease, req.params.id, req.body)
 }
 
 exports.getAll = async (req, res) => {
-    const leases = await Lease.findAll({
-        include: [{
-            model: LeaseStatus
-        }]
-    }).then((result) => {
-        res.status(200).json({
-            status: 'success',
-            data: result
-        })
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
+    const options = {include: LeaseStatus}
+    await helper.checkIfAndGetAll(res, Lease, options)
 }
 
 exports.getAllFromUser = async (req, res) => {
@@ -100,7 +52,8 @@ exports.getAllFromUser = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
-    helper.checkIfAndGet(res, Lease, req.params.id)
+    const options = {include: LeaseStatus}
+    helper.checkIfAndGet(res, Lease, req.params.id, options)
 }
 
 exports.updateStatus = async (req, res) => {

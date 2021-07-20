@@ -64,6 +64,7 @@ exports.register = async (req, res) => {
 }
 
 exports.login = async (req, res, next) => {
+    console.log(req.body)
     const { email, password } = req.body
     const options = { where: { email }}
     try {
@@ -181,7 +182,6 @@ exports.verify = async (req, res, next) => {
         }
     })
 }
-*/
 exports.logout = (req, res) => {
     if (req.cookies.jwt) {
         res.clearCookie('jwt').status(200).json({
@@ -195,3 +195,4 @@ exports.logout = (req, res) => {
         })
     }
 }
+*/

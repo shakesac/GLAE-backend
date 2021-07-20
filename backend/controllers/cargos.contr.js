@@ -2,78 +2,31 @@ const helper = require('../util/contr.helpers')
 const Cargo = require('../models/cargo.model')
 
 exports.new = async (req, res) => {
+    const { cargo } = req.body
     const newCargo = new Cargo({
-        cargo: req.body.cargo
+        cargo
     })
-    await newCargo.save().then((cargo) => {
-        res.status(201).json({
-            status: 'success',
-            message: 'O cargo foi criado com sucesso',
-            data: cargo
-        })
-    }).catch((err) => {
-        if (err.errors[0].message == 'cargos.cargo must be unique') {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Já existe um cargo com o nome indicado.'
-            })
-        }
-        res.status(400).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
+    await helper.create(res, Cargo)
 }
 
 exports.update = async (req, res) => {
-    const cargo = await Cargo.findByPk(req.params.id).catch((err) => {
-        res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
-    if (!cargo) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Cargo inexistente.'
-        })
-    }
-    await Cargo.update({
-        cargo: req.body.cargo,
-    }, {
-        where: { id: req.params.id }
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(202).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
-    res.status(200).json({
-        status: 'success',
-        message: 'Cargo actualizado com sucesso.',
-    })
+    await helper.checkIfByPkAndUpdate(res, Cargo, req.params.id, req.body)
 }
 
 exports.get = async (req, res) => {
-    const cargo = await Cargo.findByPk(req.params.id).catch((err) => {
-        res.status(400).json({
-            status: 'fail',
-            message: err.errors[0].message,
-        })
-    })
-    if (!cargo) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Cargo inexistente.'
-        })
-    }
-    res.status(200).json({
-        status: 'success',
-        data: cargo
-    })
+    helper.checkIfByPkAndGet(res, Cargo, req.params.id)
 }
 
 exports.getAll = async (req, res) => {
     await helper.checkIfAndGetAll(res, Cargo)
+}
+
+exports.delete = async (req, res) => {
+    await helper.delete(
+        res,
+        Cargo,
+        req.params.id,
+        Uers,
+        'cargoId'
+        )
 }

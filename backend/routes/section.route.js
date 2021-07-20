@@ -11,6 +11,7 @@ router.delete('/delete/:id', sectionContr.delete)
 router.get('/all', sectionContr.getAll)
 router.get('/:id/sub', subsectionContr.getAllFromSection)
 router.get('/:id', sectionContr.get)
+
 router.post(subSecPre+'/new', subsectionContr.new)
 router.put(subSecPre+'/update/:id', subsectionContr.update)
 router.delete(subSecPre+'/delete/:id', subsectionContr.delete)

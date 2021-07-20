@@ -19,23 +19,23 @@ app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json()) //body-parser on Express 4.16+
 app.use(helmet())
+app.use(morgan('tiny')) //tiny, dev
 //app.use(cookieParser())
-app.use(morgan('dev')) //tiny, dev
 
 //ROUTES
-const adminRoutes = require('./routes/admin.route')
 const authRoutes = require('./routes/auth.route')
 const leaseRoutes = require('./routes/lease.route')
 const itemRoutes = require('./routes/item.route')
 const sectionRoutes = require('./routes/section.route')
 const userRoutes = require('./routes/user.route')
-const { getCargos } = require('./controllers/cargos.contr')
-app.use(api+'/admin', adminRoutes)
+const cargoRoutes = require('./routes/cargos.routes')
 app.use(api, authRoutes)
+app.use(api+'/cargo', cargoRoutes)
 app.use(api+'/lease', leaseRoutes)
 app.use(api+'/item', itemRoutes)
 app.use(api+'/section', sectionRoutes)
 app.use(api+'/user', userRoutes)
+
 
 app.get('/', (req, res, next) =>{
     res.status(200).send('A API está a correr!')
@@ -53,7 +53,6 @@ const UserRole = require('./models/user-role.model')
 const LeaseStatus = require('./models/lease-status.model')
 const Section = require('./models/section.model')
 const Subsection = require('./models/subsection.model')
-//const router = require('./routes/admin.route')
 
 // SEQUELIZE - ASSOCIATIONS
 Cargo.hasMany(User)
@@ -94,7 +93,7 @@ Item.belongsToMany(Lease, { through: 'lease_item' })
 
 // SEQUELIZE - SYNC
 const seqMode = process.env.SEQUELIZE_DEV_MODE
-sequelize.sync({ force: seqMode }).then(result => {
+sequelize.sync({ /*force: seqMode*/ }).then(result => {
     console.log('BD: ' + result.config.database + '\nUser: ' + result.config.username)
     console.log(result.config.protocol + ' ' + result.config.host + ':' + result.config.port)
     if(seqMode) dbInitValues.create()
@@ -102,11 +101,12 @@ sequelize.sync({ force: seqMode }).then(result => {
     console.log('ERRO: DB SYNC()', err)
 })
 
-
-
 // 404 - CATCH ALL MIDDLEWARE
 app.use((req, res, next) => {
-    res.status(404).send('<h2>404 - Não encontrado</h2>')
+    res.status(404).json({
+        status: 'failed',
+        message: 'API not found.'
+    })
 })
 
 module.exports = app;
