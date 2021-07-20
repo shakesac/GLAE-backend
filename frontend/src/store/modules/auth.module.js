@@ -40,10 +40,10 @@ const mutations = {
         data.role == 1 ? true : false
     },
     [AUTH_LOGOUT_SUCCESS]: state => {
-        state.token = "";
-        state.profile = {};
-        localStorage.removeItem(STORAGE_ACCESS_TOKEN);
-        localStorage.removeItem(STORAGE_USER_PROFILE);
+        state.token = null
+        state.profile = {}
+        localStorage.removeItem(STORAGE_ACCESS_TOKEN)
+        localStorage.removeItem(STORAGE_USER_PROFILE)
     },
     [AUTH_REGISTER_SUCCESS]: (state, data) => {
     state.register = data;
@@ -88,17 +88,18 @@ const getters = {
 
 const actions = {
     [AUTH_LOGIN]: async ({ commit }, payload) => {
-        return new Promise((resolve, reject) => {
-          authService
-          .login(payload)
-          .then(res => {
-              commit(AUTH_LOGIN_SUCCESS, {token: res.token, profile: res.profile, role: res.profile.roleId});
-              commit(SET_MESSAGE, `Bem-vindo, ${res.profile.name}!`);
-              resolve(res);
-          })
-          .catch(err => reject(err))
-          
-        })
+        try {
+            const res = await authService.login(payload)
+            alert('Bem-vindo ', res.profile.firstName)
+            commit(AUTH_LOGIN_SUCCESS, {
+                token: res.token,
+                profile: res.profile,
+                role: res.profile.roleId
+            })
+            commit(SET_MESSAGE, `Bem-vindo, ${res.profile.firstName}!`)
+        } catch (err) {
+            console.log(err)
+        }
     },
     logout: ({ commit }) => {
         localStorage.removeItem('user');
