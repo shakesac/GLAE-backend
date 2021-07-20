@@ -51,9 +51,19 @@ $ npm start
 ```
 
 ## Frontend
-### Instalar modulos Node.js
+
 ```
 $ cd frontend
+$ nano .env
+```
+```
+API_URL=http://127.0.0.1:5000/api/v1  //Valor padrão
+```
+**Nota**: Alterar o URl caso os valores do .env do backend também tenham sido alterados.
+
+
+### Instalar modulos Node.js
+```
 $ npm install
 ```
 
