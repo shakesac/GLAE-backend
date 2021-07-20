@@ -81,8 +81,8 @@ export default {
         const router = useRouter()
         const isLoggedIn = computed(() => store.getters.isLoggedIn)
         const isAdmin = computed(() => store.getters.isAdmin)
-        const name = computed(() => store.getters.getProfileName)
-        console.log('Name: ', name)
+        const profile = computed(() => store.getters.getProfile)
+        console.log('Name: ', profile)
         const logout = () => {
             store.commit('logout')
             router.push('/login')

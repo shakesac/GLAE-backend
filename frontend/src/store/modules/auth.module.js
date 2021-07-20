@@ -30,7 +30,7 @@ const mutations = {
         data.role == 1 ? true : false
     },
     logout: state => {
-        state.token = null
+        state.token = ''
         state.profile = {}
         localStorage.removeItem('STORAGE_ACCESS_TOKEN')
         localStorage.removeItem('STORAGE_USER_PROFILE')
@@ -68,7 +68,7 @@ const actions = {
     login: async ({ commit }, payload) => {
         try {
             const res = await authService.login(payload)
-            alert('Bem-vindo ', res.profile )
+            alert('Bem-vindo ', res.profile.firstName )
             commit('loginSuccess', {
                 token: res.token,
                 profile: res.profile,
