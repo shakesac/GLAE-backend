@@ -4,12 +4,9 @@ import {
     AUTH_LOGIN,
     AUTH_REGISTER,
     AUTH_INFO,
-    AUTH_LOGIN_SUCCESS,
-    AUTH_LOGOUT_SUCCESS,
     AUTH_REGISTER_SUCCESS,
     SET_MESSAGE
   } from "./auth.constants";
-import { STORAGE_ACCESS_TOKEN, STORAGE_USER_PROFILE } from "../constants";
 
 const state = {
     //Inicializadas com os dados no storage caso existam.
@@ -25,14 +22,14 @@ const state = {
 }
 
 const mutations = {
-    [AUTH_LOGIN_SUCCESS]: (state, data) => {
+    loginSuccess: (state, data) => {
         state.token = data.token
         localStorage.STORAGE_ACCESS_TOKEN = data.token
         state.profile = data.profile
         localStorage.setItem('STORAGE_USER_PROFILE', JSON.stringify(data.profile))
         data.role == 1 ? true : false
     },
-    [AUTH_LOGOUT_SUCCESS]: state => {
+    logout: state => {
         state.token = null
         state.profile = {}
         localStorage.removeItem('STORAGE_ACCESS_TOKEN')
@@ -68,11 +65,11 @@ const getters = {
 }
 
 const actions = {
-    [AUTH_LOGIN]: async ({ commit }, payload) => {
+    login: async ({ commit }, payload) => {
         try {
             const res = await authService.login(payload)
-            alert('Bem-vindo ', res.profile.firstName)
-            commit(AUTH_LOGIN_SUCCESS, {
+            alert('Bem-vindo ', res.profile )
+            commit('loginSuccess', {
                 token: res.token,
                 profile: res.profile,
                 role: res.profile.roleId

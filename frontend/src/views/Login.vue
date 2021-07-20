@@ -24,7 +24,6 @@
 import {computed, reactive} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
-import { AUTH_LOGIN } from "@/store/modules/auth.constants";
 import BaseLayout from './Base.vue'
 export default {
     name: 'Login',
@@ -43,7 +42,7 @@ export default {
             password: '',
         })
         const submit = async () => {
-            await store.dispatch(AUTH_LOGIN, data)
+            await store.dispatch('login', data)
             if (status.value === true) {
                 await router.push('/painel')
             } else {

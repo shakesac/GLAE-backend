@@ -50,7 +50,7 @@
         <div class="dropdown" v-if="isLoggedIn == true">
             <button type="button" class="btn btn-success btn-circle btn-lg" id=loggedDropdown data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
             <ul class="dropdown-menu" aria-labelledby="loggedDropdown">
-                <li><a class="dropdown-item disabled"></a></li>
+                <li><a class="dropdown-item disabled">{{ name }}</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a v-if="isAdmin == true" class="dropdown-item disabled">Administrador</a></li>
                 <li><hr v-if="isAdmin == true" class="dropdown-divider"></li>
@@ -82,9 +82,9 @@ export default {
         const isLoggedIn = computed(() => store.getters.isLoggedIn)
         const isAdmin = computed(() => store.getters.isAdmin)
         const name = computed(() => store.getters.getProfileName)
-        console.log('Name: ', name, 'isLogged: ', isLoggedIn)
-        const logout = async () => {
-            await store.dispatch('logout')
+        console.log('Name: ', name)
+        const logout = () => {
+            store.commit('logout')
             router.push('/login')
         }
         return {
