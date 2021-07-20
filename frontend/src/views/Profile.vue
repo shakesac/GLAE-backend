@@ -20,12 +20,8 @@
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade shadow rounded bg-white show active p-5" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                         <h4 class="font-italic mb-4">Informação pessoal</h4>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-md-6">
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Código:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.id }}</span>
-                                </p>
                                 <p class="my-1">
                                     <span id="key" class="mr-5">Nome:</span>
                                     <span id="value" class="font-italic text-muted ">{{ name }}</span>
@@ -54,6 +50,10 @@
                             <hr class="d-md-none my-2">
                             <div class="col-md-6">
                                 <p class="my-1">
+                                    <span id="key" class="mr-5">Código de utilizador:</span>
+                                    <span id="value" class="font-italic text-muted ">{{ profile.id }}</span>
+                                </p>
+                                <p class="my-1">
                                     <span id="key" class="mr-5">Registado desde:</span>
                                     <span id="value" class="font-italic text-muted ">{{ date }}</span>
                                 </p>
@@ -81,6 +81,12 @@
                                     <span id="key" class="mr-5">Nome:</span>
                                     <span id="value" class="font-italic text-muted ">{{ name }}</span>
                                 </p>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-6 d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-primary mx-1"><i class="bi bi-pencil-fill"></i>Editar perfil</button>
+                            <button type="button" class="btn btn-danger mx-1"><i class="bi bi-trash mr-2"></i>Eliminar conta</button>
                             </div>
                         </div>
                     </div>
