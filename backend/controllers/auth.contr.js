@@ -66,7 +66,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res, next) => {
     console.log(req.body)
     const { email, password } = req.body
-    const options = { where: { email }}
+    let options = { where: { email } }
     try {
         const exists = await helper.checkIfExistsWithOptions(User, options)
         if (!exists){
@@ -90,12 +90,13 @@ exports.login = async (req, res, next) => {
                 expiresIn: process.env.JWT_EXPIRATION,
                 algorithm: process.env.JWT_ALGORITHM
             })
+            // Remover a key password antes enviar a response
+            user.password = 0
             return res.status(200).json({
                 status: 'success',
                 data: {
-                    userId: user.id,
-                    roleId: user.roleId,
-                    token
+                    token,
+                    user
                 }
             })
         }
