@@ -35,8 +35,8 @@ const mutations = {
     [AUTH_LOGIN_SUCCESS]: (state, data) => {
         state.token = data.token
         localStorage.STORAGE_ACCESS_TOKEN = data.token
-        state.profile
-        localStorage.STORAGE_USER_PROFILE = data.user
+        state.profile = data.profile
+        localStorage.STORAGE_USER_PROFILE = data.profile
         data.role == 1 ? true : false
     },
     [AUTH_LOGOUT_SUCCESS]: state => {
