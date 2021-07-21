@@ -133,7 +133,6 @@ exports.verify = async (req, res, next) => {
                     message: 'O utilizador já não existe.'
                 })
             }
-            console.log(user)
             req.user = user
             next()
         }
