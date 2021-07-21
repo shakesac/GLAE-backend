@@ -1,7 +1,8 @@
 <template>
 <base-layout>
-        <div class="col col-lg-4 mx-auto">
-            <h5 class="text-center">Iniciar sessão</h5>
+<div id="center-wrapper">
+        <div class="p-4">
+            <h5 class="text-center pb-3">Iniciar sessão</h5>
             <form v-on:submit.prevent="submit">
                 <div class="form-label-group">
                 <input v-model="data.email" type="email" id="inputEmail" class="form-control" placeholder="Endereço de email" required autofocus>
@@ -17,6 +18,7 @@
                 </div>
             </form>
         </div>
+    </div>
 </base-layout>
 </template>
 
@@ -24,6 +26,7 @@
 import {computed, reactive} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
+import swal from 'sweetalert2'
 import BaseLayout from './Base.vue'
 export default {
     name: 'Login',
@@ -34,6 +37,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const status = computed(() => store.getters.isLoggedIn)
+        const name = computed(() => store.getters.getProfile)
         if (status.value === true) {
             router.push('/painel')
         }
@@ -44,9 +48,15 @@ export default {
         const submit = async () => {
             await store.dispatch('login', data)
             if (status.value === true) {
+                swal.fire({
+                    icon: 'success',
+                    title: 'Olá ' + name.value.firstName,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 await router.push('/painel')
             } else {
-                alert('Falhou. Status: ', status.value)
+                document.getElementById('inputPassword').value=''
             }
         }
         return {
@@ -58,6 +68,12 @@ export default {
 </script>
 
 <style>
+#center-wrapper {
+  background-color: #f0f3f6;
+  width: 100%;
+  max-width: 350px;
+  border-radius: 20px;
+}
     :root {
     --input-padding-x: 1.5rem;
     --input-padding-y: 0.75rem;

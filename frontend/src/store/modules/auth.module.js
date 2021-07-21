@@ -1,5 +1,6 @@
 import api from '@/api/api'
 import { authService } from "@/api/auth.service.js";
+import Swal from 'sweetalert2'
 
 const state = {
     //Inicializadas com os dados no storage caso existam.
@@ -57,14 +58,18 @@ const actions = {
     login: async ({ commit }, payload) => {
         try {
             const res = await authService.login(payload)
-            alert('Bem-vindo ', res.profile.firstName )
             commit('loginSuccess', {
                 token: res.token,
                 profile: res.profile,
                 role: res.profile.roleId
             })
         } catch (err) {
-            console.log(err)
+            Swal.fire({
+                icon: 'error',
+                title: err.status,
+                text: err.response.data.message,
+            })
+            console.log()
         }
     },
     logout: ({ commit }) => {

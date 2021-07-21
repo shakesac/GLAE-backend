@@ -6,10 +6,14 @@ export const authService = {
       if (res.status == 200) {
         const token = res.data.data.token
         const profile = res.data.data.user
-        //const profile = JSON.stringify(res.data.data.user)
         return { token, profile }
       } else {
-        throw Error(handleResponses(res.status))
+        Swal.fire({
+          icon: 'error',
+          title: res.status,
+          text: res.data.message,
+        })
+        throw new Error(res)
       }
     },
     async register(payload) {

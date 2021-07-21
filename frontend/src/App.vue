@@ -8,6 +8,7 @@ import 'bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import Header from '@/components/Header.vue'
 
+
 export default {
   name: 'App',
   components: {
