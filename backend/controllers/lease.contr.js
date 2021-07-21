@@ -9,12 +9,12 @@ const unmutableStatus = process.env.UNMUTABLE_STATUS.split(',')
 exports.new = async (req, res) => {
     const { start, end } = req.body
     if (start < Date.now()) {
-        res.status(400).json({
+        return res.status(400).json({
             status: 'failed',
             message: 'Não é possivel colocar pedidos a iniciar no passado.',
         })
     } else if (start > end) {
-        res.status(400).json({
+        return res.status(400).json({
             status: 'failed',
             message: 'Não é possivel colocar pedidos a iniciar antes da data de término.',
         })
@@ -89,6 +89,12 @@ exports.get = async (req, res) => {
 }
 
 exports.getAllIfStatus = async (req, res) => {
+    if (!availableStatus.includes(req.params.status)){
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Estado indicado não existe.'
+        })
+    }
     const options = {
         include: [{
             model: LeaseStatus,
