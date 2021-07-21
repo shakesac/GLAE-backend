@@ -1,7 +1,8 @@
 const { Op } = require("sequelize");
 const helper = require('../util/contr.helpers')
 const LeaseStatus = require('../models/lease-status.model')
-const Lease = require('../models/lease.model')
+const Lease = require('../models/lease.model');
+const User = require("../models/user.model");
 const availableStatus = process.env.LEASE_STATUS.split(',')
 const unmutableStatus = process.env.UNMUTABLE_STATUS.split(',')
 
@@ -96,12 +97,8 @@ exports.getAllIfStatus = async (req, res) => {
         })
     }
     const options = {
-        include: [{
-            model: LeaseStatus,
-            where: {
-                status: req.params.status,
-            },
-        }],
+        include:             
+            [{ model: LeaseStatus, where: { status: req.params.status }, order: ['createdAt', 'DESC']}, {model: User }]
     }
     await helper.checkIfAndGetAll(res, Lease, options)
 }

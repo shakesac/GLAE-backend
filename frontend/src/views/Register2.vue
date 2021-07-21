@@ -158,58 +158,17 @@
 
 <script>
 import BaseLayout from './Base.vue'
-import { mapActions, mapGetters } from "vuex";
+import { useStore } from 'vuex'
 export default {
   name: "Register",
   components: { BaseLayout },
-  data() {
+  start() {
+    const store = useStore()
     return {
-      selectedSection: null,
-      selectedSubsection: null,
-      firstName: '',
-      lastName: '',
-      email: '',
-      address: '',
-      phoneNumber: '',
-      password: '',
-      confirmPassword: '',
-      subsectionId: this.selectedSection + this.selectedSubsection
+      fetchSections: () => store.dispatch('fetchSections')
+      
     }
-  },
-  created() {
-    this.fetchSections();
-  },
-  computed: {
-    ...mapGetters(['getSections', 'getSubsectionsFromSection']),
-  },
-  methods: {
-    ...mapActions([
-      'fetchSections',
-      'fetchSubsectionsFromSection',
-      'registerUser',
-      ]),
-    async saveUser() {
-      const payload = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        address: this.address,
-        phoneNumber: this.phoneNumber,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-        subsectionId: this.subsectionId
-      };
-      await this.registerUser(payload).catch((err) => {
-        console.log(err);
-      });
-    },
-    async getSubsections() {
-      await this.fetchSubsectionsFromSection(this.selectedSection).catch((err) => {
-        console.log(err);
-      })
-      this.router.push('/')
-    },
-  },
+  }
 }
 </script>
 

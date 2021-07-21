@@ -14,12 +14,12 @@ exports.update = async (req, res) => {
 }
 
 exports.get = (req, res) => {
-    let options = { attributes: { exclude: ['password'] }}
+    let options = { include: Subsection, attributes: { exclude: ['password'] }}
     helper.checkIfByPkAndGet(res, User, req.params.id, options)
 }
 
 exports.getAll = (req, res) => {
-    let options = { attributes: { exclude: ['password'] }}
+    let options = { include: Subsection, attributes: { exclude: ['password'] }}
     helper.checkIfAndGetAll(res, User, options)
 }
 

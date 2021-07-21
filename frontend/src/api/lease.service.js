@@ -33,14 +33,6 @@ export const leaseService = {
             throw new Error(res)
         }
     },
-    async getAllIfStatus(payload){
-      const res = await api.get('/lease/all/'+payload.status)
-      if (res.status == 200) {
-          return res
-      } else {
-          throw new Error(res)
-      }
-  },
     async delete(payload) {
         const res = await api.delete('/lease/delete/'+payload.id)
         if (res.status == 200) {

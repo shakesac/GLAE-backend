@@ -1,7 +1,8 @@
 import { createStore } from 'vuex'
 //import api from '@/api/api'
-import auth from './modules/auth.module'
-import sections from './modules/sections.module'
+import auth from '@/store/modules/auth.module'
+import sections from '@/store/modules/sections.module'
+import leases from '@/store/modules/lease.module'
 //import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
@@ -21,6 +22,7 @@ export default createStore({
   modules: {
     auth,
     sections,
+    leases,
 
   },
   //plugins: [createPersistedState()]

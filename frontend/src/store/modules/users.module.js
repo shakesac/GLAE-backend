@@ -1,4 +1,5 @@
 import api from '@/api/api'
+import { handleResponses } from '@/err.service'
 
 const state = {
     users: [],
@@ -7,20 +8,29 @@ const state = {
 const mutations = {
     setAllUsers: (state, users) => {
         state.users = users
-    }
+        console.log(users)
+    },
+
 }
 
 const actions = {
-    fetchAllUsers({ commit }) {
-        api.get('/users/all').then(res => {
-          commit('setAllUsers', res.data.data)
-        })
-    }
+    fetchAllUsers: async ({ commit }) => {
+        try {
+            const res = await api.get('/user/all')
+            if (res.status == 200) {
+                commit('setAllUsers', res.data.data)
+            } else {
+                throw Error(handleResponses(res))
+            }
+        } catch(err) {
+            handleResponses(err)
+        }
+    },
 }
 
 const getters = {
     getAllUsers(state) {
-        return state.allUsers
+        return state.users
     }
 }
 
