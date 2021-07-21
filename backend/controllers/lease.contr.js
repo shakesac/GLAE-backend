@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const helper = require('../util/contr.helpers')
 const LeaseStatus = require('../models/lease-status.model')
 const Lease = require('../models/lease.model')
 const availableStatus = process.env.LEASE_STATUS.split(',')
@@ -6,12 +7,32 @@ const unmutableStatus = process.env.UNMUTABLE_STATUS.split(',')
 
 
 exports.new = async (req, res) => {
+    const { start, end } = req.body
     const newLease = new Lease({
-        start: req.body.start,
-        end: req.body.end,
+        start,
+        end,
         userId: req.user.id
     })
-    await helper.create(res, newLease)
+    const lease = await newLease.save().catch((err) => {
+        res.status(400).json({
+            status: 'failed',
+            message: err.errors[0].message,
+        })
+    })
+    const status = new LeaseStatus({
+        leaseId: lease.id
+    })
+    await status.save().catch(err => {
+        res.status(400).json({
+            status: 'failed',
+            message: 'Não foi possível criar o estado do emprestimo.'
+        })
+    })
+    res.status(201).json({
+        status: 'success',
+        message: 'O emprestimo foi criado com sucesso',
+        leaseId: newLease
+    })
 }
 
 exports.update = async (req, res) => {
@@ -55,6 +76,17 @@ exports.get = async (req, res) => {
     const options = {include: LeaseStatus}
     helper.checkIfAndGet(res, Lease, req.params.id, options)
 }
+
+exports.getAllPending = async (req, res) => {
+    const options = {
+        include: LeaseStatus,
+        //order: ['updatedAt', 'ASC'],
+        where: {
+            status: 'pending'
+        }
+    }
+}
+
 
 exports.updateStatus = async (req, res) => {
     const { status, comment } = req.body
