@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const helmet = require('helmet')
 const cors = require('cors')
 const api = process.env.API_URL
+
 const sequelize = require('./util/db')
 const dbInitValues = require('./util/initValues')
 require('dotenv/config')
@@ -76,7 +77,7 @@ ItemInspection.belongsTo(Item)
 Lease.hasMany(LeaseStatus)
 LeaseStatus.belongsTo(Lease)
 
-User.hasMany(Item)
+User.hasMany(Item, { foreignKey: 'createdBy' })
 Item.belongsTo(User)
 
 Section.hasMany(Subsection, { onDelete: 'RESTRICT' })
@@ -92,8 +93,8 @@ Item.belongsToMany(Lease, { through: 'lease_item' })
 
 
 // SEQUELIZE - SYNC
-const seqMode = process.env.SEQUELIZE_DEV_MODE
-sequelize.sync({ /*force: seqMode*/ }).then(result => {
+const seqMode = process.env.SEQUELIZE_DEV_MODE == 'true' ? true : false
+sequelize.sync({ force: seqMode }).then(result => {
     console.log('BD: ' + result.config.database + '\nUser: ' + result.config.username)
     console.log(result.config.protocol + ' ' + result.config.host + ':' + result.config.port)
     if(seqMode) dbInitValues.create()
