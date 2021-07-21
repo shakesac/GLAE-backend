@@ -9,7 +9,7 @@
                         <span class="font-weight-bold small text-uppercase">Informação pessoal</span></a>
 
                     <a class="nav-link mb-3 p-3 shadow" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-                        <i class="bi bi-calendar-minus mr-2"></i>
+                        <i class="bi bi-calendar-minus"></i>
                         <span class="font-weight-bold small text-uppercase">Histórico</span></a>
                     </div>
             </div>
@@ -131,7 +131,7 @@ export default {
     const profile = computed(() => store.getters.getProfile)
     const role = profile.value.roleId == 1 ? 'Administrador' : 'Utilizador'
     const date = profile.value.createdAt.split('T')[0]
-    console.log(date)
+    
     return{
         name,
         profile,
@@ -142,9 +142,9 @@ export default {
 
 }
 </script>
-<style>
-.bi-calendar-minus {
-    margin-right: 4px;
+<style scoped>
+.bi {
+    margin-right: 8px;
 }
 #key {
     margin-right: 12px;
