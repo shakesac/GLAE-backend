@@ -138,6 +138,10 @@ exports.verify = async (req, res, next) => {
     })
 }
 
+exports.getCurrentUser = async (req, res) => {
+    const options = { attributes: { exclude: ['password'] }}
+    await helper.checkIfByPkAndGet(res, User, req.user.id, options)
+}
 
 exports.isAdmin = async (req, res, next) => {
     await User.findByPk(req.user.id).then(user => {
@@ -152,48 +156,3 @@ exports.isAdmin = async (req, res, next) => {
         }
     })
 }
-
-/*
-exports.verify = async (req, res, next) => {
-    console.log('verifyAuth: ', req.cookies)
-    const userToken = req.cookies.jwt
-    if (!userToken) {
-        return res.status(401).json({
-            status: 'failed',
-            message: 'Não tem sessão iniciada.'
-        })
-    }
-    jwt.verify(userToken, process.env.JWT_SECRET, async (err, decoded) => {
-        if (err) {
-            return res.status(401).json({
-                status: 'failed',
-                message: 'O token não é válido.'
-            })
-        } else {
-            // Verifica se utilizador ao qual o token pertence ainda existe
-            const user = await User.findByPk(decoded.id)
-            if (!user) {
-                return res.status(401).json({
-                    status: 'failed',
-                    message: 'O utilizador já não existe.'
-                })
-            }
-            req.user = user
-            next()
-        }
-    })
-}
-exports.logout = (req, res) => {
-    if (req.cookies.jwt) {
-        res.clearCookie('jwt').status(200).json({
-            status: 'success',
-            message: 'Sessão terminada.'
-        })
-    } else {
-        res.status(401).json({
-            status: 'failed',
-            message: 'JWT inválido.'
-        })
-    }
-}
-*/
