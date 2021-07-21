@@ -1,4 +1,5 @@
 import api from './api'
+import { handleResponses } from '@/err.service'
 
 export const authService = {
     async login(payload) {
@@ -8,11 +9,7 @@ export const authService = {
         const profile = res.data.data.user
         return { token, profile }
       } else {
-        Swal.fire({
-          icon: 'error',
-          title: res.status,
-          text: res.data.message,
-        })
+        console.log('Entreiaqui')
         throw new Error(res)
       }
     },
@@ -24,6 +21,14 @@ export const authService = {
         throw Error(handleResponses(res.status))
       }
     },
+    async deleteUser() {
+      const res = await api.delete('/me/delete')
+      if (res.status == 200) {
+          return res
+      } else {
+        throw Error(handleResponses(res))
+      }
+  }
     /*
     async getInfo(token) {
       const response = await fetch(`${API_URL}/auth`, {

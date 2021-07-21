@@ -86,7 +86,7 @@
                         <div class="row justify-content-end">
                             <div class="col-6 d-flex justify-content-end">
                             <button type="button" class="btn btn-outline-primary mx-1"><i class="bi bi-pencil-fill"></i>Editar perfil</button>
-                            <button type="button" class="btn btn-danger mx-1"><i class="bi bi-trash mr-2"></i>Eliminar conta</button>
+                            <button v-on:click.prevent="delCurrentUser" type="button" class="btn btn-danger mx-1"><i class="bi bi-trash mr-2"></i>Eliminar conta</button>
                             </div>
                         </div>
                     </div>
@@ -119,6 +119,7 @@ import BaseLayout from './Base.vue'
 import {computed, reactive} from 'vue'
 import {useStore} from 'vuex'
 import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2'
 export default {
   name: 'Perfil',
   components: {
@@ -126,17 +127,33 @@ export default {
   },
   setup() {
       const store = useStore()
-    //const router = useRouter()
+    const router = useRouter()
     const name = computed(() => store.getters.getProfileName)
     const profile = computed(() => store.getters.getProfile)
     const role = profile.value.roleId == 1 ? 'Administrador' : 'Utilizador'
     const date = profile.value.createdAt.split('T')[0]
-    
+    const delCurrentUser = async () => {
+        const result = await Swal.fire({
+            title: 'Tem a certeza?',
+            text: "Esta acção é irreversível!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DC3545',
+            cancelButtonColor: '#6C757D',
+            confirmButtonText: 'Sim, eliminar conta!',
+            cancelButtonText: 'Cancelar'
+        })
+        if (result.isConfirmed) {
+            await store.dispatch('delCurrentUser')
+            router.push('/')
+        }
+    }
     return{
         name,
         profile,
         role,
-        date
+        date,
+        delCurrentUser,
     }
   }
 

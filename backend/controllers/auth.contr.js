@@ -133,6 +133,7 @@ exports.verify = async (req, res, next) => {
                     message: 'O utilizador já não existe.'
                 })
             }
+            console.log(user)
             req.user = user
             next()
         }
@@ -159,11 +160,12 @@ exports.isAdmin = async (req, res, next) => {
 }
 
 exports.deleteCurrentUser = (req, res) => {
+    console.log(req.user)
     helper.delete(
         res,
         User,
         req.user.id,
-        Item,
-        'createdBy'
+        null,
+        ''
     )
 }

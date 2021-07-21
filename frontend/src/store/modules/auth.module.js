@@ -1,5 +1,6 @@
 import api from '@/api/api'
 import { authService } from "@/api/auth.service.js";
+import { handleResponses } from '@/err.service'
 import Swal from 'sweetalert2'
 
 const state = {
@@ -64,12 +65,7 @@ const actions = {
                 role: res.profile.roleId
             })
         } catch (err) {
-            Swal.fire({
-                icon: 'error',
-                title: err.status,
-                text: err.response.data.message,
-            })
-            console.log()
+            handleResponses(err)
         }
     },
     logout: ({ commit }) => {
@@ -82,7 +78,20 @@ const actions = {
         api.post('/register', user).then(res => {
           commit('setUserData', res.data.data)
         })
-      }
+    },
+    delCurrentUser: async () => {
+        try {
+            await authService.deleteUser();
+            this.logout()
+            Swal.fire({
+                icon: 'sucesso',
+                title: 'Conta eliminada com sucesso.',
+            })
+        } catch (err) {
+            handleResponses(err)
+        }
+
+    }
 }
 
 export default {

@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../util/db')
+const User = require('./user.model')
 
 const Item = sequelize.define('item', {
     id: {
@@ -17,7 +18,16 @@ const Item = sequelize.define('item', {
     },
     purchasedAt: {
         type: Sequelize.DATEONLY,
-    }    
+    },
+    createdBy: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id'
+        }
+    },
+    
 },
 {
     timestamps: true,

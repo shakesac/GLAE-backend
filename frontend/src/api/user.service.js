@@ -20,4 +20,4 @@ export const authService = {
         throw new Error(res)
       }
     },
-  }
+}
