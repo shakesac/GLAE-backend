@@ -14,7 +14,7 @@ Open endpoints não requerem autenticação.
 ## Endpoints que requerem autenticação
 Endpoints fechados requerem um token válido incluído no header do pedido. Pode obter-se um token através do pedido de Login mencionado acima.
 
-### Ralcionados com o Utilizador Actual
+### Relacionados com o Utilizador Actual
 Cada endpoint manipula ou mostra informação relacionada com o utilizador do token fornecido com o pedido:
 
 * [Mostrar utilizador actual](user/get.md) : `GET /user/me`
