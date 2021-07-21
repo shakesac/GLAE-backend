@@ -36,25 +36,5 @@ export const authService = {
       return await response.json();
     }  */
   }
-
-
-  function handleResponses(code) {
-    let message = "";
-    switch (code) {
-      case 401:
-        message = "Não está autorizado a executar esta ação!";
-        break;
-      case 403:
-        message = "Dados das credenciais errados!";
-        break;
-      case 406:
-        message = "Dados do utilizador já existentes!";
-        break;
-      default:
-        message = "Mensagem desconhecida";
-        break;
-    }
-    return message;
-  }
   
   export default authService;
