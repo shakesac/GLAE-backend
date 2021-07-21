@@ -1,6 +1,6 @@
 import api from './api'
 
-export const authService = {
+export const cargoService = {
     async new(payload) {
         const res = await api.post('/cargo/new', payload)
         if (res.ok) {

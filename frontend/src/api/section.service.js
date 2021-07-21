@@ -1,6 +1,6 @@
 import api from './api'
 
-export const authService = {
+export const sectionService = {
     async new(payload) {
         const res = await api.post('/section/new', payload)
         if (res.ok) {

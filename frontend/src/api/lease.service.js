@@ -1,6 +1,6 @@
 import api from './api'
 
-export const authService = {
+export const leaseService = {
     async new(payload) {
         const res = await api.post('/lease/new', payload)
         if (res.ok) {

@@ -1,4 +1,7 @@
 import api from '@/api/api'
+import {sectionService} from '@/api/section.service'
+import { handleResponses } from '@/err.service'
+import Swal from 'sweetalert2'
 
 const state = {
     sections: [],
@@ -19,6 +22,14 @@ const mutations = {
 }
 
 const actions = {
+    addSection: async ({ commit }, payload) => {
+        try {
+            const res = await sectionService.new()
+        } catch(err) {
+            handleResponses(err)
+        }
+        
+    },
     fetchSections({ commit }) {
         api.get('/section/all').then(res => {
           commit('setSections', res.data.data)

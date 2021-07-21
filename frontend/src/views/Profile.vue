@@ -13,8 +13,6 @@
                         <span class="font-weight-bold small text-uppercase">Histórico</span></a>
                     </div>
             </div>
-
-
             <div class="col-md-9">
                 <!-- Tabs content -->
                 <div class="tab-content" id="v-pills-tabContent">
