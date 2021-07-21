@@ -3,6 +3,7 @@ const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const helper = require('../util/contr.helpers')
 const User = require('../models/user.model')
 const Subsection = require('../models/subsection.model')
+const { options } = require('../routes/auth.route')
 
 exports.update = async (req, res) => {
     if (req.body.password) {
@@ -16,12 +17,17 @@ exports.get = (req, res) => {
     helper.checkIfByPkAndGet(res, User, req.params.id, options)
 }
 
-exports.getAll = async (req, res) => {
+exports.getAll = (req, res) => {
     let options = { attributes: { exclude: ['password'] }}
     helper.checkIfAndGetAll(res, User, options)
 }
 
-exports.getMe = async (req, res) => {
-    const options = { attributes: { exclude: ['password'] }}
-    await helper.checkIfByPkAndGet(res, User, req.user.id, options)
+exports.delete = (req, res) => {
+    helper.delete(
+        res,
+        User,
+        req.params.id,
+        Item,
+        'createdBy'
+    )
 }

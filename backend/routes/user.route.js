@@ -4,7 +4,6 @@ const {verify} = require('../controllers/auth.contr')
 const userContr = require('../controllers/user.contr')
 
 router.put('/update/:id', userContr.update)
-router.get('/me', verify, userContr.getMe)
 router.get('/all', userContr.getAll)
 router.get('/:id', userContr.get)
 
