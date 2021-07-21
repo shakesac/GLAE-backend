@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const helper = require('../util/contr.helpers')
 const User = require('../models/user.model')
+const Item = require('../models/user.model')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const Subsection = require('../models/subsection.model')
 
@@ -155,4 +156,14 @@ exports.isAdmin = async (req, res, next) => {
             })
         }
     })
+}
+
+exports.deleteCurrentUser = (req, res) => {
+    helper.delete(
+        res,
+        User,
+        req.user.id,
+        Item,
+        'createdBy'
+    )
 }

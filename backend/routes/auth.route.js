@@ -7,7 +7,8 @@ router.post('/login', authContr.login)
 router.post('/register', authContr.register)
 
 //ROUTES relativas ao utilizador actual
-router.get('/me', verify, authContr.getCurrentUser)
-
+const prefix = '/me'
+router.get(prefix + '/get', verify, authContr.getCurrentUser)
+router.delete(prefix + '/delete', verify, authContr.deleteCurrentUser)
 
 module.exports = router
