@@ -17,12 +17,7 @@ const Item = sequelize.define('item', {
     },
     purchasedAt: {
         type: Sequelize.DATEONLY,
-    },
-    createdBy: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-    },
-    
+    }    
 },
 {
     timestamps: true,
