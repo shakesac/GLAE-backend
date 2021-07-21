@@ -1,3 +1,4 @@
+const Lease = require('../models/lease.model')
 const User = require('../models/user.model')
 // Verifica se o id do objecto enviado existe na base de dados
 exports.checkIfExists = async (obj, id) => {
