@@ -8,6 +8,17 @@ const unmutableStatus = process.env.UNMUTABLE_STATUS.split(',')
 
 exports.new = async (req, res) => {
     const { start, end } = req.body
+    if (start < Date.now()) {
+        res.status(400).json({
+            status: 'failed',
+            message: 'Não é possivel colocar pedidos a iniciar no passado.',
+        })
+    } else if (start > end) {
+        res.status(400).json({
+            status: 'failed',
+            message: 'Não é possivel colocar pedidos a iniciar antes da data de término.',
+        })
+    }
     const newLease = new Lease({
         start,
         end,
@@ -77,14 +88,16 @@ exports.get = async (req, res) => {
     helper.checkIfAndGet(res, Lease, req.params.id, options)
 }
 
-exports.getAllPending = async (req, res) => {
+exports.getAllIfStatus = async (req, res) => {
     const options = {
-        include: LeaseStatus,
-        //order: ['updatedAt', 'ASC'],
-        where: {
-            status: 'pending'
-        }
+        include: [{
+            model: LeaseStatus,
+            where: {
+                status: req.params.status,
+            },
+        }],
     }
+    await helper.checkIfAndGetAll(res, Lease, options)
 }
 
 

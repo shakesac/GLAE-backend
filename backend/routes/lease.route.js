@@ -7,6 +7,7 @@ const { verify } = require('../controllers/auth.contr')
 router.post('/new', verify, leaseContr.new)
 router.put('/update/:id', verify, leaseContr.update)
 router.get('/all/user', verify, leaseContr.getAllFromUser)
+router.get('/all/:status', verify, leaseContr.getAllIfStatus)
 router.get('/all', verify, leaseContr.getAll)
 router.post('/status/update/:id', verify, leaseContr.updateStatus)
 
