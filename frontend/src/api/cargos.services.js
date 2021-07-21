@@ -2,7 +2,7 @@ import api from './api'
 
 export const authService = {
     async new(payload) {
-        const res = await api.post('/user/new', payload)
+        const res = await api.post('/cargo/new', payload)
         if (res.ok) {
           return res
         } else {
@@ -10,7 +10,7 @@ export const authService = {
         }
       },
     async update(payload) {
-      const res = await api.put('/user/update/'+payload.id, payload)
+      const res = await api.put('/cargo/update/'+payload.id, payload)
       if (res.status == 200) {
         return res
       } else {
@@ -18,7 +18,7 @@ export const authService = {
       }
     },
     async get(payload) {
-        const res = await api.get('/user/'+payload.id)
+        const res = await api.get('/cargo/'+payload.id)
         if (res.status == 200) {
             return res
         } else {
@@ -26,7 +26,7 @@ export const authService = {
         }
     },
     async getAll(){
-        const res = await api.get('/user/all')
+        const res = await api.get('/cargo/all')
         if (res.status == 200) {
             return res
         } else {
@@ -34,7 +34,7 @@ export const authService = {
         }
     },
     async delete(payload) {
-        const res = await api.delete('/user/'+payload.id)
+        const res = await api.delete('/cargo/'+payload.id)
         if (res.status == 200) {
             return res
         } else {
