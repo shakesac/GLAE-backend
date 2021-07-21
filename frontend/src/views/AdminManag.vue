@@ -10,15 +10,15 @@
                         <span class="font-weight-bold small text-uppercase">Pedidos pendentes</span></a>
 
                     <a class="nav-link mb-3 p-3 shadow" id="v-pills-leases-tab" data-bs-toggle="pill" href="#v-pills-leases" role="tab" aria-controls="v-pills-leases" aria-selected="false">
-                        <i class="fa fa-calendar-minus-o customPadd"></i>
+                        <i class="bi bi-caret-right-square customPadd"></i>
                         <span class="font-weight-bold small text-uppercase">Emprestimos em curso</span></a>
 
                     <a class="nav-link mb-3 p-3 shadow" id="v-pills-items-tab" data-bs-toggle="pill" href="#v-pills-items" role="tab" aria-controls="v-pills-items" aria-selected="false">
-                        <i class="fa fa-star customPadd"></i>
+                        <i class="bi bi-archive customPadd"></i>
                         <span class="font-weight-bold small text-uppercase">Inventário</span></a>
 
                     <a class="nav-link mb-3 p-3 shadow" id="v-pills-users-tab" data-bs-toggle="pill" href="#v-pills-users" role="tab" aria-controls="v-pills-users" aria-selected="false">
-                        <i class="fa fa-check customPadd"></i>
+                        <i class="bi bi-people-fill customPadd"></i>
                         <span class="font-weight-bold small text-uppercase">Utilizadores</span></a>
                     </div>
             </div>
@@ -128,7 +128,6 @@ export default {
   name: 'Administração',
   components: {
     BaseLayout,
-    //CrudTable,
   },
   data() {
     return {
