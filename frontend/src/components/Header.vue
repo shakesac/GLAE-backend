@@ -51,7 +51,7 @@
                 <li><hr class="dropdown-divider"></li>
                 <li><a v-if="isAdmin == true" class="dropdown-item disabled">Administrador</a></li>
                 <li><hr v-if="isAdmin == true" class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Perfil</a></li>
+                <li><router-link to='/perfil' class="dropdown-item">Perfil</router-link></li>
                 <li><a v-on:click.prevent="logout" class="dropdown-item" href="#">Logout</a></li>
             </ul>
         </div>

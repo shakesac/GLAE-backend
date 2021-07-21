@@ -1,8 +1,12 @@
 <template>
 <base-layout>
   <div class="container">
-    <div id="title" class="row border-bottom mb-3">
-      <h3>Registo</h3>
+    <div class="row justify-content-center">
+      <div id="title">
+        <div class="p-4">
+          <h3>Registo</h3>
+        </div>
+      </div>
     </div>
     <div class="row">
       <form
@@ -10,8 +14,9 @@
         novalidade
         data-vv-scope="create-user-form"
       >
-        <div class="row">
-          <div class="col-md-4 mx-auto">
+        <div class="row justify-content-center">
+          <div id="center-wrapper">
+            <div class="p-4">
             <div class="form-label-group">
               <input
                 type="text"
@@ -57,8 +62,10 @@
               />
               <label for="address">Morada</label>
             </div>
+            </div>
           </div>
-          <div class="col-md-4 mx-auto align-middle">
+          <div id="center-wrapper">
+          <div class="p-4">
             <div class="form-label-group">
               <input
                 type="email"
@@ -92,10 +99,12 @@
               />
               <label for="confirmPassword">Confirmar palavra-passe</label>
             </div>
+            </div>
           </div>
         </div>
         <div class="row m-2 justify-content-center">
-          <div class="col-md-4 border-top border-bottom py-3">
+          <div id="center-wrapper">
+            <div class="p-4">
             <select class="form-select" v-model="selectedSection" v-on:change="getSubsections">
               <option disabled selected>Secção</option>
               <option
@@ -115,9 +124,10 @@
               >{{ subsection.subsection }}</option>
             </select>
           </div>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-4">
+          </div>
+
+          <div id="center-wrapper">
+            <div class="p-4">
             <button
               class="
                 btn btn-lg btn-primary btn-block btn-login
@@ -136,6 +146,7 @@
               <router-link to="/login" class="link small"
                 >Já tens conta?</router-link
               >
+            </div>
             </div>
           </div>
         </div>
@@ -203,6 +214,26 @@ export default {
 </script>
 
 <style scoped>
+#center-wrapper {
+  background-color: #f0f3f6;
+  width: 100%;
+  max-width: 350px;
+  border-radius: 20px;
+  margin: 8px 12px
+}
+#title {
+  background-color: #f0f3f6;
+  width: 100%;
+  max-width: 724px;
+  border-radius: 20px;
+  margin: 8px 12px;
+  text-align: center
+}
+@media (min-width: 768px) and (max-width: 1199.98px) { 
+  title {
+    max-width: 362px;
+  }
+ }
 :root {
   --input-padding-x: 1.5rem;
   --input-padding-y: 0.75rem;
