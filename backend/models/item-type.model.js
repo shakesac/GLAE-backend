@@ -10,12 +10,7 @@ const ItemType = sequelize.define('item_type', {
     type: {
         type: Sequelize.STRING(200),
         allowNull: false,
-    },
-    itemCategoryId: {
-        type: Sequelize.INTEGER(2),
-        allowNull: false,
-        primaryKey: true
-    }    
+    }
 },
 {
     timestamps: true,

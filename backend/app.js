@@ -65,31 +65,31 @@ User.belongsTo(UserRole)
 User.hasMany(Lease)
 Lease.belongsTo(User)
 
-ItemCategory.hasMany(ItemType)
-ItemType.belongsTo(ItemCategory)
+ItemCategory.hasMany(ItemType, {foreignKey: 'categoryId' })
+ItemType.belongsTo(ItemCategory, {foreignKey: 'categoryId' })
 
-ItemType.hasMany(Item)
-Item.belongsTo(ItemType)
+ItemType.hasMany(Item, {foreignKey: 'typeId' })
+Item.belongsTo(ItemType, {foreignKey: 'typeId' })
 
 Item.hasMany(ItemInspection)
 ItemInspection.belongsTo(Item)
 
-Lease.hasMany(LeaseStatus)
-LeaseStatus.belongsTo(Lease)
+Lease.hasMany(LeaseStatus, { foreignKey: 'statusId' })
+LeaseStatus.belongsTo(Lease, { foreignKey: 'statusId' })
 
 User.hasMany(Item, { foreignKey: 'createdBy' })
-Item.belongsTo(User)
+Item.belongsTo(User, { foreignKey: 'createdBy' })
 
-Section.hasMany(Subsection, { onDelete: 'RESTRICT' })
-Subsection.belongsTo(Section)
+Section.hasMany(Subsection, { foreignKey: 'sectionId' }, { onDelete: 'RESTRICT' })
+//Subsection.belongsTo(Section)
 
-Subsection.hasMany(User, { onDelete: 'RESTRICT' })
-User.belongsTo(Subsection)
-
+Subsection.hasMany(User, { foreignKey: 'subsectionId' }, { onDelete: 'RESTRICT' })
+User.belongsTo(Subsection, { foreignKey: 'subsectionId' }, { onDelete: 'RESTRICT' })
 
 const LeaseItems = sequelize.define('lease_item', {}, { timestamps: false });
 Lease.belongsToMany(Item, { through: 'lease_item' })
 Item.belongsToMany(Lease, { through: 'lease_item' })
+
 
 
 // SEQUELIZE - SYNC

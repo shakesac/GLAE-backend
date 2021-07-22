@@ -32,14 +32,6 @@ const User = sequelize.define('user', {
     password: {
         type: Sequelize.STRING,
         allowNull: false,
-    },
-    roleId: {
-        type: Sequelize.INTEGER,
-        defaultValue: 2,
-        allowNull: false
-    },
-    subsectionId: {
-        type: Sequelize.INTEGER,
     }
 })
 

@@ -10,11 +10,6 @@ const Subsection = sequelize.define('subsection', {
     subsection: {
         type: Sequelize.STRING(200),
         allowNull: false,
-    },
-    sectionId: {
-        type: Sequelize.INTEGER(2),
-        allowNull: false,
-        primaryKey: true
     }
 }, {
     timestamps: true,

@@ -18,16 +18,7 @@ const Item = sequelize.define('item', {
     },
     purchasedAt: {
         type: Sequelize.DATEONLY,
-    },
-    createdBy: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: User,
-            key: 'id'
-        }
-    },
-    
+    }    
 },
 {
     timestamps: true,

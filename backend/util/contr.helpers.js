@@ -63,6 +63,9 @@ exports.checkIfAndGet = async (res, obj, options) => {
 }
 
 exports.checkIfAndGetAll = async (res, obj, options) => {
+    if (obj instanceof User) {
+        
+    }
     const result = await obj.findAll(options).catch((err) => {
         res.status(400).json({
             status: 'failed',
