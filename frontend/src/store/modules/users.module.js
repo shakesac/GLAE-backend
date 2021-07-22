@@ -31,6 +31,9 @@ const actions = {
 const getters = {
     getAllUsers(state) {
         return state.users
+    },
+    getProfileCreationDate(state) {
+        return state.profile.createdAt.split('T')[0]
     }
 }
 

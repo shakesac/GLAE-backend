@@ -1,6 +1,7 @@
 import api from '@/api/api'
 import leaseService from '@/api/lease.service'
 import { handleResponses } from '@/err.service'
+import { isInteger } from 'core-js/core/number'
 import Swal from 'sweetalert2'
 
 const state = {
@@ -8,6 +9,7 @@ const state = {
     pendingLeases: [],
     userLeases: [],
     currentLease: [],
+    deleted: 0
 }
 
 const mutations = {
@@ -27,7 +29,10 @@ const mutations = {
         state.pendingLeases.findIndex(lease).then(index => {
             state.pendingLeases.splice(index)
         })
-    }
+    },
+    delete: (state, deleted) => {
+        state.deleted = deleted
+    },
 }
 
 const actions = {
@@ -73,6 +78,9 @@ const actions = {
             handleResponses(err)
         }
     },
+    cancelLease: ({commit}, payload) => {
+        commit('deleted', payload)
+    }
 }
 
 const getters = {
