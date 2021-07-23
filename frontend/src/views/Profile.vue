@@ -18,71 +18,7 @@
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade shadow rounded bg-white show active p-5" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                         <h4 class="font-italic mb-4">Informação pessoal</h4>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Nome:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.name }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Endereço de email:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.email }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Telemóvel:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.phoneNumber }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Morada:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.address }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Permissões:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.role }}</span>
-                                </p>
-                                <p>
-                                    <span id="key" class="mr-5">Nome:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.name }}</span>
-                                </p>
-                            </div>
-                            <hr class="d-md-none my-2">
-                            <div class="col-md-6">
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Código de utilizador:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.id }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Registado desde:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ getProfileCreationDate }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Nome:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.name }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Endereço de email:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.email }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Telemóvel:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.phoneNumber }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Morada:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.address }}</span>
-                                </p>
-                                <p class="my-1">
-                                    <span id="key" class="mr-5">Permissões:</span>
-                                    <span id="value" class="font-italic text-muted ">{{ profile.role }}</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row justify-content-end">
-                            <div class="col-6 d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-primary mx-1"><i class="bi bi-pencil-fill"></i>Editar perfil</button>
-                            <button v-on:click.prevent="delCurrentUser" type="button" class="btn btn-danger mx-1"><i class="bi bi-trash mr-2"></i>Eliminar conta</button>
-                            </div>
-                        </div>
+                        <UserInfo />
                     </div>
                     
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
@@ -109,29 +45,27 @@
 
 <script scoped>
 import BaseLayout from './Base.vue'
+import UserInfo from '../components/profile/UserInfo.vue'
 import History from '../components/profile/History.vue'
 import { mapActions, mapState, mapMutations, mapGetters} from 'vuex'
+
 import Swal from 'sweetalert2'
 export default {
   name: 'Perfil',
   components: {
     BaseLayout,
+    UserInfo,
     History,
 
   },
   data() {
       return {
-          leaseIndex: ''
           
       }
   },
   computed: {
-      ...mapState(['userLeases']) ,
-      ...mapGetters(['getProfileCreationDate'])
   },
   methods: {
-      ...mapMutations(['delete']),
-      ...mapActions(['getUserLeases'])
   },
 }
 </script>
