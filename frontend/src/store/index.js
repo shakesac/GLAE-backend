@@ -7,7 +7,6 @@ import leases from '@/store/modules/lease.module'
 
 export default createStore({
   state: {
-    userRole: 'user'
 
   },
   mutations: {
@@ -25,5 +24,4 @@ export default createStore({
     leases,
 
   },
-  //plugins: [createPersistedState()]
 })
