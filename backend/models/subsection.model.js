@@ -5,11 +5,11 @@ const Subsection = sequelize.define('subsection', {
     id: {
         type: Sequelize.INTEGER(1),
         allowNull: false,
-        primaryKey: true,
     },
     subsection: {
         type: Sequelize.STRING(200),
         allowNull: false,
+        primaryKey: true,
     }
 }, {
     timestamps: true,

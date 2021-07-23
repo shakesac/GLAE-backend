@@ -5,11 +5,11 @@ const ItemType = sequelize.define('item_type', {
     id: {
         type: Sequelize.INTEGER(2),
         allowNull: false,
-        primaryKey: true
     },
     type: {
         type: Sequelize.STRING(200),
         allowNull: false,
+        primaryKey: true
     }
 },
 {
