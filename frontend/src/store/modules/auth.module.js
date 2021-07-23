@@ -44,10 +44,15 @@ const getters = {
        return state.token !=''
     },
     getProfile: (state) => {
+        console.log(state.profile)
         return state.profile
     },
     getProfileName: (state) => {
         return state.profile.firstName.concat(' ', state.profile.lastName)
+    },
+    getProfileDate: (state) => {
+        const dateArray = state.profile.createdAt.split('T')
+        return dateArray[0]
     },
     isAdmin: (state) => {
         console.log(state.isAdmin)

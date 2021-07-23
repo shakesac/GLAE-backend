@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 import auth from '@/store/modules/auth.module'
 import sections from '@/store/modules/sections.module'
 import leases from '@/store/modules/lease.module'
+import users from '@/store/modules/users.module'
 //import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
@@ -22,6 +23,7 @@ export default createStore({
     auth,
     sections,
     leases,
+    users,
 
   },
 })

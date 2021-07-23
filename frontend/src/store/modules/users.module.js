@@ -18,6 +18,7 @@ const actions = {
         try {
             const res = await api.get('/user/all')
             if (res.status == 200) {
+                console.log(res.data.data)
                 commit('setAllUsers', res.data.data)
             } else {
                 throw Error(handleResponses(res))

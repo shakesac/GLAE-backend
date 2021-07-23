@@ -39,6 +39,7 @@ const actions = {
         try {
             const res = await api.get('/lease/all/pending')
             if (res.status == 200) {
+                console.log(res.data)
                 commit('setPendingLeases', res.data.data)
             } else {
                 throw Error(handleResponses(res))
@@ -50,6 +51,7 @@ const actions = {
     fetchLeasesFromUser: async ({commit}) => {
         try {
             const res = await api.get('/lease/all/user')
+            console.log(res.data.data)
             if (res.status == 200) {
                 commit('setUserLeases', res.data.data)
             } else {
@@ -87,7 +89,7 @@ const getters = {
         return state.allLeases
     },
     getUserLeases(state) {
-        return state.state.userLeases
+        return state.userLeases
     },
     getPendingLeases(state) {
         return state.pendingLeases
