@@ -90,6 +90,7 @@ exports.get = async (req, res) => {
 }
 
 exports.getAllIfStatus = async (req, res) => {
+    console.log(availableStatus)
     if (!availableStatus.includes(req.params.status)){
         return res.status(400).json({
             status: 'failed',
@@ -98,7 +99,7 @@ exports.getAllIfStatus = async (req, res) => {
     }
     const options = {
         include:             
-            [{ model: LeaseStatus, where: { status: req.params.status }, order: ['createdAt', 'DESC']}, {model: User }]
+            [{ model: LeaseStatus, where: { status: req.params.status }, order: ['createdAt', 'DESC']}, {model: User, attibutes: { include: ['firstName, lastName']} }]
     }
     await helper.checkIfAndGetAll(res, Lease, options)
 }
