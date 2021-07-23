@@ -76,38 +76,7 @@
                     
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab">
                         <h4 class="font-italic mb-4">Utilizadores</h4>
-                            <table class="table m-0">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <!--<tbody>
-                                    <tr v-for="lease in getPendingLeases" :key="lease.id">
-                                        <th scope="row">{{ lease.id }}</th>
-                                        <td>{{ //getAllUsers.firstName + ' ' + getAllUsers.lastName }}</td>
-                                        <td>{{ getAllUsers.email }}</td>
-                                        <td>{{ getAllUsers.phoneNumber }}</td>
-                                        <td>
-                                            <ul class="list-inline m-0">
-                                                <li class="list-inline-item">
-                                                    <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Aprovar"><i class="bi bi-check-lg"></i></button>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Editar"><i class="bi bi-pencil"></i></button>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Apaga"><i class="bi bi-trash"></i></button>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </tbody>-->
-                            </table>
+                            <Users />
                     </div>
                 </div>
             </div>
@@ -119,7 +88,7 @@
 
 <script>
 import BaseLayout from './Base.vue'
-//import CrudTable from '@/components/CrudTable.vue'
+import Users from '../components/admin/Users.vue'
 import {computed, reactive} from 'vue'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -128,6 +97,7 @@ export default {
   name: 'Administração',
   components: {
     BaseLayout,
+    Users,
   },
   data() {
     return {

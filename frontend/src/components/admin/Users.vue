@@ -1,20 +1,21 @@
 <template>
+    <div>
 <table class="table m-0">
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Início</th>
-            <th scope="col">Fim</th>
-            <th scope="col">Estado</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Email</th>
+            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        <tr v-for="(lease, index) in leases" :key="index">
-            <th scope="row">{{ lease.id }}</th>
-            <td>{{ lease.start }}</td>
-            <td>{{ lease.end }}</td>
-            <td>{{ lease.lease_statuses.status }}</td>
+        <tr v-for="(user, index) in users" :key="index">
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.firstName + ' ' + user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phoneNumber}}</td>
             <td>
                 <ul class="list-inline m-0">
                     <li class="list-inline-item">
@@ -31,25 +32,21 @@
         </tr>
     </tbody>
 </table>
+    </div>
 </template>
-
-
-<script scoped>
-import {onMounted, computed, methods } from 'vue'
-import Swal from 'sweetalert2'
+<script>
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 export default {
-  name: 'Perfil | Histórico',
-  setup() {
-      const store = useStore()
-      store.dispatch('fetchLeasesFromUser')
-      const leases = computed(() => store.getters.getUserLeases)
-      return { leases }
-  }
+      name: 'Utilizadores | Administração',
+    setup() {
+        const store = useStore()
+        store.dispatch('fetchAllUsers')
+        const users = computed(() => store.getters.getAllUsers)
+        return { users }
+    }
 }
 </script>
-<style scoped>
-.bi {
-    margin-right: 8px;
-}  
+<style>
+    
 </style>

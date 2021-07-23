@@ -47,26 +47,14 @@
 import BaseLayout from './Base.vue'
 import UserInfo from '../components/profile/UserInfo.vue'
 import History from '../components/profile/History.vue'
-import { mapActions, mapState, mapMutations, mapGetters} from 'vuex'
 
-import Swal from 'sweetalert2'
 export default {
   name: 'Perfil',
   components: {
     BaseLayout,
     UserInfo,
     History,
-
-  },
-  data() {
-      return {
-          
-      }
-  },
-  computed: {
-  },
-  methods: {
-  },
+    }
 }
 </script>
 <style scoped>

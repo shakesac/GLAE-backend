@@ -3,16 +3,16 @@
 <div class="row mb-3">
     <div class="col-md-6">
         <p class="my-1">
-            <span id="key" class="mr-5">Nome:</span>
-            <span id="value" class="font-italic text-muted "></span>
+            <span id="key" class="mr-5">Nome: </span>
+            <span id="value" class="font-italic text-muted ">{{ name }}</span>
         </p>
         <p class="my-1">
-            <span id="key" class="mr-5">Endereço de email:</span>
-            <span id="value" class="font-italic text-muted "></span>
+            <span id="key" class="mr-5">Endereço de email: </span>
+            <span id="value" class="font-italic text-muted ">{{ profile.email }}</span>
         </p>
         <p class="my-1">
             <span id="key" class="mr-5">Telemóvel:</span>
-            <span id="value" class="font-italic text-muted "></span>
+            <span id="value" class="font-italic text-muted "> {{ profile.phoneNumber }}</span>
         </p>
         <p class="my-1">
             <span id="key" class="mr-5">Morada:</span>
@@ -34,8 +34,8 @@
             <span id="value" class="font-italic text-muted "></span>
         </p>
         <p class="my-1">
-            <span id="key" class="mr-5">Registado desde:</span>
-            <span id="value" class="font-italic text-muted "></span>
+            <span id="key" class="mr-5">Registado desde: </span>
+            <span id="value" class="font-italic text-muted ">{{ regDate }}</span>
         </p>
         <p class="my-1">
             <span id="key" class="mr-5">Nome:</span>
@@ -68,8 +68,17 @@
 </div>
 </template>
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 export default {
-    
+  name: 'Perfil | Informações',
+    setup() {
+        const store = useStore()
+        const profile = computed(() => store.getters.getProfile)
+        const name = computed(() => store.getters.getProfileName)
+        const regDate = computed(() => store.getters.getProfileDate)
+        return { profile, name, regDate }
+    }
 }
 </script>
 <style>
