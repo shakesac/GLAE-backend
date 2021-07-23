@@ -19,13 +19,10 @@
             <td>
                 <ul class="list-inline m-0">
                     <li class="list-inline-item">
-                        <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Aprovar"><i class="bi bi-check-lg"></i></button>
-                    </li>
-                    <li class="list-inline-item">
                         <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Editar"><i class="bi bi-pencil"></i></button>
                     </li>
                     <li class="list-inline-item">
-                        <button v-on:click.prevent="deleteUser(user.id)" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Apaga"><i class="bi bi-trash"></i></button>
+                        <button v-on:click.prevent="deleteUser(user.id)" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="bi bi-trash"></i></button>
                     </li>
                 </ul>
             </td>
