@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 const state = {
     allLeases: [],
     pendingLeases: [],
+    inProgressLeases: [],
     userLeases: [],
     currentLease: [],
     deleted: 0
@@ -18,16 +19,22 @@ const mutations = {
     setPendingLeases: (state, leases) => {
         state.pendingLeases = leases
     },
+    setInProgressLeases: (state, leases) => {
+        state.pendingLeases = leases
+    },
     setUserLeases: (state, leases) => {
         state.userLeases = leases
     },
     setCurrentLease: (state, leases) => {
         state.userLeases = leases
     },
-    removeFromPending: (state, lease) => {
-        state.pendingLeases.findIndex(lease).then(index => {
-            state.pendingLeases.splice(index)
-        })
+    removeFromPending: (state, payload) => {
+        const i = state.lease.map(item => item.id).indexOf(payload);
+        state.lease.splice(i, 1);
+    },
+    removeFromInProgress: (state, payload) => {
+        const i = state.lease.map(item => item.id).indexOf(payload);
+        state.lease.splice(i, 1);
     },
     delete: (state, deleted) => {
         state.deleted = deleted
@@ -35,12 +42,14 @@ const mutations = {
 }
 
 const actions = {
-    fetchPendingLeases: async ({ commit }) => {
+    fetchStatusLeases: async ({ commit }, status) => {
         try {
-            const res = await api.get('/lease/all/pending')
+            const res = await api.get('/lease/all/'+status)
             if (res.status == 200) {
                 console.log(res.data)
-                commit('setPendingLeases', res.data.data)
+                const capsState = status.charAt(0).toUpperCase() + status.slice(1)
+                console.log(capsState)
+                commit('set' + capsState + 'Leases', res.data.data)
             } else {
                 throw Error(handleResponses(res))
             }
@@ -61,17 +70,12 @@ const actions = {
             handleResponses(err)
         }
     },
-    updateLeaseStatus: async ({ commit }, id, index, status) => {
+    updateLeaseStatus: async ({ commit }, payload) => {
+        const { id, status } = payload
         try {
             const res = await api.post('/lease/status/update/'+id, status)
             if (res.status == 200) {
-                commit('removeFromPending', index)
-                Swal.fire({
-                    icon: 'sucesso',
-                    title: 'O estado do emprestimo foi alterado.',
-                    text: status,
-                    timer: 1500,
-                })
+                commit('removeFromPending', id)
             } else {
                 throw Error(handleResponses(res))
             }
@@ -81,6 +85,21 @@ const actions = {
     },
     cancelLease: ({commit}, payload) => {
         commit('deleted', payload)
+    },
+    closeLease: async ({commit}, payload) => {
+        const { id, status, comment } = payload
+        try {
+            const res = await api.post('/lease/status/update/'+id, status, comment)
+            if (res.status == 200 && status == 'pending') {
+                commit('removeFromPending', id)
+            } else if (res.status == 200 && status == 'inProgress') {
+                commit('removeFromInProgress', id)
+            } else {
+                throw Error(handleResponses(res))
+            }
+        } catch(err) {
+            handleResponses(err)
+        }
     }
 }
 
@@ -93,6 +112,9 @@ const getters = {
     },
     getPendingLeases(state) {
         return state.pendingLeases
+    },
+    getInProgressLeases(state) {
+        return state.inP
     },
     getCurrentLeases(state) {
         return state.currentLease

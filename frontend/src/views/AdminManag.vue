@@ -30,45 +30,13 @@
                     <div class="tab-pane fade shadow rounded bg-white show active p-5" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                         <h4 class="font-italic mb-4">Pedidos pendentes</h4>
                         <div class="table-responsive-md">
-                            <table class="table m-0">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Utilizador</th>
-                                        <th scope="col">Início</th>
-                                        <th scope="col">Fim</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(lease, index) in getPendingLeases" :key="lease.id">
-                                        <th scope="row">{{ lease.id }}</th>
-                                        <td></td>
-                                        <td>{{ lease.start }}</td>
-                                        <td>{{ lease.end }}</td>
-                                        <td>
-                                            <ul class="list-inline m-0">
-                                                <li class="list-inline-item">
-                                                    <button v-on.click.prevent="" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Aprovar"><i class="bi bi-check-lg"></i></button>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Editar"><i class="bi bi-pencil"></i></button>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <button @click.prevent="cancel(lease.id, index)" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Cancelar"><i class="bi bi-x-lg"></i></button>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <Pending />
                         </div>
                     </div>
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-leases" role="tabpanel" aria-labelledby="v-pills-leases-tab">
-                        <h4 class="font-italic mb-4">Emprestimos</h4>
-                        <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <InProgress />
                     </div>
-                    
+
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-items" role="tabpanel" aria-labelledby="v-pills-items-tab">
                         <h4 class="font-italic mb-4">Inventário</h4>
                         <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -89,36 +57,20 @@
 <script>
 import BaseLayout from './Base.vue'
 import Users from '../components/admin/Users.vue'
-import {computed, reactive} from 'vue'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
-import { useRouter } from 'vue-router'
-import Swal from 'sweetalert2'
+import Pending from '../components/admin/Pending.vue'
+import InProgress from '../components/admin/InProgress.vue'
 export default {
   name: 'Administração',
   components: {
     BaseLayout,
+    Pending,
+    InProgress,
     Users,
   },
-  data() {
-    return {
-    }
-  },
-  created() {
-    this.fetchPendingLeases()
-    //this.fetchAllUsers()
-  },
-  computed: {
-    ...mapGetters(['getPendingLeases']),
-  },
-  methods: {
-    ...mapActions([
-      'fetchPendingLeases',
-      'updateLeaseStatus',
-      //'fetchAllUsers',
-      ]),
-  },
-async cancel(id, index) {
-      this.updateLeaseStatus(id, index, 'canceled')
+  setup() {
+      return {
+
+      }
   }
 }
 </script>
