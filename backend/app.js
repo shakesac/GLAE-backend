@@ -74,8 +74,8 @@ Item.belongsTo(ItemType, {foreignKey: 'typeId' })
 Item.hasMany(ItemInspection)
 ItemInspection.belongsTo(Item)
 
-Lease.hasMany(LeaseStatus, { foreignKey: 'statusId' })
-LeaseStatus.belongsTo(Lease, { foreignKey: 'statusId' })
+Lease.hasMany(LeaseStatus)
+LeaseStatus.belongsTo(Lease)
 
 User.hasMany(Item, { foreignKey: 'createdBy' })
 Item.belongsTo(User, { foreignKey: 'createdBy' })
