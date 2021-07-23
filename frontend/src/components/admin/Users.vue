@@ -25,7 +25,7 @@
                         <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Editar"><i class="bi bi-pencil"></i></button>
                     </li>
                     <li class="list-inline-item">
-                        <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Apaga"><i class="bi bi-trash"></i></button>
+                        <button v-on:click.prevent="deleteUser(user.id)" class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Apaga"><i class="bi bi-trash"></i></button>
                     </li>
                 </ul>
             </td>
@@ -37,13 +37,28 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
       name: 'Utilizadores | Administração',
     setup() {
         const store = useStore()
         store.dispatch('fetchAllUsers')
         const users = computed(() => store.getters.getAllUsers)
-        return { users }
+        const deleteUser = (userId) => {
+            const sure = Swal.fire({
+                title: 'Tem a certeza que deseja eliminar?',
+                icon: 'warning',
+                text: 'User: ' + userId,
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+            }).then((sure) => {
+                if (sure.isConfirmed) {
+                    console.log(userId)
+                    store.dispatch('deleteUser', userId)
+                }
+            })
+        }
+        return { users, deleteUser }
     }
 }
 </script>

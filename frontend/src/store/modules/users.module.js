@@ -1,5 +1,6 @@
 import api from '@/api/api'
 import { handleResponses } from '@/err.service'
+import Swal from 'sweetalert2'
 
 const state = {
     users: [],
@@ -8,9 +9,11 @@ const state = {
 const mutations = {
     setAllUsers: (state, users) => {
         state.users = users
-        console.log(users)
     },
-
+    deleteUser: (state, payload) => {
+        const i = state.users.map(item => item.id).indexOf(payload);
+        state.users.splice(i, 1);
+    }
 }
 
 const actions = {
@@ -27,6 +30,24 @@ const actions = {
             handleResponses(err)
         }
     },
+    deleteUser: async ({ commit }, payload) => {
+        try {
+            const res = await api.delete('/user/'+payload)
+            if (res.status == 200) {
+                commit('deleteUser', payload)
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Utilizador removido com sucesso.',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            } else {
+                throw Error(handleResponses(res))
+            }
+        } catch(err) {
+            handleResponses(err)
+        }
+    }
 }
 
 const getters = {
