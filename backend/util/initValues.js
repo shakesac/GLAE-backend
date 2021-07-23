@@ -73,7 +73,7 @@ exports.create = async () => {
         { id: 4, type: 'Corda', itemCategoryId: 7},
         { id: 5, type: 'Capacete', itemCategoryId: 7},
         { id: 6, type: 'Tecido', itemCategoryId: 7},
-        { id: 7, type: 'Capacete', itemCategoryId: 7},
+        { id: 7, type: 'Máscara', itemCategoryId: 7},
 
     ]).catch(err =>{ console.log(err) })
 
@@ -85,7 +85,26 @@ exports.create = async () => {
             email: 'miguel@mail.com',
             address: 'Dummy Address',
             phoneNumber: '+351910000000', 
-            password: hashSync('forte', parseInt(process.env.BCRYPT_SALT))
+            password: hashSync('forte', parseInt(process.env.BCRYPT_SALT)),
+            roleId: 2,
+        },
+        {
+            firstName: 'Tiago',
+            lastName: 'Alves',
+            email: 'tiago@mail.com',
+            address: 'Quinta do Conde',
+            phoneNumber: '+351930000000', 
+            password: hashSync('forte', parseInt(process.env.BCRYPT_SALT)),
+            roleId: 1,
+        },
+        {
+            firstName: 'Escuteiro',
+            lastName: '1',
+            email: 'esc1@mail.com',
+            address: 'Lisboa',
+            phoneNumber: '+351960000000', 
+            password: hashSync('forte', parseInt(process.env.BCRYPT_SALT)),
+            roleId: 2,
         }
     ]).catch(err =>{ console.log(err.message) })
 }
