@@ -39,12 +39,12 @@
 
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-items" role="tabpanel" aria-labelledby="v-pills-items-tab">
                         <h4 class="font-italic mb-4">Inventário</h4>
-                        <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <Items />
                     </div>
                     
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab">
                         <h4 class="font-italic mb-4">Utilizadores</h4>
-                            <Users />
+                        <Users />
                     </div>
                 </div>
             </div>
@@ -59,13 +59,16 @@ import BaseLayout from './Base.vue'
 import Users from '../components/admin/Users.vue'
 import Pending from '../components/admin/Pending.vue'
 import InProgress from '../components/admin/InProgress.vue'
+import Items from '../components/admin/Items.vue'
 export default {
   name: 'Administração',
   components: {
     BaseLayout,
     Pending,
     InProgress,
+    Items,
     Users,
+
   },
   setup() {
       return {
