@@ -1,6 +1,5 @@
-## :microscope: Laboratório de Projecto - Agrupamento Escuteiros 1240 Murtal
+## :microscope: Laboratório de Projecto - Gestão Lojistica de Agrupamento de Escuteiros
 
-![Created](https://badges.pufler.dev/created/shakesac/GLAE-backend) ![Last commit](https://img.shields.io/github/last-commit/shakesac/GLAE-backend)
 
 ## :ledger: Documentação
 * [Documentação](docs/README.md)
