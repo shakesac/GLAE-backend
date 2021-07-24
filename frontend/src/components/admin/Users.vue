@@ -1,5 +1,6 @@
 <template>
-    <div>
+<div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab">
+    <h4 class="font-italic mb-4">Utilizadores</h4>
 <table class="table m-0">
     <thead>
         <tr>
