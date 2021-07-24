@@ -91,6 +91,7 @@ const actions = {
     },
     closeLease: async ({commit}, payload) => {
         const { id, status, comment } = payload
+        console.log(id)
         try {
             const res = await api.post('/lease/status/update/'+id, status, comment)
             if (res.status == 200 && status == 'pending') {
