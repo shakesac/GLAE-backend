@@ -1,5 +1,4 @@
 import api from '@/api/api'
-import leaseService from '@/api/lease.service'
 import { handleResponses } from '@/err.service'
 import Swal from 'sweetalert2'
 
@@ -19,8 +18,11 @@ const mutations = {
     setPendingLeases: (state, leases) => {
         state.pendingLeases = leases
     },
-    setInProgressLeases: (state, leases) => {
-        state.pendingLeases = leases
+    setInProgressLeases: (state, payload) => {
+        console.log('MUTATIONS:')
+        console.log(payload)
+        state.inProgressLeases = payload
+
     },
     setUserLeases: (state, leases) => {
         state.userLeases = leases
@@ -29,12 +31,12 @@ const mutations = {
         state.userLeases = leases
     },
     removeFromPending: (state, payload) => {
-        const i = state.lease.map(item => item.id).indexOf(payload);
-        state.lease.splice(i, 1);
+        const i = state.pendingLeases.map(item => item.id).indexOf(payload);
+        state.pendingLeases.splice(i, 1);
     },
     removeFromInProgress: (state, payload) => {
-        const i = state.lease.map(item => item.id).indexOf(payload);
-        state.lease.splice(i, 1);
+        const i = state.inProgressLeases.map(item => item.id).indexOf(payload);
+        state.inProgressLeases.splice(i, 1);
     },
     delete: (state, deleted) => {
         state.deleted = deleted
@@ -46,10 +48,10 @@ const actions = {
         try {
             const res = await api.get('/lease/all/'+status)
             if (res.status == 200) {
+                console.log('ACTION(fetchStatusLeases):')
                 console.log(res.data)
-                const capsState = status.charAt(0).toUpperCase() + status.slice(1)
-                console.log(capsState)
-                commit('set' + capsState + 'Leases', res.data.data)
+                const capsStatus = status.charAt(0).toUpperCase() + status.slice(1)
+                commit('set' + capsStatus + 'Leases', res.data.data)
             } else {
                 throw Error(handleResponses(res))
             }
@@ -75,7 +77,8 @@ const actions = {
         try {
             const res = await api.post('/lease/status/update/'+id, status)
             if (res.status == 200) {
-                commit('removeFromPending', id)
+                const capsStatus = status.charAt(0).toUpperCase() + status.slice(1)
+                commit('removeFrom'+capsStatus, id)
             } else {
                 throw Error(handleResponses(res))
             }
@@ -114,7 +117,9 @@ const getters = {
         return state.pendingLeases
     },
     getInProgressLeases(state) {
-        return state.inP
+        console.log('GETTER: ')
+        console.log(state.inProgressLeases)
+        return state.inProgressLeases
     },
     getCurrentLeases(state) {
         return state.currentLease
