@@ -1,6 +1,6 @@
 ## :microscope: Laboratório de Projecto - Agrupamento Escuteiros 1240 Murtal
 
-![Created](https://badges.pufler.dev/created/shakesac/1240Armazem) ![Last commit](https://img.shields.io/github/last-commit/shakesac/1240Armazem)
+![Created](https://badges.pufler.dev/created/shakesac/GLAE-backend) ![Last commit](https://img.shields.io/github/last-commit/shakesac/GLAE-backend)
 
 ## :ledger: Documentação
 * [Documentação](docs/README.md)
