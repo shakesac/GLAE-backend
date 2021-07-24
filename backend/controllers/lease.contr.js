@@ -86,7 +86,7 @@ exports.getAllFromUser = async (req, res) => {
 
 exports.get = async (req, res) => {
     const options = {include: LeaseStatus}
-    helper.checkIfAndGet(res, Lease, req.params.id, options)
+    await helper.checkIfAndGet(res, Lease, req.params.id, options)
 }
 
 exports.getAllIfStatus = async (req, res) => {
@@ -98,9 +98,36 @@ exports.getAllIfStatus = async (req, res) => {
         })
     }
     const options = {
-        include:             
-            [{ model: LeaseStatus, where: { status: req.params.status }, order: ['createdAt', 'DESC']}, {model: User, attibutes: { include: ['firstName, lastName']} }]
+        //order: [LeaseStatus, 'createdBy', 'DESC'],
+        include: [{
+            model: LeaseStatus,
+            where: { 
+                [Op.and]: [
+                    {
+                        status: req.params.status,
+                        isActive: true
+                     }
+                ]
+            }
+        },{
+            model: User,
+            attibutes: ['firstName, lastName, email']
+        }],
     }
+    /*
+    const options = { 
+        include: [{
+            model: LeaseStatus,
+            //as: 'status',
+            where: { status: req.params.status },
+        },{ 
+            model: User,
+            through: {
+                attibutes: ['firstName, lastName, email']
+            }
+        }],
+    }
+        */
     await helper.checkIfAndGetAll(res, Lease, options)
 }
 
@@ -137,6 +164,24 @@ exports.updateStatus = async (req, res) => {
             message: 'Não é possivel adicionar estados a este emprestimo por este já ter terminado ou ter sido cancelado.'
         })
     }
+    // Verificar o ultimo estado
+    const lastStatus = await LeaseStatus.findOne({
+        where: { 
+            [Op.and]: [
+                {
+                    leaseId,
+                    isActive: true
+                 }
+            ]
+        }
+    })
+    if (lastStatus) {
+        await LeaseStatus.update({
+            isActive: false
+        },{
+            where: { leaseId }
+        })
+    }
     LeaseStatus.create({
         status,
         leaseId,
@@ -144,7 +189,7 @@ exports.updateStatus = async (req, res) => {
     }).then(() => {
         res.status(201).json({
             status: 'success',
-            message: 'Estado de encomenda adicionado com sucesso.',
+            message: 'Estado de encomenda alterado com sucesso.',
         })
     }).catch(err => {
         res.status(400).json({
