@@ -22,6 +22,11 @@ const LeaseStatus = sequelize.define('lease_status', {
     },
     comment: {
         type: Sequelize.TEXT
+    },
+    isActive: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+        allowNull: false
     }
     }, {
     updatedAt: false,
