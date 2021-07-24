@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="lease in pendingLeases" :key="lease.id" v-bind:class="{'table-danger': (Date.parse(lease.end) < Date.now())}">
+        <tr v-for="lease in inProgressLeases" :key="lease.id" v-bind:class="{'table-danger': (Date.parse(lease.end) < Date.now())}">
             <th scope="row">{{ lease.id }}</th>
             <td>{{ lease.user.firstName + ' ' + lease.user.lastName }}</td>
             <td>{{ lease.start }}</td>
