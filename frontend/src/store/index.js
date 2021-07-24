@@ -4,7 +4,7 @@ import auth from '@/store/modules/auth.module'
 import sections from '@/store/modules/sections.module'
 import leases from '@/store/modules/lease.module'
 import users from '@/store/modules/users.module'
-//import createPersistedState from "vuex-persistedstate";
+import items from '@/store/modules/items.module'
 
 export default createStore({
   state: {
@@ -24,6 +24,7 @@ export default createStore({
     sections,
     leases,
     users,
+    items,
 
   },
 })
