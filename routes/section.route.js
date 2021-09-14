@@ -6,8 +6,8 @@ const subSecPre = '/sub'
 const {verify} = require('../controllers/auth.contr')
 
 router.post('/new', sectionContr.new)
-router.put('/update/:id', sectionContr.update)
-router.delete('/delete/:id', sectionContr.delete)
+router.put('/:id', sectionContr.update)
+router.delete('/:id', sectionContr.delete)
 router.get('/all', sectionContr.getAll)
 router.get('/:id/sub', subsectionContr.getAllFromSection)
 router.get('/:id', sectionContr.get)
