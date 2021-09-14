@@ -102,11 +102,23 @@ sequelize.sync({ force: seqMode }).then(result => {
     console.log('ERRO: DB SYNC()', err)
 })
 
+
 // 404 - CATCH ALL MIDDLEWARE
 app.use((req, res, next) => {
-    res.status(400).json({
+    const err = new Error
+    res.status(404).json({
         status: 'failed',
         message: 'Endpoint not found.'
+    })
+})
+
+//ERROR HANDLER MIDDLEWARE
+app.use((err, req, res, next) => {
+    err.statusCode = err.statusCode || 500  //Caso nao exista codigo de erro definido, usamos 500 como padrão
+    err.status = err.status || 'error'
+    res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message
     })
 })
 
