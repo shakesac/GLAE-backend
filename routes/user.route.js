@@ -4,7 +4,7 @@ const {verify} = require('../controllers/auth.contr')
 const userContr = require('../controllers/user.contr')
 const User = require('../models/user.model')
 
-router.put('/update/:id', userContr.update)
+router.put('/:id/update', userContr.update)
 router.get('/all', userContr.getAll)
 router.get('/:id', userContr.get)
 router.delete('/:id', userContr.delete)
