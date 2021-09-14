@@ -17,7 +17,7 @@ const corsOptions = {
     credentials: true
 }
 app.use(cors(corsOptions))
-app.use(express.urlencoded({ extended: true }))
+//app.use(express.urlencoded({ extended: true }))
 app.use(express.json()) //body-parser on Express 4.16+
 app.use(helmet())
 app.use(morgan('tiny')) //tiny, dev
