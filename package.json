@@ -1,6 +1,6 @@
 {
-  "name": "1240armazem",
-  "version": "1.0.0",
+  "name": "glae",
+  "version": "1.1.0",
   "description": "Sistema de gestão de equipamentos do agrupamento 1240 de escuteiros.",
   "main": "server.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shakesac/1240Armazem.git"
+    "url": "git+https://github.com/shakesac/GLAE-backend.git"
   },
-  "author": "Miguel Lima, Tiago Alves",
+  "author": "Miguel Lima",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/shakesac/1240Armazem/issues"
+    "url": "https://github.com/shakesac/GLAE-backend/issues"
   },
-  "homepage": "https://github.com/shakesac/1240Armazem#readme",
+  "homepage": "https://github.com/shakesac/GLAE-backend#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
