@@ -13,28 +13,13 @@ exports.register = async (req, res, next) => {
     const options = { where: { email }}
     try {
         const exists = await helper.checkIfExistsWithOptions(User, options)
-        if (exists) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Já existe um utilizador com o email indicado.'
-            })
-        }
+        if (exists) return next(new AppError('Já existe um utilizador com o email indicado.', 400, 'failed'))
         if (subsectionId) {
             const idSplit = subsectionId.split('')
-            if (!idSplit || !idSplit[1]) {
-                return res.status(400).json({
-                    status: 'failed',
-                    message: 'Código de grupo inválido.'
-                })
-            }
+            if (!idSplit || !idSplit[1]) return next(new AppError('Código de grupo inválido.', 400, 'failed'))
             const options = { where: { id: idSplit[1] }}
             const exists = await helper.checkIfExists(Subsection, idSplit[1])
-            if (!exists) {
-                return res.status(400).json({
-                    status: 'failed',
-                    message: 'Não existe nenhum grupo com o código indicado.'
-                })
-            }
+            if (!exists) return next(new AppError('Não existe nenhum grupo com o código indicado.', 400, 'failed'))
         }
         if (password !== confirmPassword) {
             return next(new AppError('A palavra-passe e a confirmação não coincidem.', 400, 'failed'))
@@ -66,20 +51,11 @@ exports.login = async (req, res, next) => {
     let options = { where: { email } }
     try {
         const exists = await helper.checkIfExistsWithOptions(User, options)
-        if (!exists){
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
-            })            
-        }
+        if (!exists) return next(new AppError('Utilizador ou senha inválidos!', 400, 'failed')) //Não divulgamos apenas que o utilizador está errada por razões de segurança
         const user = await User.findOne(options)
         const equal = await bcrypt.compare(password, user.password)
-        if (!equal) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Utilizador ou senha inválidos!'  //Não divulgamos apenas que a senha está errada por razões de segurança
-            })
-        } else {
+        if (!equal) return next(new AppError('Utilizador ou senha inválidos!', 400, 'failed'))
+        else {
             const token = jwt.sign({
                 id: user.id,
                 email: user.email
@@ -99,40 +75,28 @@ exports.login = async (req, res, next) => {
         }
     } catch (err) {
         console.log(err)
-        return res.status(500).json({
-            status: 'failed',
-            message: err.name
-        })
+        return next(new AppError(err.toString(), 500, 'error'))
     }            
 }
 
 exports.verify = async (req, res, next) => {
-    let token = req.headers['x-access-token']
-    if (!token) {
-        return res.status(403).json({
-            status: 'failed',
-            message: 'Não tem sessão iniciada.'
-        })
-    }
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-        if (err) {
-            return res.status(401).json({
-                status: 'failed',
-                message: 'O token não é válido.'
-            })
-        } else {
-            // Verifica se utilizador ao qual o token pertence ainda existe
-            const user = await User.findByPk(decoded.id)
-            if (!user) {
-                return res.status(401).json({
-                    status: 'failed',
-                    message: 'O utilizador já não existe.'
-                })
+    try {
+        let token = req.headers['x-access-token']
+        if (!token) return next(new AppError('Não tem sessão iniciada.', 403, 'failed'))
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+            if (err) return next(new AppError('O token não é válido.', 401, 'failed'))
+            else {
+                // Verifica se utilizador ao qual o token pertence ainda existe
+                const user = await User.findByPk(decoded.id)
+                if (!user) return next(new AppError('O utilizador já não existe.', 401, 'failed'))
+                req.user = user
+                next()
             }
-            req.user = user
-            next()
-        }
-    })
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
 exports.getCurrentUser = async (req, res) => {
@@ -141,17 +105,16 @@ exports.getCurrentUser = async (req, res) => {
 }
 
 exports.isAdmin = async (req, res, next) => {
-    await User.findByPk(req.user.id).then(user => {
-        if (user.roleId === 1) {
-            next()
-            return
-        } else {
-            return res.status(403).json({
-                status: 'failed',
-                message: 'Não tem permissões de administrador.'
-            })
-        }
-    })
+    try {
+        await User.findByPk(req.user.id).then(user => {
+            if (user.roleId === 1) {
+                next()
+            } else return next(new AppError('Não tem permissões de administrador.', 403, 'failed'))
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
 exports.deleteCurrentUser = (req, res) => {
