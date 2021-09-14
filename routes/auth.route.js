@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const authContr = require('../controllers/auth.contr')
+const profileContr = require('../controllers/profile.contr')
 const {verify} = require('../controllers/auth.contr')
 
 router.post('/login', authContr.login)
@@ -8,7 +9,7 @@ router.post('/register', authContr.register)
 
 //ROUTES relativas ao utilizador actual
 const prefix = '/me'
-router.get(prefix + '/get', verify, authContr.getCurrentUser)
-router.delete(prefix + '/delete', verify, authContr.deleteCurrentUser)
+router.get(prefix, verify, profileContr.get)
+//router.delete(prefix + '/delete', verify, authContr.deleteCurrentUser)
 
 module.exports = router

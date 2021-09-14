@@ -1,10 +1,9 @@
 const AppError = require('../util/appError')
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
+const helper = require('../util/contr.helpers')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const helper = require('../util/contr.helpers')
 const User = require('../models/user.model')
-const Item = require('../models/user.model')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const Subsection = require('../models/subsection.model')
 
@@ -82,12 +81,14 @@ exports.login = async (req, res, next) => {
 exports.verify = async (req, res, next) => {
     try {
         let token = req.headers['x-access-token']
+        console.log(token)
         if (!token) return next(new AppError('Não tem sessão iniciada.', 403, 'failed'))
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) return next(new AppError('O token não é válido.', 401, 'failed'))
             else {
                 // Verifica se utilizador ao qual o token pertence ainda existe
-                const user = await User.findByPk(decoded.id)
+                const options = { attributes: { exclude: ['password'] }}
+                const user = await User.findByPk(decoded.id, options)
                 if (!user) return next(new AppError('O utilizador já não existe.', 401, 'failed'))
                 req.user = user
                 next()
@@ -99,31 +100,13 @@ exports.verify = async (req, res, next) => {
     }
 }
 
-exports.getCurrentUser = async (req, res) => {
-    const options = { attributes: { exclude: ['password'] }}
-    await helper.checkIfByPkAndGet(res, User, req.user.id, options)
-}
-
 exports.isAdmin = async (req, res, next) => {
     try {
-        await User.findByPk(req.user.id).then(user => {
-            if (user.roleId === 1) {
-                next()
-            } else return next(new AppError('Não tem permissões de administrador.', 403, 'failed'))
-        })
+        const user = req.user
+        if (user.roleId === 1) next()
+        else return next(new AppError('Não tem permissões de administrador.', 403, 'failed'))
     } catch(err) {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))
     }
-}
-
-exports.deleteCurrentUser = (req, res) => {
-    console.log(req.user)
-    helper.delete(
-        res,
-        User,
-        req.user.id,
-        null,
-        ''
-    )
 }

@@ -203,6 +203,8 @@ exports.create = async (res, obj, options) => {
     }
 }
 
+
+// A seguinte função já não é utilizada.
 exports.delete = async (res, obj, id, constObj, constFieldName) => {
     const exists = await this.checkIfExists(obj, id)
     if (!exists) {
