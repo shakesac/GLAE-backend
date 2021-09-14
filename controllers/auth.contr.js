@@ -1,3 +1,5 @@
+const AppError = require('../util/appError')
+const { Op } = require("sequelize");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const helper = require('../util/contr.helpers')
@@ -6,7 +8,7 @@ const Item = require('../models/user.model')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const Subsection = require('../models/subsection.model')
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
     const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId} = req.body
     const options = { where: { email }}
     try {
@@ -35,10 +37,7 @@ exports.register = async (req, res) => {
             }
         }
         if (password !== confirmPassword) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'A palavra-passe e a confirmação não coincidem.'
-            })
+            return next(new AppError('A palavra-passe e a confirmação não coincidem.', 400, 'failed'))
         }
         const hashedPw = await bcrypt.hash(password, bcryptSalt)
         const newUser = new User({
@@ -57,10 +56,7 @@ exports.register = async (req, res) => {
         })
     } catch (err) {
         console.log(err)
-        return res.status(500).json({
-            status: 'failed',
-            message: err.name
-        })
+        return next(new AppError(err.toString(), 500, 'error'))
     }
 }
 
