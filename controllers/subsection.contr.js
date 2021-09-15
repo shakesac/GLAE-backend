@@ -1,6 +1,5 @@
 const AppError = require('../util/appError')
 const { Op } = require("sequelize");
-const helper = require('../util/contr.helpers')
 const Section = require('../models/section.model')
 const Subsection = require('../models/subsection.model');
 const User = require('../models/user.model');
