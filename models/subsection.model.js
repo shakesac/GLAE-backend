@@ -16,7 +16,7 @@ const Subsection = sequelize.define('subsection', {
         type: Sequelize.INTEGER(1),
         allowNull: false,
     },
-    fullId: {
+    fullCode: {
         type: Sequelize.VIRTUAL,
         get() {
             return this.sectionId + '' + this.code

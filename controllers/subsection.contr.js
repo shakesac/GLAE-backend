@@ -2,7 +2,8 @@ const AppError = require('../util/appError')
 const { Op } = require("sequelize");
 const helper = require('../util/contr.helpers')
 const Section = require('../models/section.model')
-const Subsection = require('../models/subsection.model')
+const Subsection = require('../models/subsection.model');
+const User = require('../models/user.model');
 
 exports.new = async (req, res, next) => {
     try {
@@ -51,84 +52,131 @@ exports.update = async (req, res, next) => {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))
     }
-    
-    // Verificar se secção existe
-    const sectionExists = await Section.findByPk(sectionId).catch(err => {
-        return res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
+}
+
+exports.get = async (req, res, next) => {
+    try {
+        const thisSubsection = await Subsection.findByPk(req.params.id)
+        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        else return res.status(200).json({
+            status: "success",
+            data: thisSubsection
         })
-    })
-    if (!sectionExists) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Não existe nenhuma secção com o código indicado.'
-        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
     }
-    await Subsection.update({
-        id,
-        subsection,
-        sectionId
-    }, {
-        where: { id: req.params.id }
-    }).then(() => {
-        res.status(200).json({
-            status: 'success',
-            message: 'O grupo foi actualizado com sucesso.',
-        })
-    }).catch((err) => {
-        console.log('Erro: ', err)
-        res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
 }
 
-exports.get = async (req, res) => {
-    const options = {include: Section, exclude: ['sectionId']}
-    helper.checkIfByPkAndGet(res, Subsection, req.params.id, options)
-}
-
-exports.getAll = async (req, res) => {
-    const options = {include: Section, exclude: ['sectionId']}
-    helper.checkIfAndGetAll(res, Subsection, options)
-}
-
-exports.getAllFromSection = async (req, res) => {
-    console.log(req.params)
-    await Subsection.findAll({
-        where: {
-            sectionId: req.params.id
-        }
-    }).then((subsections) => {
-        res.status(200).json({
-            status: 'success',
+exports.getAll = async (req, res, next) => {
+    try {
+        const subsections = await Subsection.findAll()
+        if (!subsections) return next(new AppError('Não existem subsecções.', 404, 'not found'))
+        else return res.status(200).json({
+            status: "success",
             data: subsections
         })
-    }).catch((err) => {
-        res.status(202).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
-exports.delete = async (req, res) => {
-    const verifyDependencies = await User.findAndCountAll({
+exports.getSection = async (req, res, next) => {
+    try {
+        const thisSubsection = await Subsection.findByPk(req.params.id)
+        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        else {
+            const thisSection = await thisSubsection.getSection()
+            return res.status(200).json({
+                status: 'success',
+                data: thisSection
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
 
-    })
-    await Subsection.destroy({
-        where: { id: req.params.id }
-    }).then(() => {
-        res.status(200).json({
-            status: 'success',
-            message: 'O grupo foi eliminada com sucesso.'
-        })
-    }).catch((err) => {
-        res.status(304).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
+exports.getUsers = async (req, res, next) => {
+    try {
+        const thisSubsection = await Subsection.findByPk(req.params.id)
+        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        else {
+            let options = {attributes: { exclude: ['password', 'updatedAt', 'subsectionId'] }}
+            const users = await thisSubsection.getUsers(options)
+            if (!users) return next(new AppError('Não existem utilizadores associados a esta subsecção.', 404, 'not found'))
+            else return res.status(200).json({
+                status: 'success',
+                data: users
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.addUser = async (req, res, next) => {
+    try {
+        const userId = req.params.uid
+        if (!userId) return next(new AppError('É necessário indicar o ID do utilizador.', 400, 'failed'))
+        const thisSubsection = await Subsection.findByPk(req.params.id)
+        const user = await User.findByPk(userId)
+        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        else if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
+        else {
+            await user.setSubsection(thisSubsection)
+            return res.status(200).json({
+                status: 'success',
+                message: `O utilizador foi adicionado a ${thisSubsection.subsection}.`
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.removeUser = async (req, res, next) => {
+    try {
+        const userId = req.params.uid
+        if (!userId) return next(new AppError('É necessário indicar o ID do utilizador.', 400, 'failed'))
+        const thisSubsection = await Subsection.findByPk(req.params.id)
+        const user = await User.findByPk(userId)
+        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        else if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
+        else if (!await thisSubsection.hasUser(user)) {
+            return next(new AppError('O utilizador indicado não está associado à subsecção indicada.', 404, 'not found'))
+        }
+        else {
+            await thisSubsection.removeUser(user)
+            return res.status(200).json({
+                status: 'success',
+                message: `O utilizador foi removido de ${thisSubsection.subsection}.`
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.delete = async (req, res, next) => {
+    try {
+        const thisSubsection = await Subsection.findByPk(req.params.id)
+        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        else if (await thisSubsection.countUsers()) return next(new AppError('Existem utilizadores associados a esta subsecção.', 400, 'failed'))
+        else {
+            thisSubsection.destroy()
+            return res.status(200).json({
+                status: 'success',
+                message: 'A subsecção foi eliminada.'
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
