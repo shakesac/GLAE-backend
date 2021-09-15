@@ -35,7 +35,7 @@ exports.update = async (req, res, next) => {
             return next(new AppError('Input inválido.', 400, 'failed'))
         } 
         const thisSection = await Section.findByPk(req.params.id)
-        if (!thisSection) return next(new AppError('Secção indicada não existe.', 400, 'failed'))
+        if (!thisSection) return next(new AppError('Secção indicada não existe.', 404, 'not found'))
         await thisSection.update({ id, section })
         return res.status(200).json({
             status: 'success',
