@@ -1,34 +1,111 @@
-const helper = require('../util/contr.helpers')
+const AppError = require('../util/appError')
+const { Op } = require("sequelize");
 const Section = require('../models/section.model')
-const Subsection = require('../models/subsection.model')
 
-exports.new = async (req, res) => {
-    const { id, section } = req.body
-    const newSection = new Section({
-        id,
-        section
-    })
-    await helper.create(res, newSection)
+exports.new = async (req, res, next) => {
+    try {
+        const { id, section } = req.body
+        const exists = await Section.findOne({ where: {
+            [Op.or]: [{ id }, { section }]
+        }})
+        if (exists) return next(new AppError('Já existe uma secção com o mesmo nome ou ID.', 400, 'failed'))
+        else {
+            await Section.create({ id, section })
+            return res.status(201).json({
+                status: 'success',
+                message: 'A secção foi criada com sucesso.'
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
-exports.update = async (req, res) => {
-    await helper.checkIfByPkAndUpdate(res, Section, req.params.id, req.body)
+exports.update = async (req, res, next) => {
+    try {
+        const { id, section } = req.body
+        if (!id) {
+            const exists = await Section.findOne({ where: {section}})
+            if (exists) return next(new AppError('Já existe uma secção com o mesmo nome.', 400, 'failed'))
+        } else if (!section) {
+            const exists = await Section.findOne({ where: {id}})
+            if (exists) return next(new AppError('Já existe uma secção com o mesmo ID.', 400, 'failed'))
+        } else if (!id && !section) {
+            return next(new AppError('Input inválido.', 400, 'failed'))
+        } 
+        const thisSection = await Section.findByPk(req.params.id)
+        if (!thisSection) return next(new AppError('Secção indicada não existe.', 400, 'failed'))
+        await thisSection.update({ id, section })
+        return res.status(200).json({
+            status: 'success',
+            message: 'A secção foi alterada com sucesso.'
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
-exports.get = async (req, res) => {
-    helper.checkIfByPkAndGet(res, Section, req.params.id)
+exports.get = async (req, res, next) => {
+    try {
+        const thisSection = await Section.findByPk(req.params.id)
+        if (!thisSection) return next(new AppError('A secção indicada não existe.', 404, 'not found'))
+        else return res.status(200).json({
+            status: "success",
+            data: thisSection
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.getSubs = async (req, res, next) => {
+    try {
+        const thisSection = await Section.findByPk(req.params.id)
+        if (!thisSection) return next(new AppError('A secção indicada não existe.', 404, 'not found'))
+        else {
+            const subsections = await thisSection.getSubsections()
+            return res.status(200).json({
+                status: 'success',
+                data: subsections
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
 exports.getAll = async (req, res) => {
-    await helper.checkIfAndGetAll(res, Section)
+    try {
+        const thisSections = await Section.findAll()
+        if (!thisSections) return next(new AppError('Não existem secções.', 404, 'not found'))
+        else return res.status(200).json({
+            status: "success",
+            data: thisSections
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
-exports.delete = async (req, res) => {
-    await helper.delete(
-        res,
-        Section,
-        req.params.id,
-        Subsection,
-        'sectionId'
-        )
+exports.delete = async (req, res, next) => {
+    try {
+        const thisSection = await Section.findByPk(req.params.id)
+        if (!thisSection) return next(new AppError('A secção indicada não existe.', 404, 'not found'))
+        else if (await thisSection.countSubsections()) return next(new AppError('Existem subsecções dependentes desta secção.', 400, 'failed'))
+        else {
+            thisSection.destroy()
+            return res.status(200).json({
+                status: 'success',
+                message: 'A secção foi eliminada.'
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }

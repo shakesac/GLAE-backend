@@ -3,9 +3,13 @@ const sequelize = require('../util/db')
 
 const ItemCategory = sequelize.define('item_category', {
     id: {
-        type: Sequelize.INTEGER(1),
-        allowNull: false,
+        type: Sequelize.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
+    },
+    code: {
+        type: Sequelize.INTEGER(8),
+        allowNull: false,
     },
     category: {
         type: Sequelize.STRING,
@@ -14,13 +18,6 @@ const ItemCategory = sequelize.define('item_category', {
 }, {
     timestamps: true,
     updatedAt: false,
-    validate: {
-        checkId() {
-            if (this.id < 0 || this.id > 9) {
-                throw new Error('O código deverá ser um valor entre 0 e 9.')
-            }
-        }
-    }
 })
 
 module.exports = ItemCategory

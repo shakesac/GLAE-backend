@@ -28,6 +28,7 @@ const authRoutes = require('./routes/auth.route')
 const leaseRoutes = require('./routes/lease.route')
 const itemRoutes = require('./routes/item.route')
 const sectionRoutes = require('./routes/section.route')
+const subsectionRoutes = require('./routes/subsection.route')
 const userRoutes = require('./routes/user.route')
 const cargoRoutes = require('./routes/cargos.routes')
 app.use(api, authRoutes)
@@ -35,6 +36,7 @@ app.use(api+'/cargo', cargoRoutes)
 app.use(api+'/lease', leaseRoutes)
 app.use(api+'/item', itemRoutes)
 app.use(api+'/section', sectionRoutes)
+app.use(api+'/subsection', subsectionRoutes)
 app.use(api+'/user', userRoutes)
 
 
@@ -59,17 +61,20 @@ const Subsection = require('./models/subsection.model')
 Cargo.hasMany(User)
 User.belongsTo(Cargo)
 
-Role.hasMany(User)
+Role.hasMany(User, { foreignKey: {
+    name: 'roleId',
+    defaultValue: 2
+}})
 User.belongsTo(Role)
 
 User.hasMany(Lease)
 Lease.belongsTo(User)
 
 ItemCategory.hasMany(ItemType, {foreignKey: 'categoryId' })
-ItemType.belongsTo(ItemCategory, {foreignKey: 'categoryId' })
+ItemType.belongsTo(ItemCategory)
 
 ItemType.hasMany(Item, {foreignKey: 'typeId' })
-Item.belongsTo(ItemType, {foreignKey: 'typeId' })
+Item.belongsTo(ItemType)
 
 Item.hasMany(ItemInspection)
 ItemInspection.belongsTo(Item)
@@ -78,13 +83,13 @@ Lease.hasMany(LeaseStatus)
 LeaseStatus.belongsTo(Lease)
 
 User.hasMany(Item, { foreignKey: 'createdBy' })
-Item.belongsTo(User, { foreignKey: 'createdBy' })
+Item.belongsTo(User)
 
 Section.hasMany(Subsection, { foreignKey: 'sectionId' }, { onDelete: 'RESTRICT' })
-//Subsection.belongsTo(Section)
+Subsection.belongsTo(Section)
 
 Subsection.hasMany(User, { foreignKey: 'subsectionId' }, { onDelete: 'RESTRICT' })
-User.belongsTo(Subsection, { foreignKey: 'subsectionId' }, { onDelete: 'RESTRICT' })
+User.belongsTo(Subsection)
 
 const LeaseItems = sequelize.define('lease_item', {}, { timestamps: false });
 Lease.belongsToMany(Item, { through: 'lease_item' })

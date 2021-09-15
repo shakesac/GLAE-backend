@@ -14,6 +14,7 @@ const Section = sequelize.define('section', {
     section: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        unique: true
     }
 }, {
     timestamps: true,

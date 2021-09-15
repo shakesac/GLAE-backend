@@ -1,50 +1,57 @@
+const AppError = require('../util/appError')
+const { Op } = require("sequelize");
 const helper = require('../util/contr.helpers')
 const Section = require('../models/section.model')
 const Subsection = require('../models/subsection.model')
-const User = require('../models/user.model')
 
-exports.new = async (req, res) => {
-    const { id, subsection, sectionId } = req.body
-    // Verificar se secção existe
-    const sectionExists = await Section.findByPk(sectionId).catch(err => {
-        return res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
-    if (!sectionExists) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Não existe nenhuma secção com o código indicado.'
-        })
-    }
-    const newSubsection = new Subsection({
-        id,
-        subsection,
-        sectionId
-    })
-    await newSubsection.save().then((subsection) => {
-        res.status(201).json({
+exports.new = async (req, res, next) => {
+    try {
+        const { code, subsection, sectionId } = req.body
+        const section = await Section.findByPk(sectionId)
+        if (!section) return next(new AppError('Não existe nenhuma secção com o código indicado.', 404, 'not found'))
+        const exists = await Subsection.findOne({ where: {
+            [Op.and]: [{ code }, { subsection }, { sectionId }]
+        }})
+        if (exists) return next(new AppError('Já existe uma subsecção com as mesmas caracteristicas.', 400, 'failed'))
+        const thisSubsection = await section.createSubsection({ id, subsection })
+        return res.status(201).json({
             status: 'success',
-            message: 'O grupo foi criado com sucesso',
-            data: subsection
+            message: `A subsecção ${thisSubsection.subsection} foi criada.`
         })
-    }).catch((err) => {
-        if (err.errors[0].message == 'subsections.PRIMARY must be unique') {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Já existe um grupo com o código ' + id + sectionId + ' atribuido.'
-            })
-        }
-        res.status(400).json({
-            status: 'failed',
-            message: err.errors[0].message,
-        })
-    })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
-exports.update = async (req, res) => {
-    const { id, subsection, sectionId } = req.body
+exports.update = async (req, res, next) => {
+    try {
+        const { code, subsection } = req.body
+        const thisSubsection = await Subsection.findByPk(req.params.id)
+        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 400, 'failed'))
+        if (!code) {
+            const exists = await Subsection.findOne({ where: { [Op.and]: [
+                {subsection}, { sectionId: thisSubsection.sectionId }
+            ]}})
+            if (exists) return next(new AppError('Já existe uma subsecção com o mesmo nome.', 400, 'failed'))
+        } else if (!subsection) {
+            const exists = await Subsection.findOne({ where: { [Op.and]: [
+                { code }, { sectionId: thisSubsection.sectionId }
+            ]}})
+            if (exists) return next(new AppError('Já existe uma subsecção com o mesmo ID.', 400, 'failed'))
+        } else if (!id && !subsection) {
+            return next(new AppError('Input inválido.', 400, 'failed'))
+        }
+        await thisSubsection.update({ code, subsection })
+        return res.status(200).json({
+            status: 'success',
+            message: 'A secção foi alterada com sucesso.'
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+    
     // Verificar se secção existe
     const sectionExists = await Section.findByPk(sectionId).catch(err => {
         return res.status(400).json({
