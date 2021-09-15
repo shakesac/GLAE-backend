@@ -5,6 +5,8 @@ const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const User = require('../models/user.model')
 const Item = require('../models/item.model')
 const Subsection = require('../models/subsection.model')
+const Cargo = require('../models/cargo.model')
+const Role = require('../models/user-role.model')
 
 exports.new = async (req, res, next) => {
     try {
@@ -27,6 +29,24 @@ exports.new = async (req, res, next) => {
             status: 'success',
             message: 'O utilizador foi registado com sucesso.'
         })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.update = async (req, res, next) => {
+    try {
+        const {firstName, lastName, address, phoneNumber} = req.body
+        const user = await User.findByPk(req.params.id)
+        if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
+        else {
+            user.update({firstName, lastName, address, phoneNumber})
+            return res.status(200).json({
+                status: 'success',
+                message: 'O utilizador foi alterado com sucesso.'
+            })
+        }
     } catch(err) {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))
@@ -97,6 +117,54 @@ exports.delete = async (req, res, next) => {
                 message: 'O utilizador foi eliminado.'
             })
         }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.setCargo = async (req, res, next) => {
+    try {
+        const { cargoId } = req.body
+        const user = await User.findByPk(req.params.id)
+        const cargo = await Cargo.findByPk(cargoId)
+        if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
+        else if (!cargo) return next(new AppError('O cargo indicado não existe.', 404, 'not found'))
+        else {
+            user.setCargo(cargo)
+            return res.status(200).json({
+                status: 'success',
+                message: `O cargo ${cargo.cargo} foi atribuído ao utilizador.`
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.togglePermissions = async (req, res, next) => {
+    try {
+        const user = await User.findByPk(req.params.id)
+        let role
+        if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
+        else {
+            const roleId = user.roleId
+            if (!roleId) {
+                role = await Role.findByPk(2)
+                user.setRole(role)
+            } else if (roleId == 1) {
+                role = await Role.findByPk(2)
+                user.setRole(role)
+            } else {
+                role = await Role.findByPk(1)
+                user.setRole(role)
+            }
+        }
+        return res.status(200).json({
+            status: 'success',
+            message: `Foram atribuidas permissões de ${role.role}`
+        })
     } catch(err) {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))
