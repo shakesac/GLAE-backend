@@ -1,6 +1,5 @@
 const AppError = require('../util/appError')
 const { Op } = require("sequelize")
-const helper = require('../util/contr.helpers')
 const Cargo = require('../models/cargo.model')
 
 exports.new = async (req, res, next) => {
