@@ -81,7 +81,6 @@ exports.login = async (req, res, next) => {
 exports.verify = async (req, res, next) => {
     try {
         let token = req.headers['x-access-token']
-        console.log(token)
         if (!token) return next(new AppError('Não tem sessão iniciada.', 403, 'failed'))
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) return next(new AppError('O token não é válido.', 401, 'failed'))
