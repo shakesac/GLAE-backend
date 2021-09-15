@@ -82,11 +82,29 @@ exports.getAll = async (req, res, next) => {
     }
 }
 
+exports.getTypes = async (req, res, next) => {
+    try {
+        const category = await Category.findByPk(req.params.id)
+        if (!category) return next(new AppError('A categoria indicada não existe.', 404, 'not found'))
+        else {
+            const options = {attributes: { exclude: ['createdAt', 'categoryId'] }}
+            const types = await category.getItem_types(options)
+            return res.status(200).json({
+                status: 'success',
+                data: types
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
 exports.delete = async (req, res, next) => {
     try {
         const thisCategory = await Category.findByPk(req.params.id)
         if (!thisCategory) return next(new AppError('A categoria indicada não existe.', 404, 'not found'))
-        //else if (await thisCategory.countItemTypes()) return next(new AppError('Existem subsecções dependentes desta secção.', 400, 'failed'))
+        else if (await thisCategory.countItem_types()) return next(new AppError('Existem tipos de item dependentes desta categoria.', 400, 'failed'))
         else {
             thisCategory.destroy()
             return res.status(200).json({

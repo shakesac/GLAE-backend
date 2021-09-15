@@ -70,10 +70,10 @@ User.belongsTo(Role)
 User.hasMany(Lease)
 Lease.belongsTo(User)
 
-ItemCategory.hasMany(ItemType, {foreignKey: 'categoryId' })
-ItemType.belongsTo(ItemCategory)
+ItemCategory.hasMany(ItemType, {foreignKey: 'categoryId' }, { onDelete: 'RESTRICT' })
+ItemType.belongsTo(ItemCategory, {foreignKey: 'categoryId' })
 
-ItemType.hasMany(Item, {foreignKey: 'typeId' })
+ItemType.hasMany(Item, {foreignKey: 'typeId' }, { onDelete: 'RESTRICT' })
 Item.belongsTo(ItemType)
 
 Item.hasMany(ItemInspection)
