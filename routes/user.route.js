@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const {verify} = require('../controllers/auth.contr')
+const {verify, isAdmin} = require('../controllers/auth.contr')
 const userContr = require('../controllers/user.contr')
-const User = require('../models/user.model')
 
 router.post('/new', userContr.new)
 router.post('/:id/pwd', userContr.pwd)
