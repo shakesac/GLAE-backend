@@ -29,8 +29,33 @@ exports.new = async (req, res, next) => {
     }
 }
 
-exports.update = async (req, res) => {
-    await helper.checkIfByPkAndUpdate(res, ItemType, req.params.id, req.body)
+exports.update = async (req, res, next) => {
+    try {
+        const { code, type } = req.body
+        const thisType = await ItemType.findByPk(req.params.id)
+        if (!thisType) return next(new AppError('O tipo de item indicado não existe.', 404, 'not found'))
+        const categoryId = thisType.categoryId
+        const exists = await ItemType.findOne({ where: {
+            [Op.or]: {
+                [Op.and]: [{ code }, { type }, { categoryId }],
+                [Op.and]: [{ code }, { categoryId }],
+                [Op.and]: [{ type }, { categoryId }]
+            }
+        }})
+        if (exists) return next(new AppError('Existe um tipo de item com as mesmas caracteristicas.', 400, 'failed'))
+        else {
+            await thisType.update({
+                code, type
+            })
+            return res.status(200).json({
+                status: "success",
+                message: "O tipo de item foi alterado."
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
 }
 
 exports.get = async (req, res, next) => {
