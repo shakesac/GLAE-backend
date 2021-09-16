@@ -42,7 +42,7 @@ exports.getAll = async (req, res, next) => {
         const item = await Item.findByPk(req.params.id)
         if (!item) return next(new AppError('O item indicado não existe.', 404, 'not found'))
         const inspects = await item.getItem_inspections()
-        if (items.length < 1) return next(new AppError('Este item nunca foi inspeccionado.', 404, 'not found'))
+        if (inspects.length < 1) return next(new AppError('Este item nunca foi inspeccionado.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: inspects
@@ -55,6 +55,7 @@ exports.getAll = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
+        const { description } = req.body
         const inspect = await ItemInspect.findByPk(req.params.id)
         if (!inspect) return next(new AppError('A inspecção indicada não existe.', 404, 'not found'))
         else {
