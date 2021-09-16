@@ -61,7 +61,10 @@ exports.get = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        const options = { where: {endOfLife: false}}
+        const options = { where: {endOfLife: false}, include: [{
+            model: ItemType,
+            attributes: ['type']
+        }] }
         const items = await Item.findAll(options)
         if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
         else return res.status(200).json({
