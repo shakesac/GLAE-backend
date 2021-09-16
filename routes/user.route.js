@@ -10,6 +10,7 @@ router.put('/:id', userContr.update)
 router.put('/:id/cargo', userContr.setCargo)
 router.put('/:id/permission', userContr.togglePermissions)
 router.get('/all', userContr.getAll)
+router.get('/:id/leases', userContr.getLeases)
 router.get('/:id', userContr.get)
 router.delete('/:id', userContr.delete)
 

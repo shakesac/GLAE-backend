@@ -1,12 +1,10 @@
 const AppError = require('../util/appError')
-const helper = require('../util/contr.helpers')
 const bcrypt = require('bcrypt')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const User = require('../models/user.model')
-const Item = require('../models/item.model')
-const Subsection = require('../models/subsection.model')
 const Cargo = require('../models/cargo.model')
 const Role = require('../models/user-role.model')
+const Lease = require('../models/lease.model')
 
 exports.new = async (req, res, next) => {
     try {
@@ -165,6 +163,23 @@ exports.togglePermissions = async (req, res, next) => {
             status: 'success',
             message: `Foram atribuidas permissões de ${role.role}`
         })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.getLeases = async (req, res, next) => {
+    try {
+        const userId = req.params.id || req.user.id
+        const user = await User.findByPk(userId)
+        if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
+        const options = { where: { userId }, order: [['createdAt', 'DESC']]}
+        const leases = await Lease.findAll(options)
+        return res.status(200).json({
+            status: 'success',
+            data: leases
+        })  
     } catch(err) {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))

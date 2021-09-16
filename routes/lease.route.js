@@ -4,13 +4,13 @@ const router = express.Router()
 const leaseContr = require('../controllers/lease.contr')
 const { verify } = require('../controllers/auth.contr')
 
-router.post('/new', verify, leaseContr.new)
-router.put('/update/:id', verify, leaseContr.update)
-router.get('/all/user', verify, leaseContr.getAllFromUser)
-router.get('/all/:status', verify, leaseContr.getAllIfStatus)
-router.get('/all', verify, leaseContr.getAll)
-router.post('/status/update/:id', verify, leaseContr.updateStatus)
+router.post('/new', leaseContr.new)
+router.put('/update/:id', leaseContr.update)
+router.get('/all/user', leaseContr.getAllFromUser)
+router.get('/all/:status', leaseContr.getAllIfStatus)
+router.get('/all', leaseContr.getAll)
+router.put('/:id/status', leaseContr.updateStatus)
 
-router.get('/:id', verify, leaseContr.get)
+router.get('/:id', leaseContr.get)
 
 module.exports = router
