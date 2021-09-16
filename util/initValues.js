@@ -6,6 +6,7 @@ const Role = require("../models/user-role.model");
 const User = require("../models/user.model");
 const ItemsCategory = require('../models/item-cat.model')
 const ItemType = require('../models/item-type.model')
+const Cargos = require('../models/cargo.model')
 
 exports.create = async () => {
     const roles = await Role.bulkCreate([
