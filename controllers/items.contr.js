@@ -30,7 +30,7 @@ exports.update = async (req, res, next) => {
         const thisItem = await Item.findByPk(req.params.id)
         if (!thisItem) return next(new AppError('O item indicado não existe.', 404, 'not found'))
         else {
-            thisItem.update({
+            await thisItem.update({
                 name, description
             })
             return res.status(200).json({

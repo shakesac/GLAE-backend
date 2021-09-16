@@ -1,8 +1,8 @@
 const AppError = require('../util/appError')
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
 const Section = require('../models/section.model')
-const Subsection = require('../models/subsection.model');
-const User = require('../models/user.model');
+const Subsection = require('../models/subsection.model')
+const User = require('../models/user.model')
 
 exports.new = async (req, res, next) => {
     try {

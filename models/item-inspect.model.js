@@ -8,18 +8,14 @@ const ItemInspection = sequelize.define('item_inspection', {
         allowNull: false,
         primaryKey: true
     },
-    date: {
-        type: Sequelize.DATEONLY,
-        allowNull: false,
-    },
     description: {
         type: Sequelize.STRING,
         allowNull: false,
     }
-    
 },
 {
-    timestamps: false
+    timestamps: true,
+    updatedAt: false
 })
 
 module.exports = ItemInspection

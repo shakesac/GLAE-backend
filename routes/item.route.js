@@ -3,6 +3,7 @@ const router = express.Router()
 const itemContr = require('../controllers/items.contr')
 const itemCatContr = require('../controllers/item-cat.contr')
 const itemTypeContr = require('../controllers/item-type.contr')
+const itemInspectContr = require('../controllers/item-inspect.contr')
 const {verify, isAdmin} = require('../controllers/auth.contr')
 
 router.post('/new', verify, itemContr.new)
@@ -27,5 +28,10 @@ router.delete('/type/:id/removeitem/:iid', itemTypeContr.removeItem)
 router.delete('/type/:id', itemTypeContr.delete)
 router.get('/type/all', itemTypeContr.getAll)
 router.get('/type/:id', itemTypeContr.get)
+
+router.post('/:id/inspect/new', itemInspectContr.new)
+router.get('/:id/inspect/all', itemInspectContr.getAll)
+router.get('/inspect/:id', itemInspectContr.get)
+router.put('/inspect/:id', itemInspectContr.update)
 
 module.exports = router
