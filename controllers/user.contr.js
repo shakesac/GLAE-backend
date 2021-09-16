@@ -91,7 +91,13 @@ exports.get = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        let options = {attributes: { exclude: ['password'] }}
+        let options = {
+            include: [{
+            model: Cargo,
+            attributes: ['cargo']
+        }],
+        attributes: { exclude: ['password']
+    }}
         const users = await User.findAll(options)
         if (!users) return next(new AppError('Não existem utilizadores.', 404, 'not found'))
         else return res.status(200).json({

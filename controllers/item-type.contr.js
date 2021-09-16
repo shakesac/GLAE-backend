@@ -75,7 +75,13 @@ exports.get = async (req, res, next) => {
 exports.getAll = async (req, res) => {
     //const options = {include: ItemCategory, exclude: ['itemCategoryId']}
     try {
-        const types = await ItemType.findAll()
+        const options = {
+            include: [{
+                model: ItemCategory,
+                attributes: ['category']
+            }]
+        }
+        const types = await ItemType.findAll(options)
         if (types.length < 1) return next(new AppError('Não existem tipos de item.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",

@@ -107,4 +107,10 @@ exports.create = async () => {
             roleId: 2,
         }
     ]).catch(err =>{ console.log(err.message) })
+
+    const cargos = await Cargos.bulkCreate([
+        {
+            cargo: 'Guarda-material'
+        }
+    ]).catch(err =>{ console.log(err.message) })
 }

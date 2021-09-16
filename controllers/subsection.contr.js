@@ -69,7 +69,13 @@ exports.get = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        const subsections = await Subsection.findAll()
+        const options = {
+            include: [{
+                model: Section,
+                attributes: ['section']
+            }]
+        }
+        const subsections = await Subsection.findAll(options)
         if (subsections.length < 1) return next(new AppError('Não existem subsecções.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
