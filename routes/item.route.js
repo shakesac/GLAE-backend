@@ -1,14 +1,16 @@
 const express = require('express')
 const router = express.Router()
-
 const itemContr = require('../controllers/items.contr')
 const itemCatContr = require('../controllers/item-cat.contr')
 const itemTypeContr = require('../controllers/item-type.contr')
+const {verify, isAdmin} = require('../controllers/auth.contr')
 
-router.post('/new', itemContr.new)
+router.post('/new', verify, itemContr.new)
+router.put('/:id/endoflife', itemContr.endOfLife)
 router.put('/:id', itemContr.update)
 router.delete('/:id', itemContr.delete)
 router.get('/all', itemContr.getAll)
+router.get('/history', itemContr.history)
 router.get('/:id', itemContr.get)
 
 router.post('/category/new', itemCatContr.new)

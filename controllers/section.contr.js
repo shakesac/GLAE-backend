@@ -81,7 +81,7 @@ exports.getSubs = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
     try {
         const thisSections = await Section.findAll()
-        if (!thisSections) return next(new AppError('Não existem secções.', 404, 'not found'))
+        if (thisSections.length < 1) return next(new AppError('Não existem secções.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: thisSections

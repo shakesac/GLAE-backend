@@ -1,8 +1,6 @@
 const AppError = require('../util/appError')
 const { Op } = require("sequelize");
-const helper = require('../util/contr.helpers')
 const Category = require('../models/item-cat.model')
-const ItemType = require('../models/item-type.model')
 
 exports.new = async (req, res, next) => {
     try {
@@ -71,7 +69,7 @@ exports.get = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
     try {
         const categories = await Category.findAll()
-        if (!categories) return next(new AppError('Não existem categorias.', 404, 'not found'))
+        if (categories.length < 1) return next(new AppError('Não existem categorias.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: categories

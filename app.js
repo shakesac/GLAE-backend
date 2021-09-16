@@ -74,7 +74,7 @@ ItemCategory.hasMany(ItemType, {foreignKey: 'categoryId' }, { onDelete: 'RESTRIC
 ItemType.belongsTo(ItemCategory, {foreignKey: 'categoryId' })
 
 ItemType.hasMany(Item, {foreignKey: 'typeId' }, { onDelete: 'RESTRICT' })
-Item.belongsTo(ItemType)
+Item.belongsTo(ItemType, {foreignKey: 'typeId' }, { onDelete: 'RESTRICT' })
 
 Item.hasMany(ItemInspection)
 ItemInspection.belongsTo(Item)
@@ -83,7 +83,7 @@ Lease.hasMany(LeaseStatus)
 LeaseStatus.belongsTo(Lease)
 
 User.hasMany(Item, { foreignKey: 'createdBy' })
-Item.belongsTo(User)
+Item.belongsTo(User, { foreignKey: 'createdBy' })
 
 Section.hasMany(Subsection, { foreignKey: 'sectionId' }, { onDelete: 'RESTRICT' })
 Subsection.belongsTo(Section)

@@ -18,7 +18,12 @@ const Item = sequelize.define('item', {
     },
     purchasedAt: {
         type: Sequelize.DATEONLY,
-    }    
+    },
+    endOfLife: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    } 
 },
 {
     timestamps: true,

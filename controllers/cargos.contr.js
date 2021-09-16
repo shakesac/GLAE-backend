@@ -53,7 +53,7 @@ exports.get = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
     try {
         const cargos = await Cargo.findAll()
-        if (!cargos) return next(new AppError('Não existem cargos.', 404, 'not found'))
+        if (cargos.length < 1) return next(new AppError('Não existem cargos.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: cargos

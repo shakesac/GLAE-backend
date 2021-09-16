@@ -70,7 +70,7 @@ exports.get = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
     try {
         const subsections = await Subsection.findAll()
-        if (!subsections) return next(new AppError('Não existem subsecções.', 404, 'not found'))
+        if (subsections.length < 1) return next(new AppError('Não existem subsecções.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: subsections
@@ -105,7 +105,7 @@ exports.getUsers = async (req, res, next) => {
         else {
             let options = {attributes: { exclude: ['password', 'updatedAt', 'subsectionId'] }}
             const users = await thisSubsection.getUsers(options)
-            if (!users) return next(new AppError('Não existem utilizadores associados a esta subsecção.', 404, 'not found'))
+            if (users.length < 1) return next(new AppError('Não existem utilizadores associados a esta subsecção.', 404, 'not found'))
             else return res.status(200).json({
                 status: 'success',
                 data: users
