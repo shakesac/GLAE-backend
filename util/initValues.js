@@ -17,11 +17,11 @@ exports.create = async () => {
         { role: 'user'},
     ])
     const sections = await Section.bulkCreate([
-        { id: 0, section: 'Agrupamento'},
-        { id: 1, section: 'Alcateia'},
-        { id: 2, section: 'Expedição'},
-        { id: 3, section: 'Comunidade'},
-        { id: 4, section: 'Clã'}
+        { code: 0, section: 'Agrupamento'},
+        { code: 1, section: 'Alcateia'},
+        { code: 2, section: 'Expedição'},
+        { code: 3, section: 'Comunidade'},
+        { code: 4, section: 'Clã'}
     ]).catch(err =>{ console.log(err.message) })
     const subsections = await Subsection.bulkCreate([
         { code: 1, subsection: 'Branco', sectionId: 1},
@@ -131,7 +131,7 @@ exports.create = async () => {
         },
         {
             name: 'Candeeiro',
-            description: 'C',
+            description: 'Candeiiro de lava',
             purchasedAt: '2021-05-09',
             typeId: 17,
             createdBy: 2

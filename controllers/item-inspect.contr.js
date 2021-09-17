@@ -41,7 +41,8 @@ exports.getAll = async (req, res, next) => {
     try {
         const item = await Item.findByPk(req.params.id)
         if (!item) return next(new AppError('O item indicado não existe.', 404, 'not found'))
-        const inspects = await item.getItem_inspections()
+        const options = {order: [['createdAt', 'DESC']]}
+        const inspects = await item.getItem_inspections(options)
         if (inspects.length < 1) return next(new AppError('Este item nunca foi inspeccionado.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",

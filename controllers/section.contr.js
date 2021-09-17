@@ -6,11 +6,11 @@ exports.new = async (req, res, next) => {
     try {
         const { id, section } = req.body
         const exists = await Section.findOne({ where: {
-            [Op.or]: [{ id }, { section }]
+            [Op.or]: [{ code }, { section }]
         }})
         if (exists) return next(new AppError('Já existe uma secção com o mesmo nome ou ID.', 400, 'failed'))
         else {
-            await Section.create({ id, section })
+            await Section.create({ code, section })
             return res.status(201).json({
                 status: 'success',
                 message: 'A secção foi criada com sucesso.'
@@ -24,19 +24,19 @@ exports.new = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
-        const { id, section } = req.body
-        if (!id) {
+        const { code, section } = req.body
+        if (!code) {
             const exists = await Section.findOne({ where: {section}})
             if (exists) return next(new AppError('Já existe uma secção com o mesmo nome.', 400, 'failed'))
         } else if (!section) {
-            const exists = await Section.findOne({ where: {id}})
-            if (exists) return next(new AppError('Já existe uma secção com o mesmo ID.', 400, 'failed'))
-        } else if (!id && !section) {
+            const exists = await Section.findOne({ where: {code}})
+            if (exists) return next(new AppError('Já existe uma secção com o mesmo código.', 400, 'failed'))
+        } else if (!code && !section) {
             return next(new AppError('Input inválido.', 400, 'failed'))
         } 
         const thisSection = await Section.findByPk(req.params.id)
         if (!thisSection) return next(new AppError('Secção indicada não existe.', 404, 'not found'))
-        await thisSection.update({ id, section })
+        await thisSection.update({ code, section })
         return res.status(200).json({
             status: 'success',
             message: 'A secção foi alterada com sucesso.'

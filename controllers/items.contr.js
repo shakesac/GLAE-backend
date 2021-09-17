@@ -61,10 +61,48 @@ exports.get = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        const options = { where: {endOfLife: false}, include: [{
-            model: ItemType,
-            attributes: ['type']
-        }] }
+        const { category } = req.query
+        let options
+        if (category) {
+            options = { where: {endOfLife: false}, include: [{
+                model: ItemType,
+                where: { categoryId: category },
+                attributes: ['type']
+            }] }
+        } else {
+            options = { where: {endOfLife: false}, include: [{
+                model: ItemType,
+                attributes: ['type']
+            }] }
+        }
+        const items = await Item.findAll(options)
+        if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
+        else return res.status(200).json({
+            status: "success",
+            data: items
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
+exports.getAllAvailable = async (req, res, next) => {
+    try {
+        const { category } = req.query
+        let options
+        if (category) {
+            options = { where: {endOfLife: false}, include: [{
+                model: ItemType,
+                where: { categoryId: category },
+                attributes: ['type']
+            }] }
+        } else {
+            options = { where: {endOfLife: false}, include: [{
+                model: ItemType,
+                attributes: ['type']
+            }] }
+        }
         const items = await Item.findAll(options)
         if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
         else return res.status(200).json({
