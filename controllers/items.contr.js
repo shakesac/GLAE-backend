@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const Item = require('../models/item.model')
 const ItemType = require('../models/item-type.model');
 const User = require('../models/user.model');
+const ItemCategory = require('../models/item-cat.model');
 
 exports.new = async (req, res, next) => {
     try {
@@ -67,12 +68,20 @@ exports.getAll = async (req, res, next) => {
             options = { where: {endOfLife: false}, include: [{
                 model: ItemType,
                 where: { categoryId: category },
-                attributes: ['type']
+                attributes: ['type', 'code'],
+                include: [{
+                    model: ItemCategory,
+                    attributes: ['code']
+                }]
             }] }
         } else {
             options = { where: {endOfLife: false}, include: [{
                 model: ItemType,
-                attributes: ['type']
+                attributes: ['type'],
+                include: [{
+                    model: ItemCategory,
+                    attributes: ['code']
+                }]
             }] }
         }
         const items = await Item.findAll(options)

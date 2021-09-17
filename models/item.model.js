@@ -23,7 +23,7 @@ const Item = sequelize.define('item', {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
-    } 
+    },
 },
 {
     timestamps: true,
