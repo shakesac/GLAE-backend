@@ -24,6 +24,7 @@ exports.new = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
+        console.log(req.body)
         const { code, section } = req.body
         if (!code) {
             const exists = await Section.findOne({ where: {section}})
