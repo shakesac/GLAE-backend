@@ -4,7 +4,7 @@ const Section = require('../models/section.model')
 
 exports.new = async (req, res, next) => {
     try {
-        const { id, section } = req.body
+        const { code, section } = req.body
         const exists = await Section.findOne({ where: {
             [Op.or]: [{ code }, { section }]
         }})
