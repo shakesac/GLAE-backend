@@ -27,12 +27,12 @@ exports.new = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
-        const { name, description } = req.body
+        const { name, description, typeId } = req.body
         const thisItem = await Item.findByPk(req.params.id)
         if (!thisItem) return next(new AppError('O item indicado não existe.', 404, 'not found'))
         else {
             await thisItem.update({
-                name, description
+                name, description, typeId
             })
             return res.status(200).json({
                 status: "success",
