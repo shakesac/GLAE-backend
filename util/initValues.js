@@ -1,14 +1,15 @@
-const { hashSync } = require("bcrypt");
-const LeaseStatus = require("../models/lease-status.model");
-const Section = require("../models/section.model");
+const { hashSync } = require("bcrypt")
+const LeaseStatus = require("../models/lease-status.model")
+const Section = require("../models/section.model")
 const Subsection = require('../models/subsection.model')
-const Role = require("../models/user-role.model");
-const User = require("../models/user.model");
+const Role = require("../models/user-role.model")
+const User = require("../models/user.model")
 const ItemsCategory = require('../models/item-cat.model')
 const ItemType = require('../models/item-type.model')
-const Cargos = require('../models/cargo.model');
-const Item = require("../models/item.model");
-const ItemInspection = require("../models/item-inspect.model");
+const Cargos = require('../models/cargo.model')
+const Item = require("../models/item.model")
+const ItemInspection = require("../models/item-inspect.model")
+const Lease = require("../models/lease.model")
 
 exports.create = async () => {
     const roles = await Role.bulkCreate([
