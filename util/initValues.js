@@ -6,7 +6,9 @@ const Role = require("../models/user-role.model");
 const User = require("../models/user.model");
 const ItemsCategory = require('../models/item-cat.model')
 const ItemType = require('../models/item-type.model')
-const Cargos = require('../models/cargo.model')
+const Cargos = require('../models/cargo.model');
+const Item = require("../models/item.model");
+const ItemInspection = require("../models/item-inspect.model");
 
 exports.create = async () => {
     const roles = await Role.bulkCreate([
@@ -75,9 +77,7 @@ exports.create = async () => {
         { code: 5, type: 'Capacete', categoryId: 7},
         { code: 6, type: 'Tecido', categoryId: 7},
         { code: 7, type: 'Máscara', categoryId: 7},
-
     ]).catch(err =>{ console.log(err) })
-
     //DEV - DADOS DE TESTE
     const users = await User.bulkCreate([
         {
@@ -108,10 +108,78 @@ exports.create = async () => {
             roleId: 2,
         }
     ]).catch(err =>{ console.log(err.message) })
-
     const cargos = await Cargos.bulkCreate([
         {
             cargo: 'Guarda-material'
         }
     ]).catch(err =>{ console.log(err.message) })
+    const items = await Item.bulkCreate([
+        {
+            name: 'Tenda grande',
+            description: 'Tenda com capacidade para 6 pessoas.',
+            purchasedAt: '2021-08-02',
+            typeId: 4,
+            createdBy: 2
+        },
+        {
+            name: 'Capacete',
+            description: 'Capacete de protecção.',
+            purchasedAt: '2021-05-09',
+            typeId: 25,
+            createdBy: 2
+        },
+        {
+            name: 'Candeeiro',
+            description: 'C',
+            purchasedAt: '2021-05-09',
+            typeId: 17,
+            createdBy: 2
+        },
+    ]).catch(err =>{ console.log(err.message) })
+    const itemInspect = await ItemInspection.bulkCreate([
+        {
+            description: "Está em excelente estado.",
+            itemId: '1'
+        },
+        {
+            description: 'Apresenta alguns buracos no chão. Fecho exterior não fecha por completo.',
+            itemId: '1'
+        }
+    ])
+    const leases = await Lease.bulkCreate([
+        {
+            start: "2021-08-17",
+            end: "2021-08-20",
+            items: [1, 3],
+            userId: '1'
+        },
+        {
+            start: '2021-08-17',
+            end: '2021-08-20',
+            items: [2],
+            userId: '3'
+        },
+    ])
+    const leaseStatus = await LeaseStatus.bulkCreate([
+        {
+            status: 'pending',
+            isActive: false,
+            leaseId: 2
+        },
+        {
+            status: 'accepted',
+            isActive: false,
+            leaseId: 2
+        },
+        {
+            status: 'inProgress',
+            isActive: true,
+            leaseId: 2
+        },
+        {
+            status: 'pending',
+            isActive: true,
+            leaseId: 1
+        }
+    ])
 }

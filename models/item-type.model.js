@@ -15,6 +15,12 @@ const ItemType = sequelize.define('item_type', {
         type: Sequelize.STRING(200),
         allowNull: false,
     },
+    fullCode: {
+        type: Sequelize.VIRTUAL,
+        get() {
+            return this.categoryId + '' + this.code
+        }
+    },
 },
 {
     timestamps: true,
