@@ -48,7 +48,15 @@ exports.update = async (req, res, next) => {
 exports.get = async (req, res, next) => {
     //const options = {include: ItemType}
     try {
-        const thisItem = await Item.findByPk(req.params.id)
+        const options = {include: [{
+            model: ItemType,
+            attributes: ['type'],
+            include: [{
+                model: ItemCategory,
+                attributes: ['id','code']
+            }]
+        }]}
+        const thisItem = await Item.findByPk(req.params.id, options)
         if (!thisItem) return next(new AppError('O item indicado não existe.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
@@ -71,18 +79,18 @@ exports.getAll = async (req, res, next) => {
                 attributes: ['type', 'code'],
                 include: [{
                     model: ItemCategory,
-                    attributes: ['code']
+                    attributes: ['id','code']
                 }]
-            }] }
+            }]}
         } else {
             options = { where: {endOfLife: false}, include: [{
                 model: ItemType,
                 attributes: ['type'],
                 include: [{
                     model: ItemCategory,
-                    attributes: ['code']
+                    attributes: ['id','code']
                 }]
-            }] }
+            }]}
         }
         const items = await Item.findAll(options)
         if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
