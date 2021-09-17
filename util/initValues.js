@@ -170,6 +170,7 @@ exports.create = async () => {
         {
             status: 'accepted',
             isActive: false,
+            comment: 'Cuidado com o candeeiro.',
             leaseId: 2
         },
         {
