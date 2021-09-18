@@ -11,7 +11,7 @@ router.put('/:id/endoflife', itemContr.endOfLife)
 router.put('/:id', itemContr.update)
 router.delete('/:id', itemContr.delete)
 router.get('/all/available', itemContr.getAvailable)
-router.get('/all', itemContr.getAll)
+router.get('/all', verify, itemContr.getAll)
 router.get('/history', itemContr.history)
 router.get('/:id', itemContr.get)
 
