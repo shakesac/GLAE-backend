@@ -4,6 +4,7 @@ const Item = require('../models/item.model')
 const ItemType = require('../models/item-type.model');
 const User = require('../models/user.model');
 const ItemCategory = require('../models/item-cat.model');
+const Lease = require('../models/lease.model')
 
 exports.new = async (req, res, next) => {
     try {
@@ -104,8 +105,11 @@ exports.getAll = async (req, res, next) => {
     }
 }
 
-exports.getAllAvailable = async (req, res, next) => {
+exports.getAvailable = async (req, res, next) => {
     try {
+        //const {start, end} = req.body
+        const start = '2021-09-17'
+        const end = '2021-09-20'
         const { category } = req.query
         let options
         if (category) {
@@ -115,10 +119,28 @@ exports.getAllAvailable = async (req, res, next) => {
                 attributes: ['type']
             }] }
         } else {
-            options = { where: {endOfLife: false}, include: [{
-                model: ItemType,
-                attributes: ['type']
-            }] }
+            options = {
+                where: {endOfLife: false},
+                include: [{
+                    model: ItemType,
+                    attributes: ['type']
+                },{
+                    model: Lease,
+                    where: {
+                        [Op.not]: {
+                            [Op.and]: [{
+                                start: {
+                                    [Op.gte]: end
+                                },
+                            },{
+                                end: {
+                                    [Op.lte]: start
+                                }
+                            }]
+                        }
+                    }
+                }]
+            }
         }
         const items = await Item.findAll(options)
         if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))

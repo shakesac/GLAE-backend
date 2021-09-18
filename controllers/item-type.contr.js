@@ -72,14 +72,30 @@ exports.get = async (req, res, next) => {
     }
 }
 
-exports.getAll = async (req, res) => {
+exports.getAll = async (req, res, next) => {
     //const options = {include: ItemCategory, exclude: ['itemCategoryId']}
     try {
-        const options = {
-            include: [{
-                model: ItemCategory,
-                attributes: ['category']
-            }]
+        const { category } = req.query
+        let options
+        if (category) {
+            options = {
+                where: {
+                    categoryId: category
+                },
+                include: [{
+                    model: ItemCategory,
+                    attributes: ['category']
+                }],
+                order: ['categoryId', 'code']
+            }
+        } else {
+            options = {
+                include: [{
+                    model: ItemCategory,
+                    attributes: ['category']
+                }],
+                order: ['categoryId', 'code']
+            }
         }
         const types = await ItemType.findAll(options)
         if (types.length < 1) return next(new AppError('Não existem tipos de item.', 404, 'not found'))
