@@ -10,6 +10,7 @@ router.get('/all', leaseContr.getAll)
 router.delete('/:id/removeItem/:iid', leaseContr.removeItem)
 router.put('/:id/status', leaseContr.updateStatus)
 router.get('/:id/items', leaseContr.getItems)
+router.get('/:id/status', leaseContr.getStatusHistory)
 
 router.get('/:id', leaseContr.get)
 

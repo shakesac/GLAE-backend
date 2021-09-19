@@ -229,6 +229,25 @@ exports.updateStatus = async (req, res, next) => {
     }
 }
 
+exports.getStatusHistory = async (req, res, next) => {
+    try {
+        const lease = await Lease.findByPk(req.params.id)
+        if (!lease) return next(new AppError('O emprestimo indicado não existe.'))
+        const options = {
+            order: [['createdAt', 'DESC']]
+        }
+        const status = await lease.getLease_statuses(options)
+        console.log(status)
+        return res.status(200).json({
+            status: 'success',
+            data: status
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error'))
+    }
+}
+
 const verifyStatus = async (lease) => {
     let valid = false
     const leaseStatus = await lease.getLease_statuses({where: {isActive:true}})
