@@ -69,11 +69,27 @@ exports.get = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        const options = {
-            include: [{
-                model: Section,
-                attributes: ['section']
-            }]
+        const { section } = req.query
+        let options
+        if (section) {
+            options = {
+                where: {
+                    sectionId: section
+                },
+                include: [{
+                    model: Section,
+                    attributes: ['section']
+                }],
+                order: ['sectionId', 'code']
+            }
+        } else {
+            options = {
+                include: [{
+                    model: Section,
+                    attributes: ['section']
+                }],
+                order: ['sectionId', 'code']
+            }
         }
         const subsections = await Subsection.findAll(options)
         if (subsections.length < 1) return next(new AppError('Não existem subsecções.', 404, 'not found'))
