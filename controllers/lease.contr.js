@@ -237,7 +237,6 @@ exports.getStatusHistory = async (req, res, next) => {
             order: [['createdAt', 'DESC']]
         }
         const status = await lease.getLease_statuses(options)
-        console.log(status)
         return res.status(200).json({
             status: 'success',
             data: status
