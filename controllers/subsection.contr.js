@@ -13,7 +13,7 @@ exports.new = async (req, res, next) => {
             [Op.and]: [{ code }, { subsection }, { sectionId }]
         }})
         if (exists) return next(new AppError('Já existe uma subsecção com as mesmas caracteristicas.', 400, 'failed'))
-        const thisSubsection = await section.createSubsection({ id, subsection })
+        const thisSubsection = await section.createSubsection({ code, subsection })
         return res.status(201).json({
             status: 'success',
             message: `A subsecção ${thisSubsection.subsection} foi criada.`
@@ -39,7 +39,7 @@ exports.update = async (req, res, next) => {
                 { code }, { sectionId: thisSubsection.sectionId }
             ]}})
             if (exists) return next(new AppError('Já existe uma subsecção com o mesmo ID.', 400, 'failed'))
-        } else if (!id && !subsection) {
+        } else if (!code && !subsection) {
             return next(new AppError('Input inválido.', 400, 'failed'))
         }
         await thisSubsection.update({ code, subsection })
