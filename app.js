@@ -113,7 +113,7 @@ app.use((req, res, next) => {
     const err = new Error
     res.status(404).json({
         status: 'failed',
-        message: 'Endpoint not found.'
+        message: 'Endpoint não encontrado.'
     })
 })
 
