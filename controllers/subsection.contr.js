@@ -26,7 +26,7 @@ exports.new = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
-        const { code, subsection } = req.body
+        const { code, subsection, sectionId } = req.body
         const thisSubsection = await Subsection.findByPk(req.params.id)
         if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 400, 'failed'))
         if (!code) {
@@ -42,7 +42,7 @@ exports.update = async (req, res, next) => {
         } else if (!code && !subsection) {
             return next(new AppError('Input inválido.', 400, 'failed'))
         }
-        await thisSubsection.update({ code, subsection })
+        await thisSubsection.update({ code, subsection, sectionId })
         return res.status(200).json({
             status: 'success',
             message: 'A secção foi alterada com sucesso.'
