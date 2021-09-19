@@ -76,7 +76,21 @@ exports.pwd = async (req, res, next) => {
 
 exports.get = async (req, res, next) => {
     try {
-        let options = {attributes: { exclude: ['password'] }}
+        let options = {
+            include: [{
+                model: Cargo,
+                attributes: ['cargo']
+            },
+            {
+                model: Subsection,
+                attributes: ['code','subsection'],
+                include: [{
+                    model: Section,
+                    attributes: ['code','section']
+                }]
+            }],
+            attributes: { exclude: ['password']}
+        }
         const user = await User.findByPk(req.params.id, options)
         console.log(user)
         if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
