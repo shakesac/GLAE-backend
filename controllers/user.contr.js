@@ -6,6 +6,7 @@ const Cargo = require('../models/cargo.model')
 const Role = require('../models/user-role.model')
 const Lease = require('../models/lease.model')
 const Subsection = require('../models/subsection.model')
+const Section = require('../models/section.model')
 
 exports.new = async (req, res, next) => {
     try {
@@ -101,18 +102,34 @@ exports.getAll = async (req, res, next) => {
             options = {
                 where: {subsectionId: subsection},
                 include: [{
-                model: Cargo,
-                attributes: ['cargo']
-            }],
+                    model: Cargo,
+                    attributes: ['cargo']
+                },
+                {
+                    model: Subsection,
+                    attributes: ['code','subsection'],
+                    include: [{
+                        model: Section,
+                        attributes: ['code','section']
+                    }]
+                }],
             attributes: { exclude: ['password']},
             order: [['firstName'],['lastName'],['createdAt']],
         }
         } else if (!subsection && limit) {
             options = {
                 include: [{
-                model: Cargo,
-                attributes: ['cargo']
-            }],
+                    model: Cargo,
+                    attributes: ['cargo']
+                },
+                {
+                    model: Subsection,
+                    attributes: ['code','subsection'],
+                    include: [{
+                        model: Section,
+                        attributes: ['code','section']
+                    }]
+                }],
             attributes: { exclude: ['password']},
             limit: parseInt(limit, 10),
             order: [['firstName'],['lastName'],['createdAt']],
@@ -121,9 +138,17 @@ exports.getAll = async (req, res, next) => {
             options = {
                 where: {subsectionId: subsection},
                 include: [{
-                model: Cargo,
-                attributes: ['cargo']
-            }],
+                    model: Cargo,
+                    attributes: ['cargo']
+                },
+                {
+                    model: Subsection,
+                    attributes: ['code','subsection'],
+                    include: [{
+                        model: Section,
+                        attributes: ['code','section']
+                    }]
+                }],
             attributes: { exclude: ['password']},
             limit: parseInt(limit, 10),
             order: [['firstName'],['lastName'],['createdAt']],
@@ -131,9 +156,17 @@ exports.getAll = async (req, res, next) => {
         } else {
             options = {
                 include: [{
-                model: Cargo,
-                attributes: ['cargo']
-            }],
+                    model: Cargo,
+                    attributes: ['cargo']
+                },
+                {
+                    model: Subsection,
+                    attributes: ['code','subsection'],
+                    include: [{
+                        model: Section,
+                        attributes: ['code','section']
+                    }]
+                }],
             attributes: { exclude: ['password']},
             order: [['firstName'],['lastName'],['createdAt']]
         }}
