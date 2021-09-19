@@ -130,6 +130,26 @@ exports.getAll = async (req, res, next) => {
     }
 }
 
+exports.getItems = async (req, res, next) => {
+    try {
+        const lease = await Lease.findByPk(req.params.id)
+        if (!lease) return next(new AppError('O emprestimo indicado não existe.', 404, 'not found'))
+        else {
+            const options = {order: ['typeId', 'createdAt']}
+            const items = await lease.getItems()
+            console.log(items)
+            if (items.length < 1) return next(new AppError('O emprestimo não tem material associado.', 404, 'not found'))
+            return res.status(200).json({
+                status: 'success',
+                data: items
+            })
+        }
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error')) 
+    }
+}
+
 exports.get = async (req, res, next) => {
     try {
         const lease = await Lease.findByPk(req.params.id)

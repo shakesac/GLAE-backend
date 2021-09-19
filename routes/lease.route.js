@@ -8,6 +8,7 @@ router.post('/new', leaseContr.new)
 router.put('/update/:id', leaseContr.update)
 router.get('/all', leaseContr.getAll)
 router.put('/:id/status', leaseContr.updateStatus)
+router.get('/:id/items', leaseContr.getItems)
 
 router.get('/:id', leaseContr.get)
 
