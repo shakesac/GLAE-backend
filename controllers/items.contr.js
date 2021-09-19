@@ -11,7 +11,7 @@ exports.new = async (req, res, next) => {
         const {name, description, purchasedAt, typeId} = req.body
         const user = await User.findByPk(req.user.id)
         const type = await ItemType.findByPk(typeId)
-        if (!type) return next(new AppError('Não existe nenhum tipo de item com o ID indicado.', 404, 'not found'))
+        if (!type) return next(new AppError('Não existe nenhum tipo de material com o ID indicado.', 404, 'not found'))
         const thisItem = await type.createItem({
             name, description, purchasedAt
         })

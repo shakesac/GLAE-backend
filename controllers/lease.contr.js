@@ -150,6 +150,27 @@ exports.getItems = async (req, res, next) => {
     }
 }
 
+exports.removeItem = async (req, res, next) => {
+    try {
+        const lease = await Lease.findByPk(req.params.id)
+        if (!lease) return next(new AppError('O emprestimo indicado não existe.', 404, 'not found'))
+        const item = await Item.findByPk(req.params.iid)
+        if (!item) return next(new AppError('O item indicado não existe.', 404, 'not found'))
+        const thisItem = await lease.hasItem(item)
+        if (!thisItem) return next(new AppError('O item indicado não está neste emprestimo.', 404, 'not found'))
+        const count = await lease.countItems()
+        if (count < 2) return next(new AppError('O emprestimo tem de conter pelo menos um artigo.', 400, 'failed'))
+        await lease.removeItem(item)
+        return res.status(200).json({
+            status: 'success',
+            message: 'O item foi removido deste emprestimo.'
+        })
+    } catch(err) {
+        console.log(err)
+        return next(new AppError(err.toString(), 500, 'error')) 
+    }
+}
+
 exports.get = async (req, res, next) => {
     try {
         const lease = await Lease.findByPk(req.params.id)
