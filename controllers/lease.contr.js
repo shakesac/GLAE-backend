@@ -46,9 +46,8 @@ exports.update = async (req, res) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        const {page, status} = req.query
+        const {page, status, limit} = req.query
         let options
-        const limit = 10
         if (status && (!page || !limit)) {
             if (!availableStatus.includes(status) && !status) {
                 return next(new AppError('O estado indicado é inválido.', 400, 'failed'))
@@ -56,19 +55,32 @@ exports.getAll = async (req, res, next) => {
             options = {
             include: [{
                 model: LeaseStatus,
+                attributes: ['status'],
                 where: {
                     status: status,
                     isActive: true
                 }
+            },{
+                model: User,
+                attributes: ['firstName', 'lastName','fullName']
             }],
             order: [['createdAt', 'DESC']]
         }}
         else if (!status && (page && limit)) {
             const offset = page * limit
-            console.log(offset, page, limit)
             options = {
+                include: [{
+                    model: LeaseStatus,
+                    attributes: ['status'],
+                    where: {
+                        isActive: true
+                    }
+                },{
+                    model: User,
+                    attributes: ['firstName', 'lastName','fullName']
+                }],
                 offset: offset,
-                limit: limit,
+                limit: parseInt(limit, 10),
                 order: [['createdAt', 'DESC']],
             }
         } else if (status && (page && limit)) {
@@ -83,14 +95,28 @@ exports.getAll = async (req, res, next) => {
                         status: status,
                         isActive: true
                     }
+                },{
+                    model: User,
+                    attributes: ['firstName', 'lastName','fullName']
                 }],
-                limit: limit,
+                limit: parseInt(limit, 10),
                 offset: offset,
                 order: [['createdAt', 'DESC']],
             }
         }
         else {
-            options = {limit: limit, order: [['createdAt', 'DESC']]}
+            options = {
+                include: [{
+                    model: LeaseStatus,
+                    attributes: ['status'],
+                    where: {
+                        isActive: true
+                    }
+                },{
+                    model: User,
+                    attributes: ['firstName', 'lastName','fullName']
+                }],
+                order: [['createdAt', 'DESC']]}
         }
         const leases = await Lease.findAll(options)
         if (leases.length < 1) return next(new AppError('Não existem emprestimos.', 404, 'not found'))
