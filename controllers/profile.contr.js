@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT)
 const User = require('../models/user.model')
+const Subsection = require('../models/subsection.model')
+const Section = require('../models/section.model')
 
 const generateToken = (user) => {
     return jwt.sign({
@@ -18,9 +20,19 @@ const generateToken = (user) => {
 
 exports.get = async (req, res, next) => {
     try {
+        const options = {
+            include: [{
+                model: Subsection,
+                attributes: ['sectionId'],
+            }],
+            attributes: {
+                exclude: ['password']
+            }
+        }
+        const user = await User.findByPk(req.user.id, options)
         return res.status(200).json({
             status: 'success',
-            data: req.user
+            data: user
         })
     } catch(err) {
         console.log(err)
@@ -30,10 +42,10 @@ exports.get = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
-        const {firstName, lastName, address, phoneNumber} = req.body
+        const {firstName, lastName, address, phoneNumber, subsectionId} = req.body
         const user = req.user
         const result = await User.update({
-            firstName, lastName, address, phoneNumber
+            firstName, lastName, address, phoneNumber, subsectionId
         }, {where: { id: user.id }})
         if (result[0] > 0) {
             return res.status(200).json({
