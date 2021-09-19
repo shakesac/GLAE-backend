@@ -10,7 +10,7 @@ const Section = require('../models/section.model')
 
 exports.new = async (req, res, next) => {
     try {
-        const {firstName, lastName, email, address, phoneNumber, password, confirmPassword} = req.body
+        const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId, cargoId, roleId} = req.body
         const user = await User.findOne({ where: { email }})
         if (user) return next(new AppError('Já existe um utilizador com o email indicado.', 400, 'failed'))
         if (password !== confirmPassword) {
@@ -23,7 +23,10 @@ exports.new = async (req, res, next) => {
             email,
             address,
             phoneNumber,
-            password:hashedPw
+            password:hashedPw,
+            subsectionId,
+            cargoId,
+            roleId
         })
         return res.status(201).json({
             status: 'success',
