@@ -152,8 +152,19 @@ exports.getItems = async (req, res, next) => {
 
 exports.removeItem = async (req, res, next) => {
     try {
-        const lease = await Lease.findByPk(req.params.id)
+        const options = {
+            include: [{
+                model: LeaseStatus,
+                where: {
+                    isActive: true
+                },
+                attributes: ['status']
+            }]
+        }
+        const lease = await Lease.findByPk(req.params.id, options)
         if (!lease) return next(new AppError('O emprestimo indicado não existe.', 404, 'not found'))
+        const valid = await verifyStatus(lease)
+        if (!valid) return next(new AppError('Não é possível alterar emprestimos arquivados ou em progresso.', 400, 'not found'))
         const item = await Item.findByPk(req.params.iid)
         if (!item) return next(new AppError('O item indicado não existe.', 404, 'not found'))
         const thisItem = await lease.hasItem(item)
@@ -216,4 +227,30 @@ exports.updateStatus = async (req, res, next) => {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))
     }
+}
+
+const verifyStatus = async (lease) => {
+    let valid = false
+    const leaseStatus = await lease.getLease_statuses({where: {isActive:true}})
+    switch(leaseStatus[0].status) {
+        case 'accepted':
+            valid = true
+            break
+        case 'inProgress':
+            valid = false
+            break
+        case 'canceled':
+            valid = false
+            break
+        case 'refused':
+            valid = false
+            break
+        case 'pending':
+            valid = true
+            break
+        case 'returned':
+            valid = false
+            break
+    }
+    return valid
 }
