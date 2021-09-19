@@ -37,11 +37,11 @@ exports.new = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
-        const {firstName, lastName, address, phoneNumber} = req.body
+        const {firstName, lastName, address, phoneNumber, subsectionId, cargoId, roleId} = req.body
         const user = await User.findByPk(req.params.id)
         if (!user) return next(new AppError('O utilizador indicado não existe.', 404, 'not found'))
         else {
-            user.update({firstName, lastName, address, phoneNumber})
+            user.update({firstName, lastName, address, phoneNumber, subsectionId, cargoId, roleId})
             return res.status(200).json({
                 status: 'success',
                 message: 'O utilizador foi alterado com sucesso.'
