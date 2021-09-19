@@ -86,7 +86,7 @@ exports.get = async (req, res, next) => {
                 attributes: ['code','subsection'],
                 include: [{
                     model: Section,
-                    attributes: ['code','section']
+                    attributes: ['id','code','section']
                 }]
             }],
             attributes: { exclude: ['password']}
@@ -124,7 +124,7 @@ exports.getAll = async (req, res, next) => {
                     attributes: ['code','subsection'],
                     include: [{
                         model: Section,
-                        attributes: ['code','section']
+                        attributes: ['id','code','section']
                     }]
                 }],
             attributes: { exclude: ['password']},
@@ -141,7 +141,7 @@ exports.getAll = async (req, res, next) => {
                     attributes: ['code','subsection'],
                     include: [{
                         model: Section,
-                        attributes: ['code','section']
+                        attributes: ['id','code','section']
                     }]
                 }],
             attributes: { exclude: ['password']},
@@ -160,7 +160,7 @@ exports.getAll = async (req, res, next) => {
                     attributes: ['code','subsection'],
                     include: [{
                         model: Section,
-                        attributes: ['code','section']
+                        attributes: ['id','code','section']
                     }]
                 }],
             attributes: { exclude: ['password']},
@@ -178,7 +178,7 @@ exports.getAll = async (req, res, next) => {
                     attributes: ['code','subsection'],
                     include: [{
                         model: Section,
-                        attributes: ['code','section']
+                        attributes: ['id','code','section']
                     }]
                 }],
             attributes: { exclude: ['password']},
