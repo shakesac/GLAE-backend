@@ -56,7 +56,7 @@ exports.update = async (req, res, next) => {
 exports.get = async (req, res, next) => {
     try {
         const thisSubsection = await Subsection.findByPk(req.params.id)
-        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        if (!thisSubsection) return next(new AppError('O grupo indicado não existe.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: thisSubsection

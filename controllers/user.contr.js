@@ -5,6 +5,7 @@ const User = require('../models/user.model')
 const Cargo = require('../models/cargo.model')
 const Role = require('../models/user-role.model')
 const Lease = require('../models/lease.model')
+const Subsection = require('../models/subsection.model')
 
 exports.new = async (req, res, next) => {
     try {
@@ -86,18 +87,56 @@ exports.get = async (req, res, next) => {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))
     }
-    //let options = { include: Subsection, attributes: { exclude: ['password'] }}
 }
 
 exports.getAll = async (req, res, next) => {
     try {
-        let options = {
-            include: [{
-            model: Cargo,
-            attributes: ['cargo']
-        }],
-        attributes: { exclude: ['password']
-    }}
+        const { subsection, limit } = req.query
+        if (subsection) {
+            const exists = await Subsection.findByPk(subsection)
+            if (!exists) return next(new AppError('O grupo indicado não existe.', 404, 'not found'))
+        }
+        let options
+        if (subsection && !limit) {
+            options = {
+                where: {subsectionId: subsection},
+                include: [{
+                model: Cargo,
+                attributes: ['cargo']
+            }],
+            attributes: { exclude: ['password']},
+            order: [['firstName'],['lastName'],['createdAt']],
+        }
+        } else if (!subsection && limit) {
+            options = {
+                include: [{
+                model: Cargo,
+                attributes: ['cargo']
+            }],
+            attributes: { exclude: ['password']},
+            limit: parseInt(limit, 10),
+            order: [['firstName'],['lastName'],['createdAt']],
+        }
+        } else if (subsection && limit) {
+            options = {
+                where: {subsectionId: subsection},
+                include: [{
+                model: Cargo,
+                attributes: ['cargo']
+            }],
+            attributes: { exclude: ['password']},
+            limit: parseInt(limit, 10),
+            order: [['firstName'],['lastName'],['createdAt']],
+        }
+        } else {
+            options = {
+                include: [{
+                model: Cargo,
+                attributes: ['cargo']
+            }],
+            attributes: { exclude: ['password']},
+            order: [['firstName'],['lastName'],['createdAt']]
+        }}
         const users = await User.findAll(options)
         if (!users) return next(new AppError('Não existem utilizadores.', 404, 'not found'))
         else return res.status(200).json({
