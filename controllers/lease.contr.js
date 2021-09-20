@@ -232,7 +232,7 @@ exports.updateStatus = async (req, res, next) => {
 exports.getStatusHistory = async (req, res, next) => {
     try {
         const lease = await Lease.findByPk(req.params.id)
-        if (!lease) return next(new AppError('O emprestimo indicado não existe.'))
+        if (!lease) return next(new AppError('O emprestimo indicado não existe.', 404, 'not found'))
         const options = {
             order: [['createdAt', 'DESC']]
         }
