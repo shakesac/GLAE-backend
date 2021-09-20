@@ -107,9 +107,9 @@ exports.getAll = async (req, res, next) => {
 
 exports.getAvailable = async (req, res, next) => {
     try {
-        //const {start, end} = req.query
-        const start = '2021-08-16'
-        const end = '2021-08-19'
+        const {start, end} = req.query
+        /*const start = '2021-08-16'
+        const end = '2021-08-19'*/
         if (!start || !end) return next(new AppError('É necessário indicar a data desejada.', 400, 'error'))
         const { category } = req.query
         let options
