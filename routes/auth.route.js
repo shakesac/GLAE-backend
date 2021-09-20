@@ -13,5 +13,6 @@ router.get(prefix, verify, profileContr.get)
 router.put(prefix, verify, profileContr.update)
 router.delete(prefix, verify, profileContr.delete)
 router.post(prefix+'/pwd', verify, profileContr.pwd)
+router.get(prefix+'/leases', verify, profileContr.getLeases)
 
 module.exports = router
