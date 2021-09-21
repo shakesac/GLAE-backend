@@ -189,13 +189,13 @@ exports.removeUser = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
     try {
         const thisSubsection = await Subsection.findByPk(req.params.id)
-        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
-        else if (await thisSubsection.countUsers()) return next(new AppError('Existem utilizadores associados a esta subsecção.', 400, 'failed'))
+        if (!thisSubsection) return next(new AppError('O grupo indicado não existe.', 404, 'not found'))
+        else if (await thisSubsection.countUsers()) return next(new AppError('Existem utilizadores associados a este grupo.', 400, 'failed'))
         else {
             thisSubsection.destroy()
             return res.status(200).json({
                 status: 'success',
-                message: 'A subsecção foi eliminada.'
+                message: 'O grupo foi eliminado.'
             })
         }
     } catch(err) {
