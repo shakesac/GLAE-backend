@@ -11,7 +11,7 @@ exports.new = async (req, res, next) => {
         if (!category) return next(new AppError('Não existe nenhuma categoria com o código indicado.', 404, 'not found'))
         const exists = await ItemType.findOne({ where: {
             [Op.or]: {
-                [Op.or]: [{ code }, { type }]
+                [Op.and]: [{ code }, { type }]
             }
         }})
         if (exists) return next(new AppError('Já existe um tipo de item com as mesmas caracteristicas.', 400, 'failed'))
