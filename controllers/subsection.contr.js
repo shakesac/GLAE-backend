@@ -22,7 +22,7 @@ exports.new = async (req, res, next) => {
         const thisSubsection = await section.createSubsection({ code, subsection })
         return res.status(201).json({
             status: 'success',
-            message: `A subsecção ${thisSubsection.subsection} foi criada.`
+            message: `O grupo ${thisSubsection.subsection} foi criado com sucesso.`
         })
     } catch(err) {
         console.log(err)
@@ -47,7 +47,7 @@ exports.update = async (req, res, next) => {
         await thisSubsection.update({ code, subsection, sectionId })
         return res.status(200).json({
             status: 'success',
-            message: 'A secção foi alterada com sucesso.'
+            message: 'O grupo foi alterado com sucesso.'
         })
     } catch(err) {
         console.log(err)
