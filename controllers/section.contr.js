@@ -120,7 +120,7 @@ exports.delete = async (req, res, next) => {
     try {
         const thisSection = await Section.findByPk(req.params.id)
         if (!thisSection) return next(new AppError('A secção indicada não existe.', 404, 'not found'))
-        else if (await thisSection.countSubsections()) return next(new AppError('Existem subsecções dependentes desta secção.', 400, 'failed'))
+        else if (await thisSection.countSubsections()) return next(new AppError('Existem grupos dependentes desta secção.', 400, 'failed'))
         else {
             thisSection.destroy()
             return res.status(200).json({

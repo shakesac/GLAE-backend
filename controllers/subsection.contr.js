@@ -30,13 +30,23 @@ exports.update = async (req, res, next) => {
         const thisSubsection = await Subsection.findByPk(req.params.id)
         if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 400, 'failed'))
         if (!code) {
-            const exists = await Subsection.findOne({ where: { [Op.and]: [
-                {subsection}, { sectionId: thisSubsection.sectionId }
+            const exists = await Subsection.findOne({ where: {
+                id: {
+                    [Op.ne]: req.params.id
+                },
+                [Op.and]: [
+                    {subsection},
+                    { sectionId: thisSubsection.sectionId }
             ]}})
             if (exists) return next(new AppError('Já existe uma subsecção com o mesmo nome.', 400, 'failed'))
         } else if (!subsection) {
-            const exists = await Subsection.findOne({ where: { [Op.and]: [
-                { code }, { sectionId: thisSubsection.sectionId }
+            const exists = await Subsection.findOne({ where: {
+                id: {
+                    [Op.ne]: req.params.id
+                },
+                [Op.and]: [
+                    { code },
+                    { sectionId: thisSubsection.sectionId }
             ]}})
             if (exists) return next(new AppError('Já existe uma subsecção com o mesmo ID.', 400, 'failed'))
         } else if (!code && !subsection) {
