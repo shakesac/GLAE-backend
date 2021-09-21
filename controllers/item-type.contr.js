@@ -26,24 +26,20 @@ exports.new = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
-        const { code, type } = req.body
+        const { code, type, categoryId } = req.body
         const thisType = await ItemType.findByPk(req.params.id)
         if (!thisType) return next(new AppError('O tipo de item indicado não existe.', 404, 'not found'))
-        const categoryId = thisType.categoryId
+        const catId = categoryId || thisType.categoryId
         const exists = await ItemType.findOne({ where: {
             id: {
                 [Op.ne]: req.params.id
             },
-            [Op.or]: {
-                [Op.and]: [{ code }, { type }, { categoryId }],
-                [Op.and]: [{ code }, { categoryId }],
-                [Op.and]: [{ type }, { categoryId }]
-            }
+            [Op.and]: [{ code }, { categoryId: catId }]
         }})
         if (exists) return next(new AppError('Existe um tipo de item com as mesmas caracteristicas.', 400, 'failed'))
         else {
             await thisType.update({
-                code, type
+                code, type, categoryId: catId
             })
             return res.status(200).json({
                 status: "success",
