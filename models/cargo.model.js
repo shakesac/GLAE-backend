@@ -9,7 +9,7 @@ const Cargo = sequelize.define('cargo', {
         primaryKey: true
     },
     cargo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(60),
         allowNull: false,
         unique: true
     }
