@@ -17,7 +17,6 @@ exports.create = async () => {
         { role: 'user'},
     ])
     const sections = await Section.bulkCreate([
-        { code: 0, section: 'Agrupamento'},
         { code: 1, section: 'Alcateia'},
         { code: 2, section: 'Expedição'},
         { code: 3, section: 'Comunidade'},
@@ -91,8 +90,8 @@ exports.create = async () => {
             roleId: 2,
         },
         {
-            firstName: 'Admin',
-            lastName: 'Temp',
+            firstName: 'Administrador',
+            lastName: '',
             email: 'admin@1.pt',
             address: 'Lisboa',
             phoneNumber: '+351930000000', 
@@ -112,6 +111,9 @@ exports.create = async () => {
     const cargos = await Cargos.bulkCreate([
         {
             cargo: 'Guarda-material'
+        },
+        {
+            cargo: 'Animador'
         }
     ]).catch(err =>{ console.log(err.message) })
     const items = await Item.bulkCreate([
@@ -125,14 +127,14 @@ exports.create = async () => {
         {
             name: 'Capacete',
             description: 'Capacete de protecção.',
-            purchasedAt: '2021-05-09',
+            purchasedAt: '2021-07-09',
             typeId: 25,
             createdBy: 2
         },
         {
             name: 'Candeeiro',
-            description: 'Candeiiro de lava',
-            purchasedAt: '2021-05-09',
+            description: 'Candeiro de lava',
+            purchasedAt: '2021-05-28',
             typeId: 17,
             createdBy: 2
         },
