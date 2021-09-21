@@ -102,7 +102,7 @@ exports.delete = async (req, res, next) => {
     try {
         const thisCategory = await Category.findByPk(req.params.id)
         if (!thisCategory) return next(new AppError('A categoria indicada não existe.', 404, 'not found'))
-        else if (await thisCategory.countItem_types()) return next(new AppError('Existem tipos de item dependentes desta categoria.', 400, 'failed'))
+        else if (await thisCategory.countItem_types()) return next(new AppError('Existem tipos de material dependentes desta categoria.', 400, 'failed'))
         else {
             thisCategory.destroy()
             return res.status(200).json({
