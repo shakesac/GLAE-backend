@@ -16,7 +16,7 @@ exports.new = async (req, res, next) => {
         const thisType = await category.createItem_type({ code, type })
         return res.status(201).json({
             status: 'success',
-            message: `O tipo de item ${thisType.type} foi criada.`
+            message: `O tipo de item ${thisType.type} foi criado.`
         })
     } catch(err) {
         console.log(err)
