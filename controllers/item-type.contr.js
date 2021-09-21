@@ -31,6 +31,9 @@ exports.update = async (req, res, next) => {
         if (!thisType) return next(new AppError('O tipo de item indicado não existe.', 404, 'not found'))
         const categoryId = thisType.categoryId
         const exists = await ItemType.findOne({ where: {
+            id: {
+                [Op.ne]: req.params.id
+            },
             [Op.or]: {
                 [Op.and]: [{ code }, { type }, { categoryId }],
                 [Op.and]: [{ code }, { categoryId }],
