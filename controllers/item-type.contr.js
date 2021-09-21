@@ -10,9 +10,7 @@ exports.new = async (req, res, next) => {
         const category = await ItemCategory.findByPk(categoryId)
         if (!category) return next(new AppError('Não existe nenhuma categoria com o código indicado.', 404, 'not found'))
         const exists = await ItemType.findOne({ where: {
-            [Op.or]: {
-                [Op.and]: [{ code }, { type }]
-            }
+                [Op.and]: [{ code }, { categoryId }]
         }})
         if (exists) return next(new AppError('Já existe um tipo de item com as mesmas caracteristicas.', 400, 'failed'))
         const thisType = await category.createItem_type({ code, type })
