@@ -34,29 +34,15 @@ exports.update = async (req, res, next) => {
     try {
         const { code, subsection, sectionId } = req.body
         const thisSubsection = await Subsection.findByPk(req.params.id)
-        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 400, 'failed'))
-        if (code != thisSubsection.code) {
+        if (!thisSubsection) return next(new AppError('O grupo indicado não existe.', 400, 'failed'))
+        if (code !== thisSubsection.code || sectionId !== thisSubsection.sectionId) {
             const exists = await Subsection.findOne({ where: {
                 id: {
                     [Op.ne]: req.params.id
                 },
-                [Op.and]: [
-                    {subsection},
-                    { sectionId: thisSubsection.sectionId }
-            ]}})
-            if (exists) return next(new AppError('Já existe uma subsecção com o mesmo nome.', 400, 'failed'))
-        } else if (subsection != thisSubsection.subsection) {
-            const exists = await Subsection.findOne({ where: {
-                id: {
-                    [Op.ne]: req.params.id
-                },
-                [Op.and]: [
-                    { code },
-                    { sectionId: thisSubsection.sectionId }
-            ]}})
-            if (exists) return next(new AppError('Já existe uma subsecção com o mesmo ID.', 400, 'failed'))
-        } else if (!code && !subsection) {
-            return next(new AppError('Input inválido.', 400, 'failed'))
+                [Op.and]: [{code}, {sectionId}]
+            }})
+            if (exists) return next(new AppError('Já existe um grupo com o mesmo código na secção indicada.', 400, 'failed'))
         }
         await thisSubsection.update({ code, subsection, sectionId })
         return res.status(200).json({
@@ -122,7 +108,7 @@ exports.getAll = async (req, res, next) => {
 exports.getSection = async (req, res, next) => {
     try {
         const thisSubsection = await Subsection.findByPk(req.params.id)
-        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        if (!thisSubsection) return next(new AppError('O grupo indicado não existe.', 404, 'not found'))
         else {
             const thisSection = await thisSubsection.getSection()
             return res.status(200).json({
@@ -139,7 +125,7 @@ exports.getSection = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
     try {
         const thisSubsection = await Subsection.findByPk(req.params.id)
-        if (!thisSubsection) return next(new AppError('A subsecção indicada não existe.', 404, 'not found'))
+        if (!thisSubsection) return next(new AppError('O grupo indicado não existe.', 404, 'not found'))
         else {
             let options = {attributes: { exclude: ['password', 'updatedAt', 'subsectionId'] }}
             const users = await thisSubsection.getUsers(options)
