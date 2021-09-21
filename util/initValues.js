@@ -84,10 +84,11 @@ exports.create = async () => {
             firstName: 'Miguel',
             lastName: 'Lima',
             email: 'miguel@mail.com',
-            address: 'Dummy Address',
+            address: 'Av. Almirante Reis, 200 - 1º Dto. 1000-052 Lisboa',
             phoneNumber: '+351910000000', 
             password: hashSync('forte', parseInt(process.env.BCRYPT_SALT)),
             roleId: 2,
+            subsectionId: 4
         },
         {
             firstName: 'Administrador',
@@ -106,6 +107,8 @@ exports.create = async () => {
             phoneNumber: '+351960000000', 
             password: hashSync('forte', parseInt(process.env.BCRYPT_SALT)),
             roleId: 2,
+            subsectionId: 8,
+            cargo: 2, 
         }
     ]).catch(err =>{ console.log(err.message) })
     const cargos = await Cargos.bulkCreate([
