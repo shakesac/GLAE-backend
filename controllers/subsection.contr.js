@@ -9,10 +9,16 @@ exports.new = async (req, res, next) => {
         const { code, subsection, sectionId } = req.body
         const section = await Section.findByPk(sectionId)
         if (!section) return next(new AppError('Não existe nenhuma secção com o código indicado.', 404, 'not found'))
-        const exists = await Subsection.findOne({ where: {
-            [Op.and]: [{ code }, { subsection }, { sectionId }]
-        }})
-        if (exists) return next(new AppError('Já existe uma subsecção com as mesmas caracteristicas.', 400, 'failed'))
+        const exists = await Subsection.findOne({
+            where: {
+                [Op.and]: [{ code }, { sectionId }]
+            },
+            include: {
+                model: Section,
+                attributes: ['section']
+            }
+        })
+        if (exists) return next(new AppError('Já existe um grupo com o mesmo código associado à secção ' + exists.section.section +'.', 400, 'failed'))
         const thisSubsection = await section.createSubsection({ code, subsection })
         return res.status(201).json({
             status: 'success',
