@@ -99,9 +99,11 @@ Item.belongsToMany(Lease, { through: 'lease_item' })
 
 // SEQUELIZE - SYNC
 const seqMode = process.env.SEQUELIZE_DEV_MODE == 'true' ? true : false
+//sequelize.sync({ force: true }).then(result => {
 sequelize.sync({ alter: seqMode }).then(result => {
     console.log('BD: ' + result.config.database + '\nUser: ' + result.config.username)
     console.log(result.config.protocol + ' ' + result.config.host + ':' + result.config.port)
+    //if(true) dbInitValues.create()
     if(seqMode) dbInitValues.create()
 }).catch(err => {
     console.log('ERRO: DB SYNC()', err)

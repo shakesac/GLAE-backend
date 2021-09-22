@@ -1,10 +1,12 @@
 const AppError = require('../util/appError')
-const { Op } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize");
 const Item = require('../models/item.model')
 const ItemType = require('../models/item-type.model');
 const User = require('../models/user.model');
 const ItemCategory = require('../models/item-cat.model');
 const Lease = require('../models/lease.model')
+const LeaseStatus = require('../models/lease-status.model');
+const sequelize = require('../util/db');
 
 exports.new = async (req, res, next) => {
     try {
@@ -112,49 +114,79 @@ exports.getAvailable = async (req, res, next) => {
         if (!start || !end) return next(new AppError('É necessário indicar a data desejada.', 400, 'error'))
         const { category } = req.query
         let options
+        let firstItems
         if (category) {
+            firstItems = await sequelize.query('SELECT `item`.*, `type`.`type` FROM `items` as `item`, `item_types` AS `type`  WHERE `item`.`typeId` = `type`.`id` and `item`.`id` NOT IN (select `lease_items`.`itemId` from `lease_items`) AND `type`.`categoryId` = :category',
+            {type: QueryTypes.SELECT,
+            replacements: {category}})
             options = {
-                where: {endOfLife: false},
+                required: true,
                 include: [{
                     model: ItemType,
-                    where: { categoryId: category },
-                    attributes: ['type']
+                    attributes: ['id','type'],
+                    where: {
+                        categoryId: category
+                    }
                 },{
                     model: Lease,
+                    attributes: ['start', 'end'],
+                    required: true,
                     where: {
-                        [Op.and]: [{
+                        [Op.and]: {
                             start: {
-                                [Op.lte]: end
+                                [Op.notBetween]: [start,end]
                             },
                             end: {
-                                [Op.gte]: start
+                                [Op.notBetween]: [start,end]
+                            },
+                    }},
+                    include: [{
+                        model: LeaseStatus,
+                        attributes: ['status','isActive'],
+                        where: {
+                            isActive: true,
+                            status: {
+                                [Op.in]: ['pending', 'accepted','inProgress']
                             }
-                        }]
-                    }
+                        }
+                    }]
                 }]
             }
         } else {
+            firstItems = await sequelize.query('SELECT `item`.*, `type`.`type` FROM `items` as `item`, `item_types` AS `type`  WHERE `item`.`typeId` = `type`.`id` and `item`.`id` NOT IN (select `lease_items`.`itemId` from `lease_items`)', { type: QueryTypes.SELECT })
             options = {
-                where: {endOfLife: false},
+                required: true,
                 include: [{
                     model: ItemType,
                     attributes: ['type']
                 },{
                     model: Lease,
+                    attributes: ['start', 'end'],
+                    required: true,
                     where: {
-                        [Op.and]: [{
+                        [Op.and]: {
                             start: {
-                                [Op.lte]: end
+                                [Op.notBetween]: [start,end]
                             },
                             end: {
-                                [Op.gte]: start
+                                [Op.notBetween]: [start,end]
+                            },
+                    }},
+                    include: [{
+                        model: LeaseStatus,
+                        attributes: ['status','isActive'],
+                        where: {
+                            isActive: true,
+                            status: {
+                                [Op.in]: ['pending', 'accepted','inProgress']
                             }
-                        }]
-                    }
+                        }
+                    }]
                 }]
             }
         }
-        const items = await Item.findAll(options)
+        const otherItems = await Item.findAll(options)
+        let items = firstItems.concat(otherItems)
         if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
