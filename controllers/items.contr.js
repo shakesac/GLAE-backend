@@ -1,11 +1,10 @@
 const AppError = require('../util/appError')
-const { Op, QueryTypes } = require("sequelize");
+const { Op } = require("sequelize");
 const Item = require('../models/item.model')
 const ItemType = require('../models/item-type.model');
 const User = require('../models/user.model');
 const ItemCategory = require('../models/item-cat.model');
-const Lease = require('../models/lease.model');
-const sequelize = require('../util/db');
+const Lease = require('../models/lease.model')
 
 exports.new = async (req, res, next) => {
     try {
@@ -113,7 +112,6 @@ exports.getAvailable = async (req, res, next) => {
         if (!start || !end) return next(new AppError('É necessário indicar a data desejada.', 400, 'error'))
         const { category } = req.query
         let options
-        /*
         if (category) {
             options = {
                 where: {endOfLife: false},
@@ -124,13 +122,12 @@ exports.getAvailable = async (req, res, next) => {
                 },{
                     model: Lease,
                     where: {
-                        [Op.or]: [{
+                        [Op.and]: [{
                             start: {
-                                [Op.notBetween]: [start, end]
-                            }
-                        }, {
+                                [Op.lte]: end
+                            },
                             end: {
-                                [Op.notBetween]: [start, end]
+                                [Op.gte]: start
                             }
                         }]
                     }
@@ -157,9 +154,8 @@ exports.getAvailable = async (req, res, next) => {
                     }
                 }]
             }
-        }*/
-        //const items = await Item.findAll(options)
-        const items = await sequelize.query("SELECT * FROM `items` AS `item` LEFT OUTER JOIN `item_types` AS `item_type` ON `item`.`typeId` = `item_type`.`id` WHERE `item`.`endOfLife` = false and `item`.id not in (select leaseId from  `lease_items`,  `leases` where `leases`.`id` = `lease_items`.`leaseId`  AND (`leases`.`start` >= '2021-09-29' AND `leases`.`end` <= '2021-10-01'))", {type: QueryTypes.SELECT})
+        }
+        const items = await Item.findAll(options)
         if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
