@@ -142,13 +142,12 @@ exports.getAvailable = async (req, res, next) => {
                 },{
                     model: Lease,
                     where: {
-                        [Op.or]: [{
+                        [Op.and]: [{
                             start: {
-                                [Op.notBetween]: [start, end]
-                            }
-                        }, {
+                                [Op.lte]: end
+                            },
                             end: {
-                                [Op.notBetween]: [start, end]
+                                [Op.gte]: start
                             }
                         }]
                     }
