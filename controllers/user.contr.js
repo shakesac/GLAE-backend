@@ -188,7 +188,7 @@ exports.getAll = async (req, res, next) => {
             order: [['firstName'],['lastName'],['createdAt']]
         }}
         const users = await User.findAll(options)
-        if (!users) return next(new AppError('Não existem utilizadores.', 404, 'not found'))
+        if (users.length < 1) return next(new AppError('Não existem utilizadores.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: users
