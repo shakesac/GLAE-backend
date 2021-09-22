@@ -8,9 +8,10 @@ const Lease = require('../models/lease.model')
 
 exports.new = async (req, res, next) => {
     try {
-        const {name, description, purchasedAt, typeId} = req.body
+        const {name, description, purchasedAt, typeId, uniqueItem, qty} = req.body
         const user = await User.findByPk(req.user.id)
         const type = await ItemType.findByPk(typeId)
+        if (qty && qty > 1) uniqueItem = 1
         if (!type) return next(new AppError('Não existe nenhum tipo de material com o ID indicado.', 404, 'not found'))
         const thisItem = await type.createItem({
             name, description, purchasedAt
@@ -108,8 +109,6 @@ exports.getAll = async (req, res, next) => {
 exports.getAvailable = async (req, res, next) => {
     try {
         const {start, end} = req.query
-        /*const start = '2021-08-16'
-        const end = '2021-08-19'*/
         if (!start || !end) return next(new AppError('É necessário indicar a data desejada.', 400, 'error'))
         const { category } = req.query
         let options

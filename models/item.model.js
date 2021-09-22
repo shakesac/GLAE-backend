@@ -24,6 +24,15 @@ const Item = sequelize.define('item', {
         allowNull: false,
         defaultValue: false
     },
+    qty: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1
+    },
+    uniqueItem: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+    }
 },
 {
     timestamps: true,
