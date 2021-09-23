@@ -5,8 +5,8 @@
 ## Instalação
 ### Clone
 ```
-$ git clone https://github.com/shakesac/1240Armazem.git
-$ cd 1240Armazem
+$ git clone https://github.com/shakesac/GLAE-backend.git
+$ cd GLAE-backend
 ```
 ## Backend
 ### Criar variáveis de ambiente
@@ -49,36 +49,6 @@ $ npm install
 ```
 $ npm start
 ```
-
-## Frontend
-
-```
-$ cd frontend
-$ nano .env
-```
-```
-API_URL=http://127.0.0.1:5000/api/v1  //Valor padrão
-```
-**Nota**: Alterar o URl caso os valores do .env do backend também tenham sido alterados.
-
-
-### Instalar modulos Node.js
-```
-$ npm install
-```
-
-### Correr em modo desenvolvimento
-```
-$ npm run serve
-```
-
-### Compilação e minificação para produção
-```
-$ npm run build
-```
-
-### Personalizar configuração
-Consultar [Guia de configuração oficial](https://cli.vuejs.org/config/).
 
 ## Outros
 ### Ligação para a colecção Postman

@@ -9,6 +9,10 @@ const Item = sequelize.define('item', {
         allowNull: false,
         primaryKey: true
     },
+    code: {
+        type: Sequelize.INTEGER(2),
+        allowNull: true,
+    },
     name: {
         type: Sequelize.STRING(200),
         allowNull: false,

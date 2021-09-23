@@ -79,11 +79,14 @@ Item.belongsTo(ItemType, {foreignKey: 'typeId' }, { onDelete: 'RESTRICT' })
 Item.hasMany(ItemInspect, {foreignKey: 'itemId' }, { onDelete: 'RESTRICT' })
 ItemInspect.belongsTo(Item, {foreignKey: 'itemId' }, { onDelete: 'RESTRICT' })
 
+Subsection.hasMany(Item, {foreignKey: 'subsectionId'}, {onDelete: 'SET NULL'})
+Item.belongsTo(Subsection, {foreignKey: 'subsectionId'}, {onDelete: 'SET NULL'})
+
 Lease.hasMany(LeaseStatus)
 LeaseStatus.belongsTo(Lease)
 
-User.hasMany(Item, { foreignKey: 'createdBy' })
-Item.belongsTo(User, { foreignKey: 'createdBy' })
+User.hasMany(Item, { foreignKey: 'createdBy' }, { onDelete: 'SET NULL' })
+Item.belongsTo(User, { foreignKey: 'createdBy' }, { onDelete: 'SET NULL' })
 
 Section.hasMany(Subsection, { foreignKey: 'sectionId' }, { onDelete: 'RESTRICT' })
 Subsection.belongsTo(Section)
@@ -96,15 +99,14 @@ Lease.belongsToMany(Item, { through: 'lease_item' })
 Item.belongsToMany(Lease, { through: 'lease_item' })
 
 
-
 // SEQUELIZE - SYNC
 const seqMode = process.env.SEQUELIZE_DEV_MODE == 'true' ? true : false
 //sequelize.sync({ force: true }).then(result => {
 sequelize.sync({ alter: seqMode }).then(result => {
     console.log('BD: ' + result.config.database + '\nUser: ' + result.config.username)
     console.log(result.config.protocol + ' ' + result.config.host + ':' + result.config.port)
-    //if(true) dbInitValues.create()
     if(seqMode) dbInitValues.create()
+    //if(true) dbInitValues.create()
 }).catch(err => {
     console.log('ERRO: DB SYNC()', err)
 })

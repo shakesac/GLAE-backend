@@ -93,10 +93,10 @@ exports.create = async () => {
         {
             firstName: 'Administrador',
             lastName: '',
-            email: 'admin@1.pt',
+            email: 'admin@1240.pt',
             address: 'Lisboa',
-            phoneNumber: '+351930000000', 
-            password: hashSync('forte', parseInt(process.env.BCRYPT_SALT)),
+            phoneNumber: '+351900000000', 
+            password: hashSync('escutas2021', parseInt(process.env.BCRYPT_SALT)),
             roleId: 1,
         },
         {
