@@ -1,27 +1,28 @@
 const AppError = require('../util/appError')
-const { Op, QueryTypes } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize")
 const Item = require('../models/item.model')
-const ItemType = require('../models/item-type.model');
+const ItemType = require('../models/item-type.model')
 const User = require('../models/user.model');
-const ItemCategory = require('../models/item-cat.model');
+const ItemCategory = require('../models/item-cat.model')
 const Lease = require('../models/lease.model')
-const LeaseStatus = require('../models/lease-status.model');
+const LeaseStatus = require('../models/lease-status.model')
 const sequelize = require('../util/db');
+const Subsection = require('../models/subsection.model')
 
 exports.new = async (req, res, next) => {
     try {
-        const {name, description, purchasedAt, typeId, uniqueItem, qty} = req.body
+        const {name, description, purchasedAt, typeId, uniqueItem, qty, subsectionId} = req.body
         const user = await User.findByPk(req.user.id)
         const type = await ItemType.findByPk(typeId)
-        if (qty && qty > 1) uniqueItem = 1
+        if (qty && qty > 1) uniqueItem = 1 //Restrição enquanto feature não está implementada.
         if (!type) return next(new AppError('Não existe nenhum tipo de material com o ID indicado.', 404, 'not found'))
         const thisItem = await type.createItem({
-            name, description, purchasedAt
+            name, description, purchasedAt, uniqueItem, qty, subsectionId
         })
         await thisItem.setUser(user)
         return res.status(201).json({
             status: 'success',
-            message: `O item ${thisItem.name} foi criado.`
+            message: `O artigo ${thisItem.name} foi criado com sucesso.`
         })
     } catch(err) {
         console.log(err)
@@ -31,16 +32,16 @@ exports.new = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     try {
-        const { name, description, typeId } = req.body
+        const { name, description, typeId, qty, subsectionId } = req.body
         const thisItem = await Item.findByPk(req.params.id)
-        if (!thisItem) return next(new AppError('O item indicado não existe.', 404, 'not found'))
+        if (!thisItem) return next(new AppError('O artigo indicado não existe.', 404, 'not found'))
         else {
             await thisItem.update({
-                name, description, typeId
+                name, description, typeId, qty, subsectionId 
             })
             return res.status(200).json({
                 status: "success",
-                message: "O item foi alterado."
+                message: "O artigo foi alterado."
             })
         }
     } catch(err) {
@@ -58,10 +59,13 @@ exports.get = async (req, res, next) => {
             include: [{
                 model: ItemCategory,
                 attributes: ['id','code']
+            },{
+                model: Subsection,
+                attributes: ['id','subsection','code']
             }]
         }]}
         const thisItem = await Item.findByPk(req.params.id, options)
-        if (!thisItem) return next(new AppError('O item indicado não existe.', 404, 'not found'))
+        if (!thisItem) return next(new AppError('O artigo indicado não existe.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: thisItem
@@ -84,6 +88,9 @@ exports.getAll = async (req, res, next) => {
                 include: [{
                     model: ItemCategory,
                     attributes: ['id','code']
+                },{
+                    model: Subsection,
+                    attributes: ['id','subsection','code']
                 }]
             }]}
         } else {
@@ -97,7 +104,7 @@ exports.getAll = async (req, res, next) => {
             }]}
         }
         const items = await Item.findAll(options)
-        if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
+        if (items.length < 1) return next(new AppError('Não existem artigos.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: items
@@ -127,6 +134,9 @@ exports.getAvailable = async (req, res, next) => {
                     where: {
                         categoryId: category
                     }
+                },{
+                    model: Subsection,
+                    attributes: ['id','subsection','code']
                 },{
                     model: Lease,
                     attributes: ['start', 'end'],
@@ -160,6 +170,9 @@ exports.getAvailable = async (req, res, next) => {
                     model: ItemType,
                     attributes: ['type']
                 },{
+                    model: Subsection,
+                    attributes: ['id','subsection','code']
+                },{
                     model: Lease,
                     attributes: ['start', 'end'],
                     required: true,
@@ -187,7 +200,7 @@ exports.getAvailable = async (req, res, next) => {
         }
         const otherItems = await Item.findAll(options)
         let items = firstItems.concat(otherItems)
-        if (items.length < 1) return next(new AppError('Não existem itens.', 404, 'not found'))
+        if (items.length < 1) return next(new AppError('Não existem artigos disponíveis.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: items
@@ -202,7 +215,7 @@ exports.history = async (req, res, next) => {
     try {
         const options = { where: {endOfLife: true}}
         const items = await Item.findAll(options)
-        if (items.length < 1) return next(new AppError('Não existem itens arquivados.', 404, 'not found'))
+        if (items.length < 1) return next(new AppError('Não existem artigos arquivados.', 404, 'not found'))
         else return res.status(200).json({
             status: "success",
             data: items
@@ -216,7 +229,7 @@ exports.history = async (req, res, next) => {
 exports.endOfLife = async (req, res, next) => {
     try {
         const thisItem = await Item.findByPk(req.params.id)
-        if (!thisItem) return next(new AppError('O item indicado não existe.', 404, 'not found'))
+        if (!thisItem) return next(new AppError('O artigo indicado não existe.', 404, 'not found'))
         else {
             thisItem.update({ endOfLife: true})
             return res.status(200).json({
@@ -233,8 +246,8 @@ exports.endOfLife = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
     try {
         const thisItem = await Item.findByPk(req.params.id)
-        if (!thisItem) return next(new AppError('O item indicado não existe.', 404, 'not found'))
-        else if (await thisItem.countLeases()) return next(new AppError('Existem emprestimos associados a este item.', 400, 'failed'))
+        if (!thisItem) return next(new AppError('O artigo indicado não existe.', 404, 'not found'))
+        else if (await thisItem.countLeases()) return next(new AppError('Existem emprestimos associados a este artigo.', 400, 'failed'))
         else {
             thisItem.destroy()
             return res.status(200).json({
