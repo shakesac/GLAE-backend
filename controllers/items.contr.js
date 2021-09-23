@@ -7,17 +7,25 @@ const ItemCategory = require('../models/item-cat.model')
 const Lease = require('../models/lease.model')
 const LeaseStatus = require('../models/lease-status.model')
 const sequelize = require('../util/db');
-const Subsection = require('../models/subsection.model')
+const Subsection = require('../models/subsection.model');
+const Section = require('../models/section.model');
 
 exports.new = async (req, res, next) => {
     try {
         const {name, description, purchasedAt, typeId, uniqueItem, qty, subsectionId} = req.body
         const user = await User.findByPk(req.user.id)
+        let code
+        const subsection = await Subsection.findByPk(subsectionId)
+        if (!subsection) return next(new AppError('O grupo indicado não existe.', 404, 'not found'))
+        else {
+            const countPlus1 = parseInt(await subsection.countItems()) + 1
+            code = parseInt((countPlus1).toLocaleString(undefined, {minimumIntegerDigits: 2, useGrouping:false}))
+        }
         const type = await ItemType.findByPk(typeId)
         if (qty && qty > 1) uniqueItem = 1 //Restrição enquanto feature não está implementada.
         if (!type) return next(new AppError('Não existe nenhum tipo de material com o ID indicado.', 404, 'not found'))
         const thisItem = await type.createItem({
-            name, description, purchasedAt, uniqueItem, qty, subsectionId
+            name, description, purchasedAt, uniqueItem, qty, subsectionId, code
         })
         await thisItem.setUser(user)
         return res.status(201).json({
@@ -35,15 +43,25 @@ exports.update = async (req, res, next) => {
         const { name, description, typeId, qty, subsectionId } = req.body
         const thisItem = await Item.findByPk(req.params.id)
         if (!thisItem) return next(new AppError('O artigo indicado não existe.', 404, 'not found'))
-        else {
-            await thisItem.update({
-                name, description, typeId, qty, subsectionId 
-            })
-            return res.status(200).json({
-                status: "success",
-                message: "O artigo foi alterado."
-            })
+        let code
+        let options
+        if (!subsectionId) {
+            options = { name, description, typeId, qty }
+        } else {
+            const subsection = await Subsection.findByPk(subsectionId)
+            if (!subsection) return next(new AppError('O grupo indicado não existe.', 404, 'not found'))
+            if (subsectionId != thisItem.subsectionId) {
+                console.log(subsectionId, thisItem.subsectionId)
+                const countPlus1 = parseInt(await subsection.countItems()) + 1
+                code = parseInt((countPlus1).toLocaleString(undefined, {minimumIntegerDigits: 2, useGrouping:false}))
+                options = {name, description, typeId, qty, subsectionId, code}
+            } else options = { name, description, typeId, qty }
         }
+        await thisItem.update(options)
+        return res.status(200).json({
+            status: "success",
+            message: "O artigo foi alterado."
+        })
     } catch(err) {
         console.log(err)
         return next(new AppError(err.toString(), 500, 'error'))
@@ -55,14 +73,14 @@ exports.get = async (req, res, next) => {
     try {
         const options = {include: [{
             model: ItemType,
-            attributes: ['type'],
+            attributes: ['type','code','fullCode', 'categoryId'],
             include: [{
                 model: ItemCategory,
                 attributes: ['id','code']
-            },{
-                model: Subsection,
-                attributes: ['id','subsection','code']
             }]
+        },{
+            model: Subsection,
+            attributes: ['id','subsection','code', 'fullCode', 'sectionId'],
         }]}
         const thisItem = await Item.findByPk(req.params.id, options)
         if (!thisItem) return next(new AppError('O artigo indicado não existe.', 404, 'not found'))
@@ -84,25 +102,29 @@ exports.getAll = async (req, res, next) => {
             options = { where: {endOfLife: false}, include: [{
                 model: ItemType,
                 where: { categoryId: category },
-                attributes: ['type', 'code'],
+                attributes: ['type','code','fullCode', 'categoryId'],
                 include: [{
                     model: ItemCategory,
                     attributes: ['id','code']
-                },{
-                    model: Subsection,
-                    attributes: ['id','subsection','code']
                 }]
+            },{
+                model: Subsection,
+                attributes: ['id','subsection','code', 'fullCode', 'sectionId'],
             }]}
         } else {
             options = { where: {endOfLife: false}, include: [{
                 model: ItemType,
-                attributes: ['type'],
+                attributes: ['type','code','fullCode', 'categoryId'],
                 include: [{
                     model: ItemCategory,
                     attributes: ['id','code']
                 }]
-            }]}
-        }
+            },{
+                model: Subsection,
+                attributes: ['id','subsection','code', 'fullCode', 'sectionId']
+            }],
+            order: [[Subsection, 'sectionId', 'ASC'], [Subsection, 'id', 'ASC'], ['code']]
+        }}
         const items = await Item.findAll(options)
         if (items.length < 1) return next(new AppError('Não existem artigos.', 404, 'not found'))
         else return res.status(200).json({
@@ -136,7 +158,7 @@ exports.getAvailable = async (req, res, next) => {
                     }
                 },{
                     model: Subsection,
-                    attributes: ['id','subsection','code']
+                    attributes: ['id','subsection','code', 'fullCode']
                 },{
                     model: Lease,
                     attributes: ['start', 'end'],
@@ -171,7 +193,7 @@ exports.getAvailable = async (req, res, next) => {
                     attributes: ['type']
                 },{
                     model: Subsection,
-                    attributes: ['id','subsection','code']
+                    attributes: ['id','subsection','code', 'fullCode']
                 },{
                     model: Lease,
                     attributes: ['start', 'end'],
@@ -234,7 +256,7 @@ exports.endOfLife = async (req, res, next) => {
             thisItem.update({ endOfLife: true})
             return res.status(200).json({
                 status: 'success',
-                message: 'O item foi arquivado.'
+                message: 'O artigo foi arquivado.'
             })
         }
     } catch(err) {
@@ -252,7 +274,7 @@ exports.delete = async (req, res, next) => {
             thisItem.destroy()
             return res.status(200).json({
                 status: 'success',
-                message: 'O item foi eliminado.'
+                message: 'O artigo foi eliminado.'
             })
         }
     } catch(err) {
