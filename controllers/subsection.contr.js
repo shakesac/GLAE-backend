@@ -80,7 +80,7 @@ exports.getAll = async (req, res, next) => {
                 },
                 include: [{
                     model: Section,
-                    attributes: ['section']
+                    attributes: ['section', 'code']
                 }],
                 order: ['sectionId', 'code']
             }
@@ -88,7 +88,7 @@ exports.getAll = async (req, res, next) => {
             options = {
                 include: [{
                     model: Section,
-                    attributes: ['section']
+                    attributes: ['section', 'code']
                 }],
                 order: ['sectionId', 'code']
             }

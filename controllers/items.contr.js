@@ -80,7 +80,11 @@ exports.get = async (req, res, next) => {
             }]
         },{
             model: Subsection,
-            attributes: ['id','subsection','code', 'fullCode', 'sectionId'],
+            attributes: ['id','subsection','code', 'sectionId'],
+            include: {
+                model: Section,
+                attributes: ['code']
+            }
         }]}
         const thisItem = await Item.findByPk(req.params.id, options)
         if (!thisItem) return next(new AppError('O artigo indicado não existe.', 404, 'not found'))
@@ -109,7 +113,11 @@ exports.getAll = async (req, res, next) => {
                 }]
             },{
                 model: Subsection,
-                attributes: ['id','subsection','code', 'fullCode', 'sectionId'],
+                attributes: ['id','subsection','code', 'sectionId'],
+                include: {
+                    model: Section,
+                    attributes: ['code']
+                }
             }]}
         } else {
             options = { where: {endOfLife: false}, include: [{
@@ -121,7 +129,11 @@ exports.getAll = async (req, res, next) => {
                 }]
             },{
                 model: Subsection,
-                attributes: ['id','subsection','code', 'fullCode', 'sectionId']
+                attributes: ['id','subsection','code', 'sectionId'],
+                include: {
+                    model: Section,
+                    attributes: ['code']
+                }
             }],
             order: [[Subsection, 'sectionId', 'ASC'], [Subsection, 'id', 'ASC'], ['code']]
         }}
@@ -145,7 +157,9 @@ exports.getAvailable = async (req, res, next) => {
         let options
         let firstItems
         if (category) {
-            firstItems = await sequelize.query('SELECT `item`.*, `type`.`type` FROM `items` as `item`, `item_types` AS `type`  WHERE `item`.`typeId` = `type`.`id` and `item`.`id` NOT IN (select `lease_items`.`itemId` from `lease_items`) AND `type`.`categoryId` = :category',
+            firstItems = await sequelize.query('SELECT `item`.*, `type`.`type` , `sub`.`subsection`, `sub`.`code` AS `subsection.code`, `sec`.`code` AS `subsection.section.code`' +
+            'FROM `items` as `item`, `item_types` AS `type`, `subsections` AS `sub`, `sections` as `sec`' +
+            'WHERE `item`.`typeId` = `type`.`id` and `item`.`subSectionId` = `sub`.`id` and `sub`.`sectionId` = `sec`.`id` and `item`.`id` NOT IN (select `lease_items`.`itemId` from `lease_items`) AND `type`.`categoryId` = :category',
             {type: QueryTypes.SELECT,
             replacements: {category}})
             options = {
@@ -158,7 +172,11 @@ exports.getAvailable = async (req, res, next) => {
                     }
                 },{
                     model: Subsection,
-                    attributes: ['id','subsection','code', 'fullCode']
+                    attributes: ['id','subsection','code'],
+                    include: {
+                        model: Section,
+                        attributes: ['code']
+                    }
                 },{
                     model: Lease,
                     attributes: ['start', 'end'],
@@ -185,7 +203,9 @@ exports.getAvailable = async (req, res, next) => {
                 }]
             }
         } else {
-            firstItems = await sequelize.query('SELECT `item`.*, `type`.`type` FROM `items` as `item`, `item_types` AS `type`  WHERE `item`.`typeId` = `type`.`id` and `item`.`id` NOT IN (select `lease_items`.`itemId` from `lease_items`)', { type: QueryTypes.SELECT })
+            firstItems = await sequelize.query('SELECT `item`.*, `type`.`type` , `sub`.`subsection`, `sub`.`code` AS `subsection.code`, `sec`.`code` AS `subsection.section.code`' +
+            'FROM `items` as `item`, `item_types` AS `type`, `subsections` AS `sub`, `sections` as `sec`' +
+            'WHERE `item`.`typeId` = `type`.`id` and `item`.`subSectionId` = `sub`.`id` and `sub`.`sectionId` = `sec`.`id` and `item`.`id` NOT IN (select `lease_items`.`itemId` from `lease_items`)', { type: QueryTypes.SELECT })
             options = {
                 required: true,
                 include: [{
@@ -193,7 +213,11 @@ exports.getAvailable = async (req, res, next) => {
                     attributes: ['type']
                 },{
                     model: Subsection,
-                    attributes: ['id','subsection','code', 'fullCode']
+                    attributes: ['id','subsection','code'],
+                    include: {
+                        model: Section,
+                        attributes: ['code']
+                    }
                 },{
                     model: Lease,
                     attributes: ['start', 'end'],

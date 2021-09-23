@@ -16,12 +16,6 @@ const Subsection = sequelize.define('subsection', {
         type: Sequelize.INTEGER(1),
         allowNull: false,
     },
-    fullCode: {
-        type: Sequelize.VIRTUAL,
-        get() {
-            return this.sectionId + '' + this.code
-        }
-    },
 }, {
     timestamps: true,
     updatedAt: false,
