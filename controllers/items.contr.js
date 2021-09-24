@@ -259,7 +259,25 @@ exports.getAvailable = async (req, res, next) => {
 
 exports.history = async (req, res, next) => {
     try {
-        const options = { where: {endOfLife: true}}
+        const options = { where:
+            {endOfLife: true},
+            include: [{
+                model: ItemType,
+                attributes: ['type','code','fullCode', 'categoryId'],
+                include: [{
+                    model: ItemCategory,
+                    attributes: ['id','code']
+                }]
+            },{
+                model: Subsection,
+                attributes: ['id','subsection','code', 'sectionId'],
+                include: {
+                    model: Section,
+                    attributes: ['code']
+                }
+            }],
+            order: [[Subsection, 'sectionId', 'ASC'], [Subsection, 'id', 'ASC'], ['code']]
+        }
         const items = await Item.findAll(options)
         if (items.length < 1) return next(new AppError('Não existem artigos arquivados.', 404, 'not found'))
         else return res.status(200).json({
@@ -280,7 +298,7 @@ exports.endOfLife = async (req, res, next) => {
             thisItem.update({ endOfLife: true})
             return res.status(200).json({
                 status: 'success',
-                message: 'O artigo foi arquivado.'
+                message: 'Artigo em fim de vida arquivado.'
             })
         }
     } catch(err) {
