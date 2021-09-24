@@ -9,17 +9,20 @@ const Subsection = require('../models/subsection.model')
 
 exports.register = async (req, res, next) => {
     const {firstName, lastName, email, address, phoneNumber, password, confirmPassword, subsectionId} = req.body
+    console.log(req.body)
     const options = { where: { email }}
     try {
         const exists = await helper.checkIfExistsWithOptions(User, options)
         if (exists) return next(new AppError('Já existe um utilizador com o email indicado.', 400, 'failed'))
-        if (subsectionId) {
-            const idSplit = subsectionId.split('')
-            if (!idSplit || !idSplit[1]) return next(new AppError('Código de grupo inválido.', 400, 'failed'))
+        const subsection = await Subsection.findByPk(subsectionId)
+        if (!subsection) return next(new AppError('Código de grupo inválido.', 400, 'failed'))
+        /*if (subsectionId) {
+            subsectionId
+            if (!idSplit || !idSplit[0]) return next(new AppError('Código de grupo inválido.', 400, 'failed'))
             const options = { where: { id: idSplit[1] }}
             const exists = await helper.checkIfExists(Subsection, idSplit[1])
             if (!exists) return next(new AppError('Não existe nenhum grupo com o código indicado.', 400, 'failed'))
-        }
+        }*/
         if (password !== confirmPassword) {
             return next(new AppError('A palavra-passe e a confirmação não coincidem.', 400, 'failed'))
         }
